@@ -444,9 +444,12 @@
     }
     .pillars-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 1.5px;
       background: var(--border);
+    }
+    @media (max-width: 640px) {
+      .pillars-grid { grid-template-columns: 1fr; }
     }
     .pillar {
       position: relative;
@@ -875,7 +878,7 @@
       <div class="section-head center reveal">
         <span class="eyebrow">The Game</span>
         <h2>Two pillars. <span class="gold">One living world.</span></h2>
-        <p class="section-desc">Project Oath is built on two inseparable systems — real-time action combat that demands genuine skill, and an AI-governed world simulation that evolves without developer scripting. Neither exists without the other.</p>
+        <p class="section-desc">Project Oath is built on two inseparable systems — a multi-agent AI that governs the world continuously, and living NPCs that think, remember, and act autonomously. Neither exists without the other.</p>
       </div>
 
       <div class="pillars-grid">
@@ -900,27 +903,7 @@
           </ul>
         </div>
 
-        <!-- II: Combat -->
-        <div class="pillar reveal delay-1">
-          <div class="pillar-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path d="M6 18L18 6"/>
-              <path d="M6 6h12v12"/>
-              <circle cx="6" cy="18" r="1.5"/>
-            </svg>
-          </div>
-          <p class="pillar-no">Pillar II &nbsp;·&nbsp; Combat System</p>
-          <h3>Combat Without Limits</h3>
-          <p class="pillar-body">No class selection at creation. Your equipped weapon defines your identity, abilities, and role. Swap weapons, swap playstyle. Six core archetypes at launch — advanced techniques are discovered by the community, not scripted into tutorials.</p>
-          <ul class="pillar-list">
-            <li class="pillar-list-item">Greatsword · Dual Blades · Staff · Bow · War Hammer · Grimoire</li>
-            <li class="pillar-list-item">Physics-respecting hitboxes — no tab-targeting. Positional play matters</li>
-            <li class="pillar-list-item">Modular signature weapon crafting — your build, permanently yours</li>
-            <li class="pillar-list-item">One weapon system for PvP arenas, open-world conflict, and raids</li>
-          </ul>
-        </div>
-
-        <!-- III: ERC-8004 -->
+        <!-- II: ERC-8004 -->
         <div class="pillar reveal delay-2">
           <div class="pillar-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -929,7 +912,7 @@
               <circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/>
             </svg>
           </div>
-          <p class="pillar-no">ERC-8004 &nbsp;·&nbsp; NPC Standard</p>
+          <p class="pillar-no">Pillar II &nbsp;·&nbsp; ERC-8004</p>
           <h3>NPCs That Remember You</h3>
           <p class="pillar-body">Every NPC in Project Oath runs as an ERC-8004 agent — a persistent, on-chain entity with genuine memory of player interactions, faction loyalty, and autonomous ownership of in-world assets. Citizens are remembered. Wanderers are strangers.</p>
           <ul class="pillar-list">
