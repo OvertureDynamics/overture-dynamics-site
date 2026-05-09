@@ -773,6 +773,95 @@
       text-transform: uppercase;
       color: var(--gold-dim);
     }
+
+    /* ══════════════════════════════════════════════
+       ROADMAP
+    ══════════════════════════════════════════════ */
+    #roadmap { background: var(--bg-deep); }
+
+    .roadmap-timeline {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+    /* Vertical gold line */
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6rem;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
+    }
+    .roadmap-item {
+      position: relative;
+      padding-bottom: 3.5rem;
+    }
+    .roadmap-item:last-child { padding-bottom: 0; }
+
+    /* Circle marker on the line */
+    .roadmap-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.55rem;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      border: 1.5px solid var(--gold-dim);
+      transform: translateX(-4px);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .roadmap-item.active::before {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 14px rgba(201,168,76,0.6);
+    }
+    .roadmap-item.active .roadmap-year { color: var(--gold); }
+
+    .roadmap-year {
+      font-family: var(--ff-head);
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.4rem;
+    }
+    .roadmap-stage {
+      font-family: var(--ff-head);
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+    }
+    .roadmap-item:not(.active) .roadmap-stage { color: var(--text-muted); }
+    .roadmap-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 520px;
+      margin-bottom: 1rem;
+    }
+    .roadmap-item:not(.active) .roadmap-desc { color: var(--text-dim); }
+    .roadmap-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .roadmap-tag {
+      font-family: var(--ff-head);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.7rem;
+    }
+    .roadmap-item.active .roadmap-tag {
+      color: var(--gold-dim);
+      border-color: rgba(201,168,76,0.25);
+    }
   </style>
 </head>
 <body>
@@ -787,6 +876,7 @@
         <ul class="nav-links">
           <li><a href="#pillars">The Game</a></li>
           <li><a href="#founders">Founder's Pass</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
           <li><a href="#about">Studio</a></li>
         </ul>
         <a href="https://discord.gg/38zGZaUjnQ" target="_blank" rel="noopener" class="btn-nav">Join Discord</a>
@@ -804,7 +894,7 @@
     <div class="hero-bottom-fade"></div>
 
     <div class="hero-content">
-      <p class="hero-eyebrow">Overture Dynamics &nbsp;·&nbsp; High-Fantasy MMO &nbsp;·&nbsp; Alpha 2027</p>
+      <p class="hero-eyebrow">Overture Dynamics &nbsp;·&nbsp; High-Fantasy MMO</p>
 
       <h1 class="hero-title">
         <span class="t-project">Project</span>
@@ -918,6 +1008,91 @@
             <li class="pillar-list-item">Your offline player agent remains active in the world as a Citizen</li>
             <li class="pillar-list-item">World historian system logs major events — players live through history</li>
           </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       ROADMAP
+  ═══════════════════════════════════════════ -->
+  <section id="roadmap" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Development Roadmap</span>
+        <h2>The path to a <span class="gold">living world.</span></h2>
+        <p class="section-desc">Project Oath is built in phases — each one unlocking the next layer of the world simulation. Revenue from early access funds the systems that make the full vision possible.</p>
+      </div>
+
+      <div class="roadmap-timeline">
+
+        <!-- Stage 1 -->
+        <div class="roadmap-item active reveal">
+          <p class="roadmap-year">2026 — Now</p>
+          <h3 class="roadmap-stage">Pre-Seed · Foundation</h3>
+          <p class="roadmap-desc">Raising $500K to build the three proof-of-concept assets required to close the seed round. Establishing the studio, the standard, and the community from the ground up.</p>
+          <div class="roadmap-tags">
+            <span class="roadmap-tag">Game Design Document</span>
+            <span class="roadmap-tag">ERC-8004 Prototype</span>
+            <span class="roadmap-tag">Combat Vertical Slice</span>
+            <span class="roadmap-tag">Discord Community</span>
+            <span class="roadmap-tag">Founder's Pass Launch</span>
+          </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="roadmap-item reveal delay-1">
+          <p class="roadmap-year">2027</p>
+          <h3 class="roadmap-stage">Seed Round · First Team</h3>
+          <p class="roadmap-desc">$3M seed round closes after a live ERC-8004 NPC demo and playable combat build. First full-time engineering, AI, and art hires join the studio. Core systems enter full production.</p>
+          <div class="roadmap-tags">
+            <span class="roadmap-tag">$3M Seed Round</span>
+            <span class="roadmap-tag">Core Engineering Team</span>
+            <span class="roadmap-tag">AI / ML Hires</span>
+            <span class="roadmap-tag">UE5 Production Build</span>
+          </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="roadmap-item reveal delay-2">
+          <p class="roadmap-year">2028</p>
+          <h3 class="roadmap-stage">Series A · Full Production</h3>
+          <p class="roadmap-desc">$15M Series A funds the full production team — 15 to 25 people. Early access launches with buy-to-play and subscription tiers. First real-world test of the economy and NPC memory systems.</p>
+          <div class="roadmap-tags">
+            <span class="roadmap-tag">$15M Series A</span>
+            <span class="roadmap-tag">Early Access Launch</span>
+            <span class="roadmap-tag">Live Economy Agent</span>
+            <span class="roadmap-tag">Wanderer & Citizen Tiers</span>
+          </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="roadmap-item reveal delay-3">
+          <p class="roadmap-year">2029 – 2030</p>
+          <h3 class="roadmap-stage">Open Beta · Living Systems</h3>
+          <p class="roadmap-desc">Weather, ecology, and geological event systems go live. The world begins generating its own history. Open beta targets 3,000–6,000 active Citizens and $3M–$8M ARR. Series B prep begins.</p>
+          <div class="roadmap-tags">
+            <span class="roadmap-tag">Weather & Climate Agent</span>
+            <span class="roadmap-tag">Ecology Layer</span>
+            <span class="roadmap-tag">Geological Events</span>
+            <span class="roadmap-tag">Open Beta</span>
+            <span class="roadmap-tag">Series B</span>
+          </div>
+        </div>
+
+        <!-- Stage 5 -->
+        <div class="roadmap-item reveal delay-4">
+          <p class="roadmap-year">2031</p>
+          <h3 class="roadmap-stage">Full Launch · The Living World</h3>
+          <p class="roadmap-desc">Project Oath launches publicly with the complete multi-agent simulation — AI Narrative Engine, world historian, persistent faction memory, and full ERC-8004 NPC layer at scale. The world runs itself.</p>
+          <div class="roadmap-tags">
+            <span class="roadmap-tag">AI Narrative Engine</span>
+            <span class="roadmap-tag">World Historian</span>
+            <span class="roadmap-tag">Full NPC Memory at Scale</span>
+            <span class="roadmap-tag">100K+ Subscribers</span>
+            <span class="roadmap-tag">Public Launch</span>
+          </div>
         </div>
 
       </div>
