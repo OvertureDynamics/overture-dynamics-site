@@ -775,6 +775,49 @@
     }
 
     /* ══════════════════════════════════════════════
+       PROBLEM SECTION
+    ══════════════════════════════════════════════ */
+    #problem { background: var(--bg-mid); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+    }
+    .problem-card {
+      background: var(--bg-mid);
+      padding: 2rem 2.2rem;
+      transition: background 0.3s;
+    }
+    .problem-card:hover { background: #11111f; }
+    .problem-number {
+      font-family: var(--ff-head);
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
+    }
+    .problem-title {
+      font-family: var(--ff-head);
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .problem-body {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+    }
+    .problem-solve {
+      margin-top: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--gold-dim);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════════════
        ROADMAP
     ══════════════════════════════════════════════ */
     #roadmap { background: var(--bg-deep); }
@@ -874,6 +917,7 @@
       <div class="nav-inner">
         <a href="#" class="nav-logo">Overture Dynamics</a>
         <ul class="nav-links">
+          <li><a href="#problem">The Problem</a></li>
           <li><a href="#pillars">The Game</a></li>
           <li><a href="#founders">Founder's Pass</a></li>
           <li><a href="#roadmap">Roadmap</a></li>
@@ -958,6 +1002,58 @@
   </section>
 
   <!-- ═══════════════════════════════════════════
+       THE PROBLEM
+  ═══════════════════════════════════════════ -->
+  <section id="problem" class="section">
+    <div class="container">
+      <div class="section-head center reveal">
+        <span class="eyebrow">The Problem</span>
+        <h2>Every major MMO suffers <span class="gold">the same six failures.</span></h2>
+        <p class="section-desc">Project Oath was designed to solve all six simultaneously — not patch one while ignoring the rest.</p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card reveal">
+          <p class="problem-number">Failure 01</p>
+          <h4 class="problem-title">Linear Quest Design</h4>
+          <p class="problem-body">Quests are hand-authored story paths. Once players exhaust them, the world goes silent until a developer writes more.</p>
+          <p class="problem-solve">Project Oath: Five AI agents generate events, crises, and history continuously — no developer input required after launch.</p>
+        </div>
+        <div class="problem-card reveal delay-1">
+          <p class="problem-number">Failure 02</p>
+          <h4 class="problem-title">Hollow NPCs</h4>
+          <p class="problem-body">Reactive scripts that wait for player input, remember nothing, and own nothing. Every conversation resets.</p>
+          <p class="problem-solve">Project Oath: Every NPC is an ERC-8004 agent — persistent memory, LLM-driven reasoning, genuine asset ownership.</p>
+        </div>
+        <div class="problem-card reveal delay-2">
+          <p class="problem-number">Failure 03</p>
+          <h4 class="problem-title">Static Economies</h4>
+          <p class="problem-body">Developer-tuned prices that don't reflect real supply and demand. Exploits are inevitable. Markets feel fake.</p>
+          <p class="problem-solve">Project Oath: The Economy Agent tracks every transaction in real time. Prices and scarcity emerge from behavior — never set by a developer.</p>
+        </div>
+        <div class="problem-card reveal">
+          <p class="problem-number">Failure 04</p>
+          <h4 class="problem-title">Content Treadmills</h4>
+          <p class="problem-body">Publishers spend hundreds of millions on expansion packs just to keep worlds alive between developer releases.</p>
+          <p class="problem-solve">Project Oath: A world governed by AI agents never goes static. There is no content gap to fill. No DLC. Ever.</p>
+        </div>
+        <div class="problem-card reveal delay-1">
+          <p class="problem-number">Failure 05</p>
+          <h4 class="problem-title">No World Memory</h4>
+          <p class="problem-body">Player actions rarely leave lasting consequences. History doesn't stick. The same dungeon resets. The same NPC forgets.</p>
+          <p class="problem-solve">Project Oath: The world accumulates a permanent geological, political, and social record. Nothing resets. History is real.</p>
+        </div>
+        <div class="problem-card reveal delay-2">
+          <p class="problem-number">Failure 06</p>
+          <h4 class="problem-title">No Living Factions</h4>
+          <p class="problem-body">Guilds and factions are scripted states with fixed power — not emergent outcomes of actual player and NPC behavior.</p>
+          <p class="problem-solve">Project Oath: Faction power is an emergent outcome. The Events Agent monitors behavior and triggers lore-consistent political shifts — without scripting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
        PILLARS — THE GAME
   ═══════════════════════════════════════════ -->
   <section id="pillars" class="section">
@@ -1001,11 +1097,11 @@
           </div>
           <p class="pillar-no">Pillar II &nbsp;·&nbsp; ERC-8004</p>
           <h3>NPCs That Remember You</h3>
-          <p class="pillar-body">Every NPC in Project Oath runs as an ERC-8004 agent — a persistent, on-chain entity with genuine memory of player interactions, faction loyalty, and autonomous ownership of in-world assets. Citizens are remembered. Wanderers are strangers.</p>
+          <p class="pillar-body">Every NPC in Project Oath runs as an ERC-8004 agent — a persistent, on-chain entity with genuine memory of player interactions, faction loyalty, and autonomous ownership of in-world assets. Every subscriber is remembered.</p>
           <ul class="pillar-list">
-            <li class="pillar-list-item">Citizen NPCs remember you permanently across every session</li>
-            <li class="pillar-list-item">Relationships, history, and reputation persist and compound over time</li>
-            <li class="pillar-list-item">Your offline player agent remains active in the world as a Citizen</li>
+            <li class="pillar-list-item">NPCs remember you permanently — relationships, grudges, and loyalty persist forever</li>
+            <li class="pillar-list-item">Relationships, history, and reputation compound over time — no resets</li>
+            <li class="pillar-list-item">Your offline player agent stays active in the world when you log off</li>
             <li class="pillar-list-item">World historian system logs major events — players live through history</li>
           </ul>
         </div>
@@ -1043,7 +1139,7 @@
 
         <!-- Stage 2 -->
         <div class="roadmap-item reveal delay-1">
-          <p class="roadmap-year">2027</p>
+          <p class="roadmap-year">Late 2027</p>
           <h3 class="roadmap-stage">Seed Round · First Team</h3>
           <p class="roadmap-desc">$3M seed round closes after a live ERC-8004 NPC demo and playable combat build. First full-time engineering, AI, and art hires join the studio. Core systems enter full production.</p>
           <div class="roadmap-tags">
@@ -1056,14 +1152,14 @@
 
         <!-- Stage 3 -->
         <div class="roadmap-item reveal delay-2">
-          <p class="roadmap-year">2028</p>
+          <p class="roadmap-year">Early 2029</p>
           <h3 class="roadmap-stage">Series A · Full Production</h3>
-          <p class="roadmap-desc">$15M Series A funds the full production team — 15 to 25 people. Early access launches with buy-to-play and subscription tiers. First real-world test of the economy and NPC memory systems.</p>
+          <p class="roadmap-desc">$15M Series A requires closed alpha with paying subscribers, $1.5M ARR, and demonstrated NPC system stability. Funds a 25–75 person team. All simulation agents go live. Series B prep begins.</p>
           <div class="roadmap-tags">
             <span class="roadmap-tag">$15M Series A</span>
-            <span class="roadmap-tag">Early Access Launch</span>
-            <span class="roadmap-tag">Live Economy Agent</span>
-            <span class="roadmap-tag">Wanderer & Citizen Tiers</span>
+            <span class="roadmap-tag">Closed Alpha Launch</span>
+            <span class="roadmap-tag">All 5 Agents Live</span>
+            <span class="roadmap-tag">$1.5M ARR Target</span>
           </div>
         </div>
 
@@ -1071,7 +1167,7 @@
         <div class="roadmap-item reveal delay-3">
           <p class="roadmap-year">2029 – 2030</p>
           <h3 class="roadmap-stage">Open Beta · Living Systems</h3>
-          <p class="roadmap-desc">Weather, ecology, and geological event systems go live. The world begins generating its own history. Open beta targets 3,000–6,000 active Citizens and $3M–$8M ARR. Series B prep begins.</p>
+          <p class="roadmap-desc">Weather, ecology, and geological event systems go live. The world begins generating its own history. Open beta targets 3,000–6,000 active subscribers and $3M–$8M ARR.</p>
           <div class="roadmap-tags">
             <span class="roadmap-tag">Weather & Climate Agent</span>
             <span class="roadmap-tag">Ecology Layer</span>
@@ -1161,35 +1257,35 @@
 
         <div class="founders-price-block reveal delay-1">
           <div class="founders-price">$299</div>
-          <span class="founders-price-note">One-Time &nbsp;·&nbsp; Lifetime Citizen Access &nbsp;·&nbsp; No Monthly Fee</span>
+          <span class="founders-price-note">One-Time &nbsp;·&nbsp; Lifetime Subscription Access &nbsp;·&nbsp; No Monthly Fee</span>
         </div>
 
         <div class="gold-divider reveal delay-1"></div>
 
         <p class="founders-body reveal delay-2">
-          Available pre-launch only, capped at 10,000. Founders receive permanent Citizen-tier access — no subscription, ever. NPCs reference your founding status as part of the world's history. You don't just play the world. <em style="color: var(--text);">You are part of it.</em>
+          Available pre-launch only, capped at 10,000. Founders receive lifetime subscription access — no $14.99/mo fee, ever. NPCs reference your founding status as part of the world's history. You don't just play the world. <em style="color: var(--text);">You are part of it.</em>
         </p>
 
         <div class="founders-perks reveal delay-2">
           <div class="perk">
             <span class="perk-dot"></span>
-            <span>Permanent Citizen access — NPCs remember you across every session, forever</span>
+            <span>Lifetime subscription — no $14.99/mo fee, ever. Pay once, play forever</span>
           </div>
           <div class="perk">
             <span class="perk-dot"></span>
-            <span>Full marketplace access, faction standing, territorial influence, and political office</span>
+            <span>NPCs remember you permanently — relationships, history, and reputation persist across every session</span>
           </div>
           <div class="perk">
             <span class="perk-dot"></span>
-            <span>Offline player agent — your character exists in the world while you sleep</span>
+            <span>Full marketplace access with tiered fees, faction standing, territorial influence, and political office</span>
           </div>
           <div class="perk">
             <span class="perk-dot"></span>
-            <span>NPCs reference your founding status as in-world historical fact — permanently</span>
+            <span>Offline player agent — your character gathers, trades, and acts in the world while you sleep</span>
           </div>
           <div class="perk">
             <span class="perk-dot"></span>
-            <span>No subscription fee, ever — pay once, play forever at the highest tier</span>
+            <span>NPCs reference your founding status as permanent in-world historical fact</span>
           </div>
         </div>
 
@@ -1238,6 +1334,12 @@
             </a>
             <a href="https://tiktok.com/@OvertureMMO" target="_blank" rel="noopener" aria-label="TikTok">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg>
+            </a>
+            <a href="https://youtube.com/@OvertureMMO" target="_blank" rel="noopener" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="https://instagram.com/OvertureMMO" target="_blank" rel="noopener" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
             </a>
           </div>
         </div>
