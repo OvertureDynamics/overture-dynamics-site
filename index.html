@@ -818,6 +818,168 @@
     }
 
     /* ══════════════════════════════════════════════
+       MMORPG — THE LIVING WORLD
+    ══════════════════════════════════════════════ */
+    #world { background: var(--bg-deep); }
+
+    .world-quote {
+      font-family: var(--ff-head);
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      font-weight: 600;
+      font-style: italic;
+      line-height: 1.45;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      border-left: 2px solid var(--gold);
+      padding-left: 1.8rem;
+      margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+      max-width: 720px;
+    }
+    .world-quote em { font-style: normal; color: var(--gold); }
+
+    .influence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+    }
+    .influence-card {
+      background: var(--bg-deep);
+      padding: 2rem 2.2rem;
+      transition: background 0.3s;
+    }
+    .influence-card:hover { background: #0d0d1a; }
+    .influence-no {
+      font-family: var(--ff-head);
+      font-size: 0.55rem;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      margin-bottom: 0.5rem;
+    }
+    .influence-title {
+      font-family: var(--ff-head);
+      font-size: 0.95rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 0.7rem;
+    }
+    .influence-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ══════════════════════════════════════════════
+       COMBAT & CRAFTING
+    ══════════════════════════════════════════════ */
+    #combat { background: var(--bg-mid); }
+
+    .combat-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+    @media (max-width: 860px) {
+      .combat-layout { grid-template-columns: 1fr; }
+    }
+
+    /* Weapons grid */
+    .weapons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      background: var(--border);
+      margin-top: 1.8rem;
+    }
+    .weapon-card {
+      background: var(--bg-mid);
+      padding: 1.4rem 1.6rem;
+      transition: background 0.3s;
+      position: relative;
+    }
+    .weapon-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .weapon-card:hover { background: #11111f; }
+    .weapon-card:hover::before { opacity: 1; }
+    .weapon-name {
+      font-family: var(--ff-head);
+      font-size: 0.82rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .weapon-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* Combat mechanics */
+    .mechanic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 1.8rem;
+    }
+    .mechanic {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+    .mechanic-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .mechanic-icon svg { width: 16px; height: 16px; stroke-width: 1.5; }
+    .mechanic-title {
+      font-family: var(--ff-head);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .mechanic-body {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    /* Crafting block */
+    .crafting-block {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .crafting-block h3 {
+      font-family: var(--ff-head);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+    .crafting-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ══════════════════════════════════════════════
        ROADMAP
     ══════════════════════════════════════════════ */
     #roadmap { background: var(--bg-deep); }
@@ -919,6 +1081,8 @@
         <ul class="nav-links">
           <li><a href="#problem">The Problem</a></li>
           <li><a href="#pillars">The Game</a></li>
+          <li><a href="#world">The World</a></li>
+          <li><a href="#combat">Combat</a></li>
           <li><a href="#roadmap">Roadmap</a></li>
           <li><a href="#about">Studio</a></li>
           <li><a href="#founders">Founder's Pass</a></li>
@@ -1104,6 +1268,160 @@
             <li class="pillar-list-item">Your offline player agent stays active in the world when you log off</li>
             <li class="pillar-list-item">World historian system logs major events — players live through history</li>
           </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       THE LIVING MMO
+  ═══════════════════════════════════════════ -->
+  <section id="world" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Massively Multiplayer</span>
+        <h2>One server. <span class="gold">One shared history.</span></h2>
+      </div>
+
+      <p class="world-quote reveal delay-1">
+        "Players do not play in the world —<br>
+        <em>they shape it.</em>"
+      </p>
+
+      <p class="about-p reveal delay-1" style="max-width:680px; margin-bottom: clamp(2rem,5vw,3.5rem);">
+        Project Oath runs on a single shard per region. Every player inhabits the same world, shares the same economy, and lives through the same history. There is no critical path. A player can spend their first month trading ore, building faction alliances, following an NPC merchant's fortunes, or fighting in PvP arenas. All of it is the game — simultaneously. Every player's experience is genuinely non-linear and unrepeatable.
+      </p>
+
+      <div class="influence-grid">
+        <div class="influence-card reveal">
+          <p class="influence-no">Economic Power</p>
+          <h4 class="influence-title">Control the Markets</h4>
+          <p class="influence-body">Players control supply chains, corner rare materials, and move markets. A single guild that monopolises a region's ore production can dictate prices across multiple empires. Every other player — and every NPC — feels the consequence.</p>
+        </div>
+        <div class="influence-card reveal delay-1">
+          <p class="influence-no">Reputation &amp; Relationships</p>
+          <h4 class="influence-title">Build Your Legacy With NPCs</h4>
+          <p class="influence-body">NPCs remember every interaction permanently. Help a merchant survive a drought and they become a lasting ally. Betray a faction leader and that reputation propagates across the NPC network. Who you are is built through action, not character selection.</p>
+        </div>
+        <div class="influence-card reveal delay-2">
+          <p class="influence-no">Political Influence</p>
+          <h4 class="influence-title">Govern Territories</h4>
+          <p class="influence-body">Players hold faction titles, govern territories, and run for political office. The political map is an emergent outcome of player behaviour — alliances form, wars start, and territorial borders shift based on what players actually do.</p>
+        </div>
+        <div class="influence-card reveal">
+          <p class="influence-no">Permanent World Legacy</p>
+          <h4 class="influence-title">Leave a Mark That Lasts</h4>
+          <p class="influence-body">Player actions leave marks that outlast each session. A destroyed biome, a collapsed trade route, a historically significant battle — all logged permanently by the world historian. Players become part of the world's recorded history.</p>
+        </div>
+        <div class="influence-card reveal delay-1">
+          <p class="influence-no">Combat &amp; Faction Warfare</p>
+          <h4 class="influence-title">Fight for the World</h4>
+          <p class="influence-body">Ranked arenas, open-world PvP, and instanced raids all feed into faction standing and territorial control. A victory in open-world combat can shift a region's political balance. Combat is meaningful because the world it takes place in is genuinely alive.</p>
+        </div>
+        <div class="influence-card reveal delay-2">
+          <p class="influence-no">Offline Presence</p>
+          <h4 class="influence-title">The World Never Pauses</h4>
+          <p class="influence-body">Player characters run as ERC-8004 agents when logged off — gathering resources, trading on standing instructions, and patrolling territory. A player's influence on the world continues even when they are not actively playing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       COMBAT & CRAFTING
+  ═══════════════════════════════════════════ -->
+  <section id="combat" class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Combat &amp; Crafting</span>
+        <h2>No class. <span class="gold">No limits.</span></h2>
+        <p class="section-desc">There is no class selection at character creation. The weapon you equip defines your identity, your abilities, and your role. Swap weapons — swap who you are.</p>
+      </div>
+
+      <div class="combat-layout">
+
+        <!-- Left: Weapons -->
+        <div>
+          <span class="eyebrow reveal" style="margin-bottom:0.3rem;">Six Weapon Archetypes</span>
+          <p class="about-p reveal delay-1" style="margin-top:0.3rem;">Six core weapon archetypes at launch — each with a distinct mechanical identity, advanced techniques discovered through play rather than scripted into tutorials.</p>
+          <div class="weapons-grid reveal delay-1">
+            <div class="weapon-card">
+              <p class="weapon-name">Greatsword</p>
+              <p class="weapon-desc">Slow, powerful sweeps with massive poise. The foundation of frontline play — trades speed for dominance in a zone.</p>
+            </div>
+            <div class="weapon-card">
+              <p class="weapon-name">Dual Blades</p>
+              <p class="weapon-desc">High-speed combo chains with aggressive repositioning. Rewards continuous pressure and animation-cancel mastery.</p>
+            </div>
+            <div class="weapon-card">
+              <p class="weapon-name">Staff</p>
+              <p class="weapon-desc">Mid-range elemental projection and AoE. Requires positional discipline — power scales with distance management.</p>
+            </div>
+            <div class="weapon-card">
+              <p class="weapon-name">Bow</p>
+              <p class="weapon-desc">Long-range precision with charged shots and movement penalties. Punishes enemies who overcommit. Unforgiving to master.</p>
+            </div>
+            <div class="weapon-card">
+              <p class="weapon-name">War Hammer</p>
+              <p class="weapon-desc">Crowd control and structure. Interrupt-focused kit built around breaking enemy momentum and holding ground.</p>
+            </div>
+            <div class="weapon-card">
+              <p class="weapon-name">Grimoire</p>
+              <p class="weapon-desc">Summoning and dark resonance. The most mechanically distinct archetype — its depth is discovered, not explained.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Combat mechanics + Crafting -->
+        <div>
+          <span class="eyebrow reveal" style="margin-bottom:0.3rem;">Core Mechanics</span>
+          <p class="about-p reveal delay-1" style="margin-top:0.3rem;">No tab-targeting. No cooldown rotation. Skill is expressed through positioning, timing, and weapon mastery.</p>
+          <div class="mechanic-list">
+            <div class="mechanic reveal delay-1">
+              <div class="mechanic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              </div>
+              <div>
+                <p class="mechanic-title">Dodge-Cancel System</p>
+                <p class="mechanic-body">Any animation can be cancelled into a dodge roll, creating a deep movement layer that separates novice from expert play.</p>
+              </div>
+            </div>
+            <div class="mechanic reveal delay-1">
+              <div class="mechanic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              </div>
+              <div>
+                <p class="mechanic-title">Interrupt Windows</p>
+                <p class="mechanic-body">Most abilities — NPC and player — have readable interrupt windows. Recognising and exploiting them is core to high-level play.</p>
+              </div>
+            </div>
+            <div class="mechanic reveal delay-2">
+              <div class="mechanic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              </div>
+              <div>
+                <p class="mechanic-title">Positional Play</p>
+                <p class="mechanic-body">Attack cones, backstab multipliers, and AoE shapes reward spatial awareness. Every fight is a question of geometry as much as timing.</p>
+              </div>
+            </div>
+            <div class="mechanic reveal delay-2">
+              <div class="mechanic-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </div>
+              <div>
+                <p class="mechanic-title">Stamina Management</p>
+                <p class="mechanic-body">Dodge rolls and defensive skills consume stamina. Managing resources under pressure is a combat skill in itself — not a background stat.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="crafting-block reveal delay-3">
+            <h3>Signature Weapon Crafting</h3>
+            <p class="crafting-body">Crafted signature weapons are modular. Components can be exchanged to modify ability sets, damage types, and passive traits — permanently defining your individual play identity. No two signature weapons are identical.</p>
+            <p class="crafting-body">Signature weapons are the primary driver of player-to-player marketplace activity. The economy feels the weight of every crafting decision.</p>
+            <p class="crafting-body">One weapon system serves all content modes — ranked PvP arenas, open-world faction conflict, and instanced raids. No split meta. A weapon mastered in PvP is the same weapon used in raid content.</p>
+          </div>
         </div>
 
       </div>
@@ -1320,6 +1638,9 @@
         <div class="footer-nav">
           <p class="footer-nav-head">Navigate</p>
           <a href="#pillars">The Game</a>
+          <a href="#world">The World</a>
+          <a href="#combat">Combat</a>
+          <a href="#roadmap">Roadmap</a>
           <a href="#about">Studio</a>
           <a href="#founders">Founder's Pass</a>
           <a href="mailto:chris.inserra@overturedynamics.com">Contact</a>
