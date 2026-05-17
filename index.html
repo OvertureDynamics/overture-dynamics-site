@@ -218,15 +218,42 @@
       padding: 9rem 1.5rem 6rem;
       max-width: 900px;
     }
-    .hero-eyebrow {
-      font-family: var(--ff-head);
-      font-size: clamp(0.55rem, 1.5vw, 0.7rem);
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--gold);
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.8rem;
       margin-bottom: 2rem;
       opacity: 0;
       animation: fadeSlideDown 1s 0.4s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    .hero-meta-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .hero-meta-label {
+      font-family: var(--ff-head);
+      font-size: 0.5rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .hero-meta-value {
+      font-family: var(--ff-head);
+      font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .hero-meta-value.genre {
+      color: var(--text-muted);
+    }
+    .hero-meta-sep {
+      color: var(--text-dim);
+      font-size: 0.7rem;
+      margin-top: 0.8rem;
     }
     .hero-title {
       font-family: var(--ff-head);
@@ -1102,7 +1129,17 @@
     <div class="hero-bottom-fade"></div>
 
     <div class="hero-content">
-      <p class="hero-eyebrow">Overture Dynamics &nbsp;·&nbsp; High-Fantasy MMO</p>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Studio</span>
+          <span class="hero-meta-value">Overture Dynamics</span>
+        </div>
+        <span class="hero-meta-sep">·</span>
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Genre</span>
+          <span class="hero-meta-value genre">High-Fantasy MMO</span>
+        </div>
+      </div>
 
       <h1 class="hero-title">
         <span class="t-project">Project</span>
