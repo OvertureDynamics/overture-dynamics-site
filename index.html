@@ -115,19 +115,27 @@
       gap: 1rem;
     }
     .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text);
+    }
+    .nav-logo-mark { flex-shrink: 0; }
+    .nav-logo-text {
       font-family: var(--ff-head);
       font-size: 0.78rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      line-height: 1.25;
+      line-height: 1;
     }
-    .nav-logo-sub {
-      font-size: 0.55rem;
-      letter-spacing: 0.3em;
-      color: var(--gold);
+
+    /* Hero emblem seal */
+    .hero-emblem {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeSlideDown 1.1s 0.15s cubic-bezier(.22,1,.36,1) forwards;
     }
     .nav-links {
       display: flex;
@@ -1108,7 +1116,40 @@
   <nav id="nav">
     <div class="container">
       <div class="nav-inner">
-        <a href="#" class="nav-logo">Overture Dynamics</a>
+        <a href="#" class="nav-logo">
+          <svg class="nav-logo-mark" width="38" height="38" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+            <line x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="162" y1="38" x2="167" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="188" y1="100" x2="194" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="162" y1="162" x2="167" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="100" y1="188" x2="100" y2="194" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="38" y1="162" x2="33" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="12" y1="100" x2="6" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
+            <line x1="38" y1="38" x2="33" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
+            <polygon points="100,9 191,100 100,191 9,100" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
+            <polygon points="100,3 106,9 100,15 94,9" fill="#c9a84c"/>
+            <polygon points="185,100 191,94 197,100 191,106" fill="#c9a84c"/>
+            <polygon points="100,185 106,191 100,197 94,191" fill="#c9a84c"/>
+            <polygon points="3,100 9,94 15,100 9,106" fill="#c9a84c"/>
+            <circle cx="146" cy="55" r="4" fill="#c9a84c"/>
+            <circle cx="146" cy="146" r="4" fill="#c9a84c"/>
+            <circle cx="55" cy="146" r="4" fill="#c9a84c"/>
+            <circle cx="55" cy="55" r="4" fill="#c9a84c"/>
+            <circle cx="100" cy="100" r="55" fill="none" stroke="#c9a84c" stroke-width="0.9"/>
+            <polygon points="100,44 107,86 100,142 93,86" fill="rgba(201,168,76,0.25)" stroke="#c9a84c" stroke-width="1.1"/>
+            <rect x="77" y="83" width="46" height="5" rx="1" fill="#c9a84c"/>
+            <polygon points="100,142 104,148 100,155 96,148" fill="#c9a84c"/>
+            <circle cx="100" cy="45" r="6" fill="#c9a84c"/>
+            <circle cx="155" cy="100" r="6" fill="#c9a84c"/>
+            <circle cx="100" cy="155" r="6" fill="#c9a84c"/>
+            <circle cx="45" cy="100" r="6" fill="#c9a84c"/>
+            <line x1="104" y1="100" x2="149" y2="100" stroke="#c9a84c" stroke-width="0.6"/>
+            <line x1="96" y1="100" x2="51" y2="100" stroke="#c9a84c" stroke-width="0.6"/>
+            <circle cx="100" cy="100" r="5" fill="#c9a84c"/>
+          </svg>
+          <span class="nav-logo-text">Overture Dynamics</span>
+        </a>
         <ul class="nav-links">
           <li><a href="#problem">The Problem</a></li>
           <li><a href="#pillars">The Game</a></li>
@@ -1133,6 +1174,41 @@
     <div class="hero-bottom-fade"></div>
 
     <div class="hero-content">
+
+      <div class="hero-emblem">
+        <svg width="88" height="88" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="Overture Dynamics seal">
+          <circle cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+          <line x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="162" y1="38" x2="167" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="188" y1="100" x2="194" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="162" y1="162" x2="167" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="100" y1="188" x2="100" y2="194" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="38" y1="162" x2="33" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="12" y1="100" x2="6" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="38" y1="38" x2="33" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
+          <polygon points="100,9 191,100 100,191 9,100" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
+          <polygon points="100,3 106,9 100,15 94,9" fill="#c9a84c"/>
+          <polygon points="185,100 191,94 197,100 191,106" fill="#c9a84c"/>
+          <polygon points="100,185 106,191 100,197 94,191" fill="#c9a84c"/>
+          <polygon points="3,100 9,94 15,100 9,106" fill="#c9a84c"/>
+          <circle cx="146" cy="55" r="4" fill="#c9a84c"/>
+          <circle cx="146" cy="146" r="4" fill="#c9a84c"/>
+          <circle cx="55" cy="146" r="4" fill="#c9a84c"/>
+          <circle cx="55" cy="55" r="4" fill="#c9a84c"/>
+          <circle cx="100" cy="100" r="55" fill="none" stroke="#c9a84c" stroke-width="0.9"/>
+          <polygon points="100,44 107,86 100,142 93,86" fill="rgba(201,168,76,0.25)" stroke="#c9a84c" stroke-width="1.1"/>
+          <rect x="77" y="83" width="46" height="5" rx="1" fill="#c9a84c"/>
+          <polygon points="100,142 104,148 100,155 96,148" fill="#c9a84c"/>
+          <circle cx="100" cy="45" r="6" fill="#c9a84c"/>
+          <circle cx="155" cy="100" r="6" fill="#c9a84c"/>
+          <circle cx="100" cy="155" r="6" fill="#c9a84c"/>
+          <circle cx="45" cy="100" r="6" fill="#c9a84c"/>
+          <line x1="104" y1="100" x2="149" y2="100" stroke="#c9a84c" stroke-width="0.6"/>
+          <line x1="96" y1="100" x2="51" y2="100" stroke="#c9a84c" stroke-width="0.6"/>
+          <circle cx="100" cy="100" r="5" fill="#c9a84c"/>
+        </svg>
+      </div>
+
       <div class="hero-meta">
         <div class="hero-meta-item">
           <span class="hero-meta-label">Studio</span>
