@@ -1,0 +1,46 @@
+<svg width="400" height="283" viewBox="0 0 680 480" role="img" xmlns="http://www.w3.org/2000/svg">
+<title>Overture Dynamics logo mark</title>
+<desc>Heraldic seal mark for Overture Dynamics featuring a diamond frame enclosing a spear blade with compass nodes, above the studio name and tagline Play Own Evolve</desc>
+<style>
+.mk { fill: none; stroke: #c9a84c; }
+.gf { fill: #c9a84c; stroke: none; }
+.gd { fill: rgba(201,168,76,0.28); stroke: none; }
+.lbl { fill: #c9a84c; font-family: Cinzel,Georgia,'Times New Roman',serif; text-anchor: middle; }
+.lbd { fill: #8a6d28; font-family: Cinzel,Georgia,'Times New Roman',serif; text-anchor: middle; }
+</style>
+<rect width="680" height="480" fill="#06060d"/>
+<circle cx="340" cy="195" r="125" class="mk" stroke-width="0.8"/>
+<line x1="340" y1="68" x2="340" y2="57" class="mk" stroke-width="1.3"/>
+<line x1="428" y1="108" x2="435" y2="101" class="mk" stroke-width="1.3"/>
+<line x1="467" y1="195" x2="477" y2="195" class="mk" stroke-width="1.3"/>
+<line x1="428" y1="282" x2="435" y2="289" class="mk" stroke-width="1.3"/>
+<line x1="340" y1="322" x2="340" y2="333" class="mk" stroke-width="1.3"/>
+<line x1="252" y1="282" x2="245" y2="289" class="mk" stroke-width="1.3"/>
+<line x1="213" y1="195" x2="203" y2="195" class="mk" stroke-width="1.3"/>
+<line x1="252" y1="108" x2="245" y2="101" class="mk" stroke-width="1.3"/>
+<polygon points="340,65 470,195 340,325 210,195" class="mk" stroke-width="1"/>
+<polygon points="340,55 350,65 340,75 330,65" class="gf"/>
+<polygon points="460,195 470,185 480,195 470,205" class="gf"/>
+<polygon points="340,315 350,325 340,335 330,325" class="gf"/>
+<polygon points="220,195 210,185 200,195 210,205" class="gf"/>
+<circle cx="405" cy="130" r="3.5" class="gf"/>
+<circle cx="405" cy="260" r="3.5" class="gf"/>
+<circle cx="275" cy="260" r="3.5" class="gf"/>
+<circle cx="275" cy="130" r="3.5" class="gf"/>
+<circle cx="340" cy="195" r="78" class="mk" stroke-width="0.6"/>
+<polygon points="340,115 350,175 340,255 330,175" class="mk" stroke-width="0.9"/>
+<polygon points="340,115 350,175 340,255 330,175" class="gd"/>
+<rect x="307" y="172" width="66" height="6" rx="1" class="gf"/>
+<polygon points="340,255 346,264 340,273 334,264" class="gf"/>
+<circle cx="340" cy="117" r="5" class="gf"/>
+<circle cx="418" cy="195" r="5" class="gf"/>
+<circle cx="340" cy="273" r="5" class="gf"/>
+<circle cx="262" cy="195" r="5" class="gf"/>
+<line x1="345" y1="195" x2="413" y2="195" class="mk" stroke-width="0.5"/>
+<line x1="335" y1="195" x2="267" y2="195" class="mk" stroke-width="0.5"/>
+<circle cx="340" cy="195" r="5" class="gf"/>
+<line x1="148" y1="370" x2="532" y2="370" class="mk" stroke-width="0.5"/>
+<text x="340" y="402" class="lbl" font-size="24" letter-spacing="0.28em">OVERTURE DYNAMICS</text>
+<line x1="238" y1="418" x2="442" y2="418" class="mk" stroke-width="0.4"/>
+<text x="340" y="440" class="lbd" font-size="12" letter-spacing="0.22em">PLAY · OWN · EVOLVE</text>
+</svg>
