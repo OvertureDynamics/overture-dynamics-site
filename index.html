@@ -840,9 +840,10 @@
     }
     .problem-title {
       font-family: var(--ff-head);
-      font-size: 0.88rem;
+      font-size: 1.05rem;
+      font-weight: 700;
       letter-spacing: 0.06em;
-      color: var(--text-muted);
+      color: var(--text);
       margin-bottom: 0.5rem;
     }
     .problem-body {
@@ -1110,6 +1111,35 @@
     }
 
     /* ══════════════════════════════════════════════
+       CUSTOM CURSOR
+    ══════════════════════════════════════════════ */
+    html { cursor: none; }
+    #custom-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      pointer-events: none;
+      z-index: 99999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      /* centered on the hotspot */
+      margin: -10px 0 0 -10px;
+    }
+    #custom-cursor.visible { opacity: 1; }
+    #custom-cursor svg {
+      display: block;
+      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), filter 0.18s ease;
+    }
+    #custom-cursor.hovering svg {
+      transform: scale(1.55);
+      filter: drop-shadow(0 0 4px rgba(201,168,76,0.9));
+    }
+    #custom-cursor.clicking svg {
+      transform: scale(0.8);
+      filter: drop-shadow(0 0 2px rgba(201,168,76,0.5));
+    }
+
+    /* ══════════════════════════════════════════════
        CURSOR GLOW
     ══════════════════════════════════════════════ */
     #cursor-glow {
@@ -1255,6 +1285,21 @@
 
   <div id="scroll-progress"></div>
   <div id="cursor-glow"></div>
+
+  <!-- Custom cursor: miniature brand mark -->
+  <div id="custom-cursor">
+    <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <!-- cardinal ticks -->
+      <line x1="10" y1="1"  x2="10" y2="4.5" stroke="#c9a84c" stroke-width="1.2"/>
+      <line x1="19" y1="10" x2="15.5" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
+      <line x1="10" y1="19" x2="10" y2="15.5" stroke="#c9a84c" stroke-width="1.2"/>
+      <line x1="1"  y1="10" x2="4.5" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
+      <!-- diamond frame -->
+      <polygon points="10,5 15,10 10,15 5,10" fill="none" stroke="#c9a84c" stroke-width="1"/>
+      <!-- center node -->
+      <circle cx="10" cy="10" r="1.8" fill="#c9a84c"/>
+    </svg>
+  </div>
 
   <!-- ═══════════════════════════════════════════
        NAVIGATION
@@ -2116,6 +2161,26 @@
       resize();
       draw();
     })();
+
+    /* ── Custom cursor ───────────────────────── */
+    const cursor = document.getElementById('custom-cursor');
+    let cursorVisible = false;
+
+    document.addEventListener('mousemove', e => {
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+      if (!cursorVisible) { cursor.classList.add('visible'); cursorVisible = true; }
+    });
+    document.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
+    document.addEventListener('mouseenter', () => { if (cursorVisible) cursor.classList.add('visible'); });
+
+    // Hover state via delegation — catches all interactive elements
+    document.addEventListener('mouseover', e => {
+      cursor.classList.toggle('hovering', !!e.target.closest('a, button, [role="button"], input, select, textarea, label'));
+    });
+
+    // Click compression
+    document.addEventListener('mousedown', () => { cursor.classList.remove('hovering'); cursor.classList.add('clicking'); });
+    document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
 
     /* ── Cursor glow ─────────────────────────── */
     const cursorGlow = document.getElementById('cursor-glow');
