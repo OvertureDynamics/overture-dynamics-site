@@ -1110,6 +1110,28 @@
     }
 
     /* ══════════════════════════════════════════════
+       CURSOR GLOW
+    ══════════════════════════════════════════════ */
+    #cursor-glow {
+      position: fixed;
+      top: -300px;
+      left: -300px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, rgba(201,168,76,0.03) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 9;
+      will-change: transform;
+      mix-blend-mode: screen;
+    }
+
+    /* ══════════════════════════════════════════════
+       HERO PARALLAX
+    ══════════════════════════════════════════════ */
+    .hero-content { will-change: transform, opacity; }
+
+    /* ══════════════════════════════════════════════
        SCROLL PROGRESS BAR
     ══════════════════════════════════════════════ */
     #scroll-progress {
@@ -1232,6 +1254,7 @@
 <body>
 
   <div id="scroll-progress"></div>
+  <div id="cursor-glow"></div>
 
   <!-- ═══════════════════════════════════════════
        NAVIGATION
@@ -2093,6 +2116,30 @@
       resize();
       draw();
     })();
+
+    /* ── Cursor glow ─────────────────────────── */
+    const cursorGlow = document.getElementById('cursor-glow');
+    let cx = -1000, cy = -1000, rx = -1000, ry = -1000;
+    document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; });
+    document.addEventListener('mouseleave', () => { cx = -1000; cy = -1000; });
+    (function glowLoop() {
+      rx += (cx - rx) * 0.1;
+      ry += (cy - ry) * 0.1;
+      cursorGlow.style.transform = `translate(${rx}px, ${ry}px)`;
+      requestAnimationFrame(glowLoop);
+    })();
+
+    /* ── Hero parallax depth ─────────────────── */
+    const heroContent = document.querySelector('.hero-content');
+
+    function updateHeroParallax() {
+      const y  = window.scrollY;
+      const vh = window.innerHeight;
+      if (y > vh * 1.5) return;
+      heroContent.style.transform = `translateY(${y * 0.38}px)`;
+      heroContent.style.opacity   = Math.max(0, 1 - (y / vh) * 1.4);
+    }
+    window.addEventListener('scroll', updateHeroParallax, { passive: true });
 
     /* ── Scroll progress bar ─────────────────── */
     const progressBar = document.getElementById('scroll-progress');
