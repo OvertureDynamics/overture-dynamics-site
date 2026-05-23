@@ -132,6 +132,14 @@
       align-items: center;
       gap: 0.75rem;
       color: var(--text);
+      flex: 1;
+    }
+    .nav-right {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 0.75rem;
     }
     .nav-logo-mark { flex-shrink: 0; }
     .nav-logo-text {
@@ -1427,12 +1435,14 @@
           <li><a href="#about">Studio</a></li>
           <li><a href="#founders">Founder's Pass</a></li>
         </ul>
-        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-nav">Join Discord</a>
-        <button class="nav-hamburger" id="hamburger" aria-label="Toggle navigation">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div class="nav-right">
+          <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-nav">Join Discord</a>
+          <button class="nav-hamburger" id="hamburger" aria-label="Toggle navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
     </div>
   </nav>
