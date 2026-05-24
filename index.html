@@ -122,11 +122,10 @@
       border-color: var(--border);
     }
     .nav-inner {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
       gap: 1rem;
-      position: relative;
     }
     .nav-logo {
       display: flex;
@@ -162,10 +161,8 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 2.2rem;
-      position: absolute;
-      left: 50%;
-      transform: translateX(-50%);
+      gap: 0.45rem;
+      justify-content: center;
     }
     .nav-links a {
       font-family: var(--ff-head);
@@ -174,7 +171,7 @@
       text-transform: uppercase;
       color: var(--text-muted);
       border: 1px solid rgba(201,168,76,0.15);
-      padding: 0.4rem 0.9rem;
+      padding: 0.35rem 0.7rem;
       white-space: nowrap;
       transition: color 0.25s, border-color 0.25s, background 0.25s;
     }
