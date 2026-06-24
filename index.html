@@ -10,7 +10,7 @@
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#06060d" />
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23c9a84c' stroke-width='1.2'/%3E%3Cpolygon points='50,5 95,50 50,95 5,50' fill='none' stroke='%23c9a84c' stroke-width='1.4'/%3E%3Ccircle cx='50' cy='50' r='3' fill='%23c9a84c'/%3E%3C/svg%3E" />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -175,10 +175,12 @@
       white-space: nowrap;
       transition: color 0.25s, border-color 0.25s, background 0.25s;
     }
-    .nav-links a:hover {
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
       color: var(--text);
       border-color: rgba(201,168,76,0.4);
       background: rgba(201,168,76,0.05);
+      outline: none;
     }
     .btn-nav {
       font-family: var(--ff-head);
@@ -193,9 +195,11 @@
       transition: background 0.25s, box-shadow 0.25s;
       white-space: nowrap;
     }
-    .btn-nav:hover {
+    .btn-nav:hover,
+    .btn-nav:focus-visible {
       background: #deb95a;
       box-shadow: 0 0 28px rgba(201,168,76,0.35);
+      outline: none;
     }
     @media (max-width: 640px) {
       .nav-links { display: none; }
@@ -365,9 +369,11 @@
       transition: background 0.25s, box-shadow 0.3s;
       line-height: 1.4;
     }
-    .btn-primary:hover {
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
       background: #dbb94f;
       box-shadow: 0 0 50px rgba(201,168,76,0.45);
+      outline: none;
     }
     .btn-primary .btn-sub {
       font-size: 0.52rem;
@@ -390,10 +396,12 @@
       cursor: pointer;
       transition: border-color 0.25s, color 0.25s, box-shadow 0.25s;
     }
-    .btn-secondary:hover {
+    .btn-secondary:hover,
+    .btn-secondary:focus-visible {
       border-color: var(--border-hover);
       color: var(--gold);
       box-shadow: 0 0 24px rgba(201,168,76,0.1);
+      outline: none;
     }
 
     /* Scroll hint */
@@ -1141,9 +1149,17 @@
     }
 
     /* ══════════════════════════════════════════════
-       CUSTOM CURSOR
+       CUSTOM CURSOR — disabled for reduced motion
     ══════════════════════════════════════════════ */
-    html { cursor: none; }
+    @media (prefers-reduced-motion: reduce) {
+      html { cursor: auto !important; }
+      #custom-cursor { display: none !important; }
+      #cursor-glow { display: none !important; }
+      .hero-scanline { display: none; }
+      #hero-canvas { display: none; }
+    }
+
+    html:not([data-cursor-disabled]) { cursor: none; }
     #custom-cursor {
       position: fixed;
       top: 0; left: 0;
@@ -1152,7 +1168,6 @@
       z-index: 99999;
       opacity: 0;
       transition: opacity 0.3s ease;
-      /* centered on the hotspot */
       margin: -10px 0 0 -10px;
     }
     #custom-cursor.visible { opacity: 1; }
@@ -1277,6 +1292,7 @@
       transition: color 0.25s;
     }
     .mobile-nav a:hover,
+    .mobile-nav a:focus-visible,
     .mobile-nav a.active { color: var(--gold); }
     .mobile-nav .btn-nav {
       font-size: 0.68rem;
@@ -1365,6 +1381,40 @@
       opacity: 0.55;
     }
 
+    /* ══════════════════════════════════════════════
+       BACK TO TOP
+    ══════════════════════════════════════════════ */
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid var(--border);
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
+      pointer-events: none;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    #back-to-top:hover,
+    #back-to-top:focus-visible {
+      background: rgba(201,168,76,0.25);
+      border-color: var(--border-hover);
+      outline: none;
+    }
+    #back-to-top svg { width: 18px; height: 18px; }
   </style>
 </head>
 <body>
@@ -1373,16 +1423,13 @@
   <div id="cursor-glow"></div>
 
   <!-- Custom cursor: miniature brand mark -->
-  <div id="custom-cursor">
+  <div id="custom-cursor" aria-hidden="true">
     <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-      <!-- cardinal ticks -->
       <line x1="10" y1="1"  x2="10" y2="4.5" stroke="#c9a84c" stroke-width="1.2"/>
       <line x1="19" y1="10" x2="15.5" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
       <line x1="10" y1="19" x2="10" y2="15.5" stroke="#c9a84c" stroke-width="1.2"/>
       <line x1="1"  y1="10" x2="4.5" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
-      <!-- diamond frame -->
       <polygon points="10,5 15,10 10,15 5,10" fill="none" stroke="#c9a84c" stroke-width="1"/>
-      <!-- center node -->
       <circle cx="10" cy="10" r="1.8" fill="#c9a84c"/>
     </svg>
   </div>
@@ -1390,10 +1437,10 @@
   <!-- ═══════════════════════════════════════════
        NAVIGATION
   ═══════════════════════════════════════════ -->
-  <nav id="nav">
+  <nav id="nav" role="navigation" aria-label="Main navigation">
     <div class="container">
       <div class="nav-inner">
-        <a href="#" class="nav-logo">
+        <a href="#" class="nav-logo" aria-label="Overture Dynamics home">
           <svg class="nav-logo-mark" width="38" height="38" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
             <line x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
@@ -1451,7 +1498,7 @@
   <!-- ═══════════════════════════════════════════
        MOBILE NAV OVERLAY
   ═══════════════════════════════════════════ -->
-  <div class="mobile-nav" id="mobile-nav">
+  <div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
     <a href="#problem">The Problem</a>
     <a href="#pillars">The Game</a>
     <a href="#world">The World</a>
@@ -1466,16 +1513,16 @@
   <!-- ═══════════════════════════════════════════
        HERO
   ═══════════════════════════════════════════ -->
-  <section id="hero">
-    <canvas id="hero-canvas"></canvas>
-    <div class="hero-vignette"></div>
-    <div class="hero-scanline"></div>
-    <div class="hero-bottom-fade"></div>
+  <section id="hero" aria-label="Hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-vignette" aria-hidden="true"></div>
+    <div class="hero-scanline" aria-hidden="true"></div>
+    <div class="hero-bottom-fade" aria-hidden="true"></div>
 
     <div class="hero-content">
 
-      <div class="hero-emblem" id="hero-logo-animated">
-        <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-label="Overture Dynamics seal">
+      <div class="hero-emblem" id="hero-logo-animated" aria-hidden="true">
+        <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <radialGradient id="hero-logo-bg" cx="50%" cy="42%" r="48%">
               <stop offset="0%" stop-color="#c9a84c" stop-opacity="1"/>
@@ -1543,14 +1590,13 @@
           Founder's Pass
           <span class="btn-sub">$299 · Lifetime Access · Coming Soon</span>
         </a>
-        <!-- Replace href with your actual Discord invite link -->
         <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-secondary">
           Join Discord
         </a>
       </div>
     </div>
 
-    <div class="hero-scroll">
+    <div class="hero-scroll" aria-hidden="true">
       <div class="hero-scroll-line"></div>
     </div>
   </section>
@@ -1558,7 +1604,7 @@
   <!-- ═══════════════════════════════════════════
        STATS STRIP
   ═══════════════════════════════════════════ -->
-  <section id="stats">
+  <section id="stats" aria-label="Key statistics">
     <div class="container">
       <div class="stats-row">
         <div class="stat reveal">
@@ -1592,7 +1638,7 @@
   <!-- ═══════════════════════════════════════════
        THE PROBLEM
   ═══════════════════════════════════════════ -->
-  <section id="problem" class="section">
+  <section id="problem" class="section" aria-label="The Problem">
     <div class="container">
       <div class="section-head center reveal">
         <span class="eyebrow">The Problem</span>
@@ -1644,7 +1690,7 @@
   <!-- ═══════════════════════════════════════════
        PILLARS — THE GAME
   ═══════════════════════════════════════════ -->
-  <section id="pillars" class="section">
+  <section id="pillars" class="section" aria-label="Game pillars">
     <div class="container">
       <div class="section-head center reveal">
         <span class="eyebrow">The Game</span>
@@ -1701,7 +1747,7 @@
   <!-- ═══════════════════════════════════════════
        THE LIVING MMO
   ═══════════════════════════════════════════ -->
-  <section id="world" class="section">
+  <section id="world" class="section" aria-label="The living world">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Massively Multiplayer</span>
@@ -1755,7 +1801,7 @@
   <!-- ═══════════════════════════════════════════
        COMBAT & CRAFTING
   ═══════════════════════════════════════════ -->
-  <section id="combat" class="section">
+  <section id="combat" class="section" aria-label="Combat and crafting">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Combat &amp; Crafting</span>
@@ -1855,7 +1901,7 @@
   <!-- ═══════════════════════════════════════════
        ROADMAP
   ═══════════════════════════════════════════ -->
-  <section id="roadmap" class="section">
+  <section id="roadmap" class="section" aria-label="Development roadmap">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Development Roadmap</span>
@@ -1941,7 +1987,7 @@
   <!-- ═══════════════════════════════════════════
        ABOUT THE STUDIO
   ═══════════════════════════════════════════ -->
-  <section id="about" class="section">
+  <section id="about" class="section" aria-label="About the studio">
     <div class="container">
       <div class="about-grid">
 
@@ -1992,7 +2038,7 @@
   <!-- ═══════════════════════════════════════════
        FOUNDER'S PASS
   ═══════════════════════════════════════════ -->
-  <section id="founders" class="section">
+  <section id="founders" class="section" aria-label="Founder's Pass">
     <div class="container">
       <div class="founders-wrap">
 
@@ -2072,7 +2118,6 @@
         <div class="footer-socials">
           <p class="footer-socials-head">Community</p>
           <div class="social-links">
-            <!-- Replace # with actual links before launch -->
             <a href="https://x.com/OvertureMMO" target="_blank" rel="noopener" aria-label="Twitter/X">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
             </a>
@@ -2105,12 +2150,26 @@
     </div>
   </footer>
 
+  <!-- ═══════════════════════════════════════════
+       BACK TO TOP
+  ═══════════════════════════════════════════ -->
+  <button id="back-to-top" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <path d="M12 5v14M5 12l7-7 7 7"/>
+    </svg>
+  </button>
 
   <!-- ═══════════════════════════════════════════
        SCRIPTS
   ═══════════════════════════════════════════ -->
   <script>
     'use strict';
+
+    /* ── Detect reduced motion ────────────────── */
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      document.documentElement.setAttribute('data-cursor-disabled', 'true');
+    }
 
     /* ── Nav: glass on scroll ────────────────── */
     const nav = document.getElementById('nav');
@@ -2132,13 +2191,16 @@
     /* ── Hero canvas: living world simulation ── */
     (function () {
       const canvas = document.getElementById('hero-canvas');
-      const ctx    = canvas.getContext('2d');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
 
       const GOLD_R   = 201, GOLD_G   = 168, GOLD_B   = 76;
       const PURP_R   = 123, PURP_G   = 94,  PURP_B   = 167;
       const WHITE_R  = 237, WHITE_G  = 232, WHITE_B  = 223;
 
       let W, H, nodes;
+      let animationId = null;
+      let isVisible = true;
 
       /* Resize handler */
       function resize() {
@@ -2152,9 +2214,9 @@
         const count = Math.max(40, Math.floor((W * H) / 15000));
         nodes = Array.from({ length: count }, () => {
           const roll = Math.random();
-          const type = roll < 0.08 ? 'player'   // bright gold — player characters
-                     : roll < 0.22 ? 'agent'    // purple — AI world agents
-                     : 'npc';                    // dim white — NPCs
+          const type = roll < 0.08 ? 'player'
+                     : roll < 0.22 ? 'agent'
+                     : 'npc';
           return {
             x:  Math.random() * W,
             y:  Math.random() * H,
@@ -2170,6 +2232,11 @@
 
       /* Draw one frame */
       function draw() {
+        if (!isVisible) {
+          animationId = requestAnimationFrame(draw);
+          return;
+        }
+
         ctx.clearRect(0, 0, W, H);
 
         /* Edges */
@@ -2208,7 +2275,6 @@
           const pulse = 0.65 + 0.35 * Math.sin(n.phase);
 
           if (n.type === 'player') {
-            /* Glowing gold orb */
             const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
             grd.addColorStop(0, `rgba(${GOLD_R},${GOLD_G},${GOLD_B},${0.85 * pulse})`);
             grd.addColorStop(1, `rgba(${GOLD_R},${GOLD_G},${GOLD_B},0)`);
@@ -2223,7 +2289,6 @@
             ctx.fill();
 
           } else if (n.type === 'agent') {
-            /* Glowing purple agent */
             const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
             grd.addColorStop(0, `rgba(${PURP_R},${PURP_G},${PURP_B},${0.75 * pulse})`);
             grd.addColorStop(1, `rgba(${PURP_R},${PURP_G},${PURP_B},0)`);
@@ -2238,7 +2303,6 @@
             ctx.fill();
 
           } else {
-            /* Dim NPC point */
             ctx.fillStyle = `rgba(${WHITE_R},${WHITE_G},${WHITE_B},${0.18 * pulse})`;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 0.55, 0, Math.PI * 2);
@@ -2250,7 +2314,7 @@
           n.y += n.vy;  if (n.y < 0) n.y = H;  if (n.y > H) n.y = 0;
         });
 
-        requestAnimationFrame(draw);
+        animationId = requestAnimationFrame(draw);
       }
 
       /* Boot */
@@ -2258,27 +2322,38 @@
       ro.observe(canvas.parentElement);
       resize();
       draw();
+
+      /* Pause animation when not visible to save CPU */
+      const visibilityObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => { isVisible = e.isIntersecting; });
+      }, { threshold: 0 });
+      visibilityObserver.observe(canvas);
+
+      /* Cleanup on page unload */
+      window.addEventListener('beforeunload', () => {
+        if (animationId) cancelAnimationFrame(animationId);
+      });
     })();
 
     /* ── Custom cursor ───────────────────────── */
     const cursor = document.getElementById('custom-cursor');
     let cursorVisible = false;
 
-    document.addEventListener('mousemove', e => {
-      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      if (!cursorVisible) { cursor.classList.add('visible'); cursorVisible = true; }
-    });
-    document.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
-    document.addEventListener('mouseenter', () => { if (cursorVisible) cursor.classList.add('visible'); });
+    if (!prefersReducedMotion) {
+      document.addEventListener('mousemove', e => {
+        cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        if (!cursorVisible) { cursor.classList.add('visible'); cursorVisible = true; }
+      });
+      document.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
+      document.addEventListener('mouseenter', () => { if (cursorVisible) cursor.classList.add('visible'); });
 
-    // Hover state via delegation — catches all interactive elements
-    document.addEventListener('mouseover', e => {
-      cursor.classList.toggle('hovering', !!e.target.closest('a, button, [role="button"], input, select, textarea, label'));
-    });
+      document.addEventListener('mouseover', e => {
+        cursor.classList.toggle('hovering', !!e.target.closest('a, button, [role="button"], input, select, textarea, label'));
+      });
 
-    // Click compression
-    document.addEventListener('mousedown', () => { cursor.classList.remove('hovering'); cursor.classList.add('clicking'); });
-    document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
+      document.addEventListener('mousedown', () => { cursor.classList.remove('hovering'); cursor.classList.add('clicking'); });
+      document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
+    }
 
     /* ── Cursor glow ─────────────────────────── */
     const cursorGlow = document.getElementById('cursor-glow');
@@ -2392,7 +2467,47 @@
         '<span class="sd-line right"></span>';
       el.insertAdjacentElement('afterend', div);
     });
-  </script>
 
+    /* ── Back to top ──────────────────────────── */
+    const backToTop = document.getElementById('back-to-top');
+
+    function updateBackToTop() {
+      if (window.scrollY > 600) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    }
+
+    window.addEventListener('scroll', updateBackToTop, { passive: true });
+
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    /* ── Keyboard support: Escape closes mobile nav ── */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
+        mobileNav.classList.remove('open');
+        hamburger.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+
+    /* ── Smooth scroll with offset for fixed nav ── */
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        const target = document.querySelector(targetId);
+        if (!target) return;
+        e.preventDefault();
+        const navHeight = nav.offsetHeight;
+        const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+
+  </script>
 </body>
 </html>
