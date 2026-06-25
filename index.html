@@ -38,12 +38,12 @@
   </script>
   <style>
     /* ══════════════════════════════════════════════
-       DESIGN TOKENS
+       DESIGN TOKENS — now with transparency
     ══════════════════════════════════════════════ */
     :root {
-      --bg-deep:       #06060d;
-      --bg-mid:        #0b0b18;
-      --bg-card:       #0f0f1e;
+      --bg-deep:       rgba(6, 6, 13, 0.88);
+      --bg-mid:        rgba(11, 11, 24, 0.90);
+      --bg-card:       rgba(15, 15, 30, 0.85);
 
       --border:        rgba(201,168,76,0.12);
       --border-hover:  rgba(201,168,76,0.4);
@@ -70,7 +70,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      background: var(--bg-deep);
+      background: #06060d; /* solid fallback */
       color: var(--text);
       font-family: var(--ff-body);
       font-weight: 400;
@@ -81,6 +81,19 @@
     ul { list-style: none; }
 
     /* ══════════════════════════════════════════════
+       GLOBAL PARTICLE CANVAS (fixed background)
+    ══════════════════════════════════════════════ */
+    #global-canvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      tabindex: -1;
+    }
+
+    /* ══════════════════════════════════════════════
        UTILITIES
     ══════════════════════════════════════════════ */
     .container {
@@ -88,6 +101,8 @@
       max-width: var(--max-w);
       margin-inline: auto;
       padding-inline: clamp(1.25rem, 5vw, 2.5rem);
+      position: relative;
+      z-index: 1;
     }
 
     .eyebrow {
@@ -236,20 +251,13 @@
       justify-content: center;
       text-align: center;
       overflow: hidden;
-    }
-    #hero-canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      tabindex: -1; /* prevent accidental focus */
+      background: transparent; /* let canvas show through */
     }
     /* Radial vignette — pulls focus to center */
     .hero-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 75% 70% at center, transparent 20%, rgba(6,6,13,0.65) 65%, var(--bg-deep) 95%);
+      background: radial-gradient(ellipse 75% 70% at center, transparent 20%, rgba(6,6,13,0.65) 65%, rgba(6,6,13,0.95) 95%);
       z-index: 1;
     }
     /* Bottom fade into next section */
@@ -509,6 +517,9 @@
     ══════════════════════════════════════════════ */
     .section {
       padding: clamp(4.5rem, 11vw, 9rem) 0;
+      position: relative;
+      z-index: 1;
+      background: var(--bg-deep);
     }
     .section-head {
       margin-bottom: clamp(2.5rem, 6vw, 5rem);
@@ -564,7 +575,7 @@
       opacity: 0;
       transition: opacity 0.4s;
     }
-    .pillar:hover { background: #11111f; }
+    .pillar:hover { background: rgba(17,17,31,0.95); }
     .pillar:hover::after { opacity: 1; }
     .pillar-icon {
       width: 46px;
@@ -667,7 +678,7 @@
       position: relative;
       transition: background 0.3s;
     }
-    .about-stat-box:hover { background: #12121e; }
+    .about-stat-box:hover { background: rgba(18,18,30,0.95); }
     .about-stat-value {
       display: block;
       font-family: var(--ff-head);
@@ -886,7 +897,7 @@
       padding: 2rem 2.2rem;
       transition: background 0.3s;
     }
-    .problem-card:hover { background: #11111f; }
+    .problem-card:hover { background: rgba(17,17,31,0.95); }
     .problem-number {
       font-family: var(--ff-head);
       font-size: 0.92rem;
@@ -947,7 +958,7 @@
       padding: 2rem 2.2rem;
       transition: background 0.3s;
     }
-    .influence-card:hover { background: #0d0d1a; }
+    .influence-card:hover { background: rgba(13,13,26,0.95); }
     .influence-no {
       font-family: var(--ff-head);
       font-size: 0.92rem;
@@ -1008,7 +1019,7 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
-    .weapon-card:hover { background: #11111f; }
+    .weapon-card:hover { background: rgba(17,17,31,0.95); }
     .weapon-card:hover::before { opacity: 1; }
     .weapon-name {
       font-family: var(--ff-head);
@@ -1450,6 +1461,11 @@
 </head>
 <body>
 
+  <!-- ═══════════════════════════════════════════
+       GLOBAL PARTICLE BACKGROUND
+  ═══════════════════════════════════════════ -->
+  <canvas id="global-canvas" aria-hidden="true" tabindex="-1"></canvas>
+
   <div id="scroll-progress"></div>
   <div id="cursor-glow"></div>
 
@@ -1545,7 +1561,6 @@
        HERO
   ═══════════════════════════════════════════ -->
   <section id="hero" aria-label="Hero">
-    <canvas id="hero-canvas" aria-hidden="true" tabindex="-1"></canvas>
     <div class="hero-vignette" aria-hidden="true"></div>
     <div class="hero-scanline" aria-hidden="true"></div>
     <div class="hero-bottom-fade" aria-hidden="true"></div>
@@ -2222,35 +2237,31 @@
     }, { threshold: 0.1 });
     revealEls.forEach(el => revealObserver.observe(el));
 
-    /* ── Hero canvas: living world simulation ── */
+    /* ── Global particle background (Black & Blue) ── */
     (function () {
-      const canvas = document.getElementById('hero-canvas');
+      const canvas = document.getElementById('global-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
 
-      const GOLD_R   = 201, GOLD_G   = 168, GOLD_B   = 76;
-      const PURP_R   = 123, PURP_G   = 94,  PURP_B   = 167;
-      const WHITE_R  = 237, WHITE_G  = 232, WHITE_B  = 223;
+      // Strict Black & Blue palette
+      const BLUE_R = 0, BLUE_G = 150, BLUE_B = 255;
+      const DARK_R = 10, DARK_G = 15, DARK_B = 25;
 
       let W, H, nodes;
       let animationId = null;
       let isVisible = true;
 
-      /* Resize handler */
       function resize() {
-        W = canvas.width  = canvas.offsetWidth;
-        H = canvas.height = canvas.offsetHeight;
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
         buildNodes();
       }
 
-      /* Create a field of nodes */
       function buildNodes() {
-        const count = Math.max(40, Math.floor((W * H) / 15000));
-        nodes = Array.from({ length: count }, () => {
-          const roll = Math.random();
-          const type = roll < 0.08 ? 'player'
-                     : roll < 0.22 ? 'agent'
-                     : 'npc';
+        const count = Math.max(60, Math.floor((W * H) / 12000));
+        nodes = Array.from({ length: count }, (_, i) => {
+          // Strictly alternating 2-step cycle: Blue → Dark
+          const type = (i % 2 === 0) ? 'blue' : 'dark';
           return {
             x:  Math.random() * W,
             y:  Math.random() * H,
@@ -2264,7 +2275,6 @@
         });
       }
 
-      /* Draw one frame */
       function draw() {
         if (!isVisible) {
           animationId = requestAnimationFrame(draw);
@@ -2273,10 +2283,10 @@
 
         ctx.clearRect(0, 0, W, H);
 
-        /* Edges */
         const maxD  = Math.min(W, H) * 0.18;
         const maxD2 = maxD * maxD;
 
+        // Draw edges
         for (let i = 0; i < nodes.length; i++) {
           const a = nodes[i];
           for (let j = i + 1; j < nodes.length; j++) {
@@ -2286,15 +2296,14 @@
             const d2 = dx * dx + dy * dy;
             if (d2 >= maxD2) continue;
 
-            const t       = 1 - Math.sqrt(d2) / maxD;
-            const special = a.type !== 'npc' || b.type !== 'npc';
+            const t = 1 - Math.sqrt(d2) / maxD;
 
-            if (special) {
-              ctx.strokeStyle = `rgba(${GOLD_R},${GOLD_G},${GOLD_B},${t * 0.22})`;
-              ctx.lineWidth = 0.9;
+            if (a.type === 'blue' || b.type === 'blue') {
+              ctx.strokeStyle = `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, ${t * 0.25})`;
+              ctx.lineWidth = 1.2;
             } else {
-              ctx.strokeStyle = `rgba(${WHITE_R},${WHITE_G},${WHITE_B},${t * 0.07})`;
-              ctx.lineWidth = 0.35;
+              ctx.strokeStyle = `rgba(${DARK_R + 5}, ${DARK_G + 5}, ${DARK_B + 10}, ${t * 0.15})`;
+              ctx.lineWidth = 0.6;
             }
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
@@ -2303,47 +2312,33 @@
           }
         }
 
-        /* Nodes */
+        // Draw nodes
         nodes.forEach(n => {
           n.phase += n.phaseSpeed;
           const pulse = 0.65 + 0.35 * Math.sin(n.phase);
 
-          if (n.type === 'player') {
+          if (n.type === 'blue') {
+            // Glowing blue orb
             const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
-            grd.addColorStop(0, `rgba(${GOLD_R},${GOLD_G},${GOLD_B},${0.85 * pulse})`);
-            grd.addColorStop(1, `rgba(${GOLD_R},${GOLD_G},${GOLD_B},0)`);
+            grd.addColorStop(0, `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, ${0.85 * pulse})`);
+            grd.addColorStop(1, `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, 0)`);
             ctx.fillStyle = grd;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = `rgba(${GOLD_R},${GOLD_G},${GOLD_B},1)`;
+            ctx.fillStyle = `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, 1)`;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 1.1, 0, Math.PI * 2);
             ctx.fill();
-
-          } else if (n.type === 'agent') {
-            const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
-            grd.addColorStop(0, `rgba(${PURP_R},${PURP_G},${PURP_B},${0.75 * pulse})`);
-            grd.addColorStop(1, `rgba(${PURP_R},${PURP_G},${PURP_B},0)`);
-            ctx.fillStyle = grd;
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = `rgba(${PURP_R},${PURP_G},${PURP_B},0.9)`;
-            ctx.beginPath();
-            ctx.arc(n.x, n.y, n.r * 0.75, 0, Math.PI * 2);
-            ctx.fill();
-
           } else {
-            ctx.fillStyle = `rgba(${WHITE_R},${WHITE_G},${WHITE_B},${0.18 * pulse})`;
+            // Dark / "black" node — very faint
+            ctx.fillStyle = `rgba(${DARK_R}, ${DARK_G}, ${DARK_B}, ${0.3 * pulse})`;
             ctx.beginPath();
-            ctx.arc(n.x, n.y, n.r * 0.55, 0, Math.PI * 2);
+            ctx.arc(n.x, n.y, n.r * 0.7, 0, Math.PI * 2);
             ctx.fill();
           }
 
-          /* Move & wrap */
           n.x += n.vx;  if (n.x < 0) n.x = W;  if (n.x > W) n.x = 0;
           n.y += n.vy;  if (n.y < 0) n.y = H;  if (n.y > H) n.y = 0;
         });
@@ -2351,13 +2346,11 @@
         animationId = requestAnimationFrame(draw);
       }
 
-      /* Boot */
       const ro = new ResizeObserver(resize);
-      ro.observe(canvas.parentElement);
+      ro.observe(document.body);
       resize();
       draw();
 
-      /* Pause animation when not visible */
       const visibilityObserver = new IntersectionObserver((entries) => {
         entries.forEach(e => { isVisible = e.isIntersecting; });
       }, { threshold: 0 });
@@ -2388,7 +2381,7 @@
       document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
     }
 
-    /* ── Cursor glow (still works if hover) ──── */
+    /* ── Cursor glow ──────────────────────────── */
     const cursorGlow = document.getElementById('cursor-glow');
     let cx = -1000, cy = -1000, rx = -1000, ry = -1000;
     if (hasHover) {
@@ -2402,7 +2395,7 @@
       requestAnimationFrame(glowLoop);
     })();
 
-    /* ── Hero parallax depth + scroll progress ── */
+    /* ── Hero parallax + scroll progress ──────── */
     const heroContent = document.querySelector('.hero-content');
     const progressBar = document.getElementById('scroll-progress');
 
@@ -2410,12 +2403,10 @@
     function updateScrollState() {
       const y  = window.scrollY;
       const vh = window.innerHeight;
-      // parallax
       if (y <= vh * 1.5) {
         heroContent.style.transform = `translateY(${y * 0.38}px)`;
         heroContent.style.opacity   = Math.max(0, 1 - (y / vh) * 1.4);
       }
-      // progress
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       progressBar.style.width = (docH > 0 ? y / docH * 100 : 0) + '%';
     }
@@ -2477,79 +2468,4 @@
     }, { threshold: 0.5 });
     counterEls.forEach(el => counterObserver.observe(el));
 
-    /* ── Hamburger / mobile nav ──────────────── */
-    const hamburger  = document.getElementById('hamburger');
-    const mobileNav  = document.getElementById('mobile-nav');
-
-    hamburger.addEventListener('click', () => {
-      const open = mobileNav.classList.toggle('open');
-      hamburger.classList.toggle('open', open);
-      document.body.style.overflow = open ? 'hidden' : '';
-    });
-
-    mobileNav.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', () => {
-        mobileNav.classList.remove('open');
-        hamburger.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-    });
-
-    /* ── Diamond section dividers ────────────── */
-    const dividerAfter = ['problem', 'pillars', 'world', 'combat', 'roadmap'];
-    dividerAfter.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const div = document.createElement('div');
-      div.className = 'section-divider';
-      div.innerHTML =
-        '<span class="sd-line"></span>' +
-        '<svg class="sd-diamond" width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">' +
-        '<polygon points="5,0 10,5 5,10 0,5" fill="#c9a84c"/></svg>' +
-        '<span class="sd-line right"></span>';
-      el.insertAdjacentElement('afterend', div);
-    });
-
-    /* ── Back to top ──────────────────────────── */
-    const backToTop = document.getElementById('back-to-top');
-
-    function updateBackToTop() {
-      if (window.scrollY > 600) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
-    }
-
-    window.addEventListener('scroll', updateBackToTop, { passive: true });
-
-    backToTop.addEventListener('click', () => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    /* ── Keyboard: Escape closes mobile nav ──── */
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileNav.classList.contains('open')) {
-        mobileNav.classList.remove('open');
-        hamburger.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-    });
-
-    /* ── Smooth scroll with offset ────────────── */
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const targetId = this.getAttribute('href');
-        if (targetId === '#') return;
-        const target = document.querySelector(targetId);
-        if (!target) return;
-        e.preventDefault();
-        const navHeight = nav.offsetHeight;
-        const top = target.getBoundingClientRect().top + window.scrollY - navHeight - 16;
-        window.scrollTo({ top, behavior: 'smooth' });
-      });
-    });
-
-  </script>
-</body>
-</html>
+    /* ──
