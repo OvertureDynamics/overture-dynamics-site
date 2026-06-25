@@ -81,6 +81,37 @@
     ul { list-style: none; }
 
     /* ══════════════════════════════════════════════
+       CUSTOM CURSOR — only on hover-capable devices
+    ══════════════════════════════════════════════ */
+    @media (hover: hover) {
+      html { cursor: none; }
+    }
+    #custom-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      pointer-events: none;
+      z-index: 99999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      margin: -10px 0 0 -10px;
+    }
+    @media (hover: hover) { #custom-cursor.visible { opacity: 1; } }
+    @media (hover: none) { #custom-cursor { display: none !important; } }
+    #custom-cursor svg {
+      display: block;
+      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), filter 0.18s ease;
+    }
+    #custom-cursor.hovering svg {
+      transform: scale(1.55);
+      filter: drop-shadow(0 0 4px rgba(201,168,76,0.9));
+    }
+    #custom-cursor.clicking svg {
+      transform: scale(0.8);
+      filter: drop-shadow(0 0 2px rgba(201,168,76,0.5));
+    }
+
+    /* ══════════════════════════════════════════════
        NOISE TEXTURE OVERLAY
     ══════════════════════════════════════════════ */
     #noise-overlay {
@@ -292,7 +323,6 @@
       padding: 0.35rem 0.7rem;
       white-space: nowrap;
       transition: color 0.25s, border-color 0.25s, background 0.25s;
-      cursor: default;
     }
     .nav-links a:hover,
     .nav-links a:focus-visible {
@@ -310,7 +340,6 @@
       background: var(--gold);
       padding: 0.6rem 1.3rem;
       border: none;
-      cursor: default;
       transition: background 0.25s, box-shadow 0.25s;
       white-space: nowrap;
     }
@@ -470,7 +499,6 @@
       background: var(--gold);
       padding: 1.05rem 2.4rem;
       border: none;
-      cursor: pointer;
       transition: background 0.25s, box-shadow 0.3s, transform 0.25s cubic-bezier(.34,1.56,.64,1);
       line-height: 1.4;
     }
@@ -497,7 +525,6 @@
       background: transparent;
       padding: 1.05rem 2.4rem;
       border: 1px solid var(--border);
-      cursor: pointer;
       transition: border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(.34,1.56,.64,1);
     }
     .btn-secondary:hover,
@@ -635,7 +662,6 @@
       padding: clamp(2rem, 4.5vw, 3.2rem);
       overflow: hidden;
       transition: background 0.35s;
-      cursor: default;
     }
     .pillar::after {
       content: '';
@@ -719,7 +745,6 @@
       background: var(--bg-mid);
       padding: 2rem 2.2rem;
       transition: background 0.3s;
-      cursor: default;
     }
     .problem-card:hover { background: rgba(17,17,31,0.85); }
     .problem-number {
@@ -789,7 +814,6 @@
       padding: 1.6rem 2rem;
       position: relative;
       transition: background 0.3s;
-      cursor: default;
     }
     .about-stat-box:hover { background: rgba(18,18,30,0.85); }
     .about-stat-value {
@@ -918,7 +942,6 @@
       background: var(--bg-deep);
       padding: 2rem 2.2rem;
       transition: background 0.3s;
-      cursor: default;
     }
     .influence-card:hover { background: rgba(13,13,26,0.85); }
     .influence-no {
@@ -966,7 +989,6 @@
       padding: 1.4rem 1.6rem;
       transition: background 0.3s;
       position: relative;
-      cursor: default;
     }
     .weapon-card::before {
       content: '';
@@ -1065,7 +1087,6 @@
     .roadmap-item {
       position: relative;
       padding-bottom: 3.5rem;
-      cursor: default;
       transition: background 0.3s ease, border-color 0.3s ease;
       border: 1px solid transparent;
       border-radius: 4px;
@@ -1117,7 +1138,6 @@
       display: flex;
       align-items: center;
       gap: 0.8rem;
-      cursor: default;
     }
     .roadmap-item.active .roadmap-stage::after {
       content: " ⚡ LIVE";
@@ -1340,7 +1360,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
@@ -1394,7 +1413,6 @@
       height: 28px;
       background: none;
       border: none;
-      cursor: default;
       padding: 12px;
       margin: -8px;
       flex-shrink: 0;
@@ -1508,35 +1526,6 @@
     #hero-logo-animated .ew-e  { stroke-dasharray: 46; stroke-dashoffset: 46; animation: logo-draw .35s 4.75s ease both; }
     #hero-logo-animated .ew-w  { stroke-dasharray: 46; stroke-dashoffset: 46; animation: logo-draw .35s 4.8s ease both; }
     #hero-logo-animated .glow  { animation: logo-glowIn 2s .3s ease both, logo-breathe 5s 7s ease-in-out infinite; }
-
-    /* ══════════════════════════════════════════════
-       CUSTOM CURSOR
-    ══════════════════════════════════════════════ */
-    @media (hover: hover) { html { cursor: none; } }
-    #custom-cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 20px; height: 20px;
-      pointer-events: none;
-      z-index: 99999;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      margin: -10px 0 0 -10px;
-    }
-    @media (hover: hover) { #custom-cursor.visible { opacity: 1; } }
-    @media (hover: none) { #custom-cursor { display: none !important; } }
-    #custom-cursor svg {
-      display: block;
-      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), filter 0.18s ease;
-    }
-    #custom-cursor.hovering svg {
-      transform: scale(1.55);
-      filter: drop-shadow(0 0 4px rgba(201,168,76,0.9));
-    }
-    #custom-cursor.clicking svg {
-      transform: scale(0.8);
-      filter: drop-shadow(0 0 2px rgba(201,168,76,0.5));
-    }
 
     /* ══════════════════════════════════════════════
        CURSOR GLOW — reduced bloom
