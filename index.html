@@ -2237,19 +2237,16 @@
     }, { threshold: 0.1 });
     revealEls.forEach(el => revealObserver.observe(el));
 
-    /* ── Global particle background (Black & Blue) ── */
+    /* ── Global particle background (colour‑shifting) ── */
     (function () {
       const canvas = document.getElementById('global-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
 
-      // Strict Black & Blue palette
-      const BLUE_R = 0, BLUE_G = 150, BLUE_B = 255;
-      const DARK_R = 10, DARK_G = 15, DARK_B = 25;
-
       let W, H, nodes;
       let animationId = null;
       let isVisible = true;
+      let hue = 210; // start at blue, will drift
 
       function resize() {
         W = canvas.width  = window.innerWidth;
@@ -2260,7 +2257,7 @@
       function buildNodes() {
         const count = Math.max(60, Math.floor((W * H) / 12000));
         nodes = Array.from({ length: count }, (_, i) => {
-          // Strictly alternating 2-step cycle: Blue → Dark
+          // Strictly alternating 2‑step cycle: Blue → Dark
           const type = (i % 2 === 0) ? 'blue' : 'dark';
           return {
             x:  Math.random() * W,
@@ -2281,10 +2278,16 @@
           return;
         }
 
+        // Slowly drift the hue (0.05° per frame → ~360° in 2 hours, smooth and subtle)
+        hue = (hue + 0.05) % 360;
+
         ctx.clearRect(0, 0, W, H);
 
         const maxD  = Math.min(W, H) * 0.18;
         const maxD2 = maxD * maxD;
+
+        // Convert current hue to RGB for blue nodes
+        const blueRGB = hslToRgb(hue / 360, 0.85, 0.55);
 
         // Draw edges
         for (let i = 0; i < nodes.length; i++) {
@@ -2299,10 +2302,10 @@
             const t = 1 - Math.sqrt(d2) / maxD;
 
             if (a.type === 'blue' || b.type === 'blue') {
-              ctx.strokeStyle = `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, ${t * 0.25})`;
+              ctx.strokeStyle = `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, ${t * 0.30})`;
               ctx.lineWidth = 1.2;
             } else {
-              ctx.strokeStyle = `rgba(${DARK_R + 5}, ${DARK_G + 5}, ${DARK_B + 10}, ${t * 0.15})`;
+              ctx.strokeStyle = `rgba(15, 20, 35, ${t * 0.15})`;
               ctx.lineWidth = 0.6;
             }
             ctx.beginPath();
@@ -2318,22 +2321,23 @@
           const pulse = 0.65 + 0.35 * Math.sin(n.phase);
 
           if (n.type === 'blue') {
-            // Glowing blue orb
+            // Glowing orb with current hue
             const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
-            grd.addColorStop(0, `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, ${0.85 * pulse})`);
-            grd.addColorStop(1, `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, 0)`);
+            grd.addColorStop(0, `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, ${0.85 * pulse})`);
+            grd.addColorStop(1, `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, 0)`);
             ctx.fillStyle = grd;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = `rgba(${BLUE_R}, ${BLUE_G}, ${BLUE_B}, 1)`;
+            ctx.fillStyle = `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, 1)`;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 1.1, 0, Math.PI * 2);
             ctx.fill();
           } else {
-            // Dark / "black" node — very faint
-            ctx.fillStyle = `rgba(${DARK_R}, ${DARK_G}, ${DARK_B}, ${0.3 * pulse})`;
+            // Dark nodes – stay near‑black but pulse slightly
+            const darkPulse = 0.15 + 0.15 * pulse;
+            ctx.fillStyle = `rgba(10, 15, 28, ${darkPulse})`;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 0.7, 0, Math.PI * 2);
             ctx.fill();
@@ -2344,6 +2348,29 @@
         });
 
         animationId = requestAnimationFrame(draw);
+      }
+
+      // Helper: convert HSL to RGB (all values 0–255)
+      function hslToRgb(h, s, l) {
+        let r, g, b;
+        if (s === 0) {
+          r = g = b = l;
+        } else {
+          const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+          };
+          const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+          const p = 2 * l - q;
+          r = hue2rgb(p, q, h + 1/3);
+          g = hue2rgb(p, q, h);
+          b = hue2rgb(p, q, h - 1/3);
+        }
+        return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
       }
 
       const ro = new ResizeObserver(resize);
