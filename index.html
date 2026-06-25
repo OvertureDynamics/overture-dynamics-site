@@ -1045,7 +1045,7 @@
     }
 
     /* ══════════════════════════════════════════════
-       ROADMAP — clean descriptive text, no duplicate boxes
+       ROADMAP — clickable with expandable details, no tags
     ══════════════════════════════════════════════ */
     #roadmap { background: var(--bg-deep); }
     .roadmap-timeline {
@@ -1064,6 +1064,7 @@
     .roadmap-item {
       position: relative;
       padding-bottom: 3.5rem;
+      cursor: pointer;
     }
     .roadmap-item:last-child { padding-bottom: 0; }
     .roadmap-item::before {
@@ -1103,6 +1104,10 @@
       color: var(--text-muted);
       margin-bottom: 0.3rem;
       transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      cursor: pointer;
     }
     .roadmap-item.active .roadmap-stage::after {
       content: " ⚡ LIVE";
@@ -1111,6 +1116,18 @@
       opacity: 0.8;
       letter-spacing: 0.1em;
     }
+    .roadmap-expand-icon {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: var(--gold-dim);
+      transition: transform 0.3s ease, color 0.3s ease;
+      margin-left: auto;
+    }
+    .roadmap-item.expanded .roadmap-expand-icon {
+      transform: rotate(180deg);
+      color: var(--gold);
+    }
+
     .roadmap-desc {
       font-size: 0.92rem;
       color: var(--text-muted);
@@ -1120,23 +1137,51 @@
     }
     .roadmap-item:not(.active) .roadmap-desc { color: var(--text-dim); }
 
-    .roadmap-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+    .roadmap-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(.22,1,.36,1), opacity 0.4s ease, margin 0.4s ease;
+      opacity: 0;
+      margin-top: 0;
     }
-    .roadmap-tag {
+    .roadmap-item.expanded .roadmap-details {
+      max-height: 400px;
+      opacity: 1;
+      margin-top: 0.8rem;
+    }
+    .roadmap-details-inner {
+      background: rgba(15,15,30,0.6);
+      border: 1px solid var(--border);
+      padding: 1.2rem 1.6rem;
+      border-radius: 2px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 1.5rem;
+    }
+    .roadmap-detail-item {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+    }
+    .roadmap-detail-item .label {
+      color: var(--text-dim);
       font-family: var(--ff-head);
       font-size: 0.58rem;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-      padding: 0.3rem 0.7rem;
+      flex-shrink: 0;
     }
-    .roadmap-item.active .roadmap-tag {
-      color: var(--gold-dim);
-      border-color: rgba(201,168,76,0.25);
+    .roadmap-detail-item .value {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .roadmap-detail-item .value.gold { color: var(--gold); }
+
+    @media (max-width: 560px) {
+      .roadmap-details-inner { grid-template-columns: 1fr; }
+      .roadmap-stage { flex-wrap: wrap; }
     }
 
     /* ══════════════════════════════════════════════
@@ -1969,14 +2014,14 @@
   </section>
 
   <!-- ═══════════════════════════════════════════
-       ROADMAP — descriptive text only, no duplicate boxes
+       ROADMAP — clickable with expandable details, no tags
   ═══════════════════════════════════════════ -->
   <section id="roadmap" class="section" aria-label="Development roadmap">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Development Roadmap</span>
         <h2>The path to a <span class="gold">living world.</span></h2>
-        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation.</p>
+        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. Click any phase to expand full details.</p>
       </div>
 
       <div class="roadmap-timeline">
@@ -1984,67 +2029,90 @@
         <!-- Phase 1 -->
         <div class="roadmap-item active reveal" data-phase="1">
           <p class="roadmap-year">2026 – 2027 &nbsp;·&nbsp; Phase 1</p>
-          <div class="roadmap-stage">Foundation · Pre-Seed &amp; Seed</div>
+          <div class="roadmap-stage">
+            Foundation · Pre-Seed &amp; Seed
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
           <p class="roadmap-desc">Raising $500K pre-seed to build the three proof-of-concept assets — ERC-8004 NPC prototype, UE5 combat vertical slice, and GDD. Seed round of $3M closes by end of 2027 after live NPC demo, playable combat build, and 1,000+ Discord members. First full-time engineering and AI hires join. Economy Agent goes live.</p>
-          <div class="roadmap-tags">
-            <span class="roadmap-tag">$500K Pre-Seed</span>
-            <span class="roadmap-tag">ERC-8004 Prototype</span>
-            <span class="roadmap-tag">Combat Vertical Slice</span>
-            <span class="roadmap-tag">$3M Seed Close</span>
-            <span class="roadmap-tag">Founder's Pass Launch</span>
-            <span class="roadmap-tag">Economy Agent Live</span>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">5–12 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate, GDD complete, ERC-8004 prototype</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat vertical slice on UE5, Discord 1,000+, pre-seed close</span></div>
+            </div>
           </div>
         </div>
 
         <!-- Phase 2 -->
         <div class="roadmap-item reveal delay-1" data-phase="2">
           <p class="roadmap-year">2028 &nbsp;·&nbsp; Phase 2</p>
-          <div class="roadmap-stage">Pre-Alpha · Series A</div>
+          <div class="roadmap-stage">
+            Pre-Alpha · Series A
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
           <p class="roadmap-desc">$15M Series A raises on demonstrated NPC stability and all simulation agents integrated. A 10–18 person team builds toward internal alpha. Weapon crafting, marketplace v1, and all five world agents run simultaneously for the first time.</p>
-          <div class="roadmap-tags">
-            <span class="roadmap-tag">$15M Series A</span>
-            <span class="roadmap-tag">All 5 Agents Integrated</span>
-            <span class="roadmap-tag">Internal Alpha</span>
-            <span class="roadmap-tag">Marketplace v1</span>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">10–18 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M (Series A)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All simulation agents integrated</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Weapon crafting complete, marketplace v1, Series A raise</span></div>
+            </div>
           </div>
         </div>
 
         <!-- Phase 3 -->
         <div class="roadmap-item reveal delay-2" data-phase="3">
           <p class="roadmap-year">2029 – 2030 &nbsp;·&nbsp; Phase 3</p>
-          <div class="roadmap-stage">Closed Alpha</div>
+          <div class="roadmap-stage">
+            Closed Alpha
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
           <p class="roadmap-desc">Founder's Pass holders access the world — the only way to play during this phase. Full world simulation runs live for the first time with real players. 1K-player closed alpha. Series B preparation begins.</p>
-          <div class="roadmap-tags">
-            <span class="roadmap-tag">Founders-Only Access</span>
-            <span class="roadmap-tag">Full World Simulation Live</span>
-            <span class="roadmap-tag">Series B Prep</span>
-            <span class="roadmap-tag">1K-Player Alpha</span>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">15–22 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M (Series A/B)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass holders access the world</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player closed alpha, full world simulation live, Series B prep</span></div>
+            </div>
           </div>
         </div>
 
         <!-- Phase 4 -->
         <div class="roadmap-item reveal delay-3" data-phase="4">
           <p class="roadmap-year">2031 – 2032 &nbsp;·&nbsp; Phase 4</p>
-          <div class="roadmap-stage">Open Beta · Full Subscription Launch</div>
+          <div class="roadmap-stage">
+            Open Beta · Full Subscription Launch
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
           <p class="roadmap-desc">Public subscription launch. 5K–20K players, full subscription launch, economy tuning, press & influencer push. $500K MRR target by end of 2032 — $6M subscription ARR.</p>
-          <div class="roadmap-tags">
-            <span class="roadmap-tag">Open Beta</span>
-            <span class="roadmap-tag">$500K MRR Target</span>
-            <span class="roadmap-tag">5K–20K Players</span>
-            <span class="roadmap-tag">Series B / C</span>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">20–28 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M (Series B/C)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Full subscription launch, economy tuning, press & influencer push</span></div>
+            </div>
           </div>
         </div>
 
         <!-- Phase 5 -->
         <div class="roadmap-item reveal delay-4" data-phase="5">
           <p class="roadmap-year">2033 – 2034 &nbsp;·&nbsp; Phase 5</p>
-          <div class="roadmap-stage">Release · The Living World</div>
+          <div class="roadmap-stage">
+            Release · The Living World
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
           <p class="roadmap-desc">Full public launch targeting 200,000–500,000 registered players. ~120K subscribers generating $21.6M subscription ARR plus marketplace fees. On-chain ownership layer activates. The world runs itself — entirely.</p>
-          <div class="roadmap-tags">
-            <span class="roadmap-tag">Public Launch</span>
-            <span class="roadmap-tag">200K–500K Players</span>
-            <span class="roadmap-tag">$20M–$25M ARR</span>
-            <span class="roadmap-tag">On-Chain Ownership Activates</span>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">30 people (cap)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M (Series B/C)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch, on-chain ownership layer activates</span></div>
+            </div>
           </div>
         </div>
 
@@ -2452,6 +2520,14 @@
         if (animationId) cancelAnimationFrame(animationId);
       });
     })();
+
+    /* ── Interactive Roadmap (click to expand) ── */
+    document.querySelectorAll('.roadmap-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        if (e.target.closest('a')) return;
+        this.classList.toggle('expanded');
+      });
+    });
 
     /* ── Section Progress Indicator ──────────── */
     const sections = ['hero', 'problem', 'pillars', 'world', 'combat', 'roadmap', 'founders'];
