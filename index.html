@@ -1065,13 +1065,22 @@
       position: relative;
       padding-bottom: 3.5rem;
       cursor: pointer;
+      transition: background 0.3s ease, border-color 0.3s ease;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      padding: 1.2rem 1.2rem 3.5rem 1.2rem;
+      margin: 0 -1.2rem;
     }
     .roadmap-item:last-child { padding-bottom: 0; }
+    .roadmap-item:hover {
+      background: rgba(201,168,76,0.04);
+      border-color: rgba(201,168,76,0.15);
+    }
     .roadmap-item::before {
       content: '';
       position: absolute;
-      left: -2.5rem;
-      top: 0.55rem;
+      left: -0.5rem;
+      top: 1.8rem;
       width: 9px;
       height: 9px;
       border-radius: 50%;
@@ -1122,10 +1131,16 @@
       color: var(--gold-dim);
       transition: transform 0.3s ease, color 0.3s ease;
       margin-left: auto;
+      opacity: 0.6;
+    }
+    .roadmap-item:hover .roadmap-expand-icon {
+      opacity: 1;
+      color: var(--gold);
     }
     .roadmap-item.expanded .roadmap-expand-icon {
       transform: rotate(180deg);
       color: var(--gold);
+      opacity: 1;
     }
 
     .roadmap-desc {
@@ -1182,6 +1197,7 @@
     @media (max-width: 560px) {
       .roadmap-details-inner { grid-template-columns: 1fr; }
       .roadmap-stage { flex-wrap: wrap; }
+      .roadmap-item { padding: 0.8rem 0.8rem 2.5rem 0.8rem; margin: 0 -0.8rem; }
     }
 
     /* ══════════════════════════════════════════════
@@ -2021,7 +2037,7 @@
       <div class="section-head reveal">
         <span class="eyebrow">Development Roadmap</span>
         <h2>The path to a <span class="gold">living world.</span></h2>
-        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. Click any phase to expand full details.</p>
+        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. <strong style="color: var(--gold-dim);">Click any phase to expand details.</strong></p>
       </div>
 
       <div class="roadmap-timeline">
