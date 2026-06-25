@@ -38,12 +38,12 @@
   </script>
   <style>
     /* ══════════════════════════════════════════════
-       DESIGN TOKENS — now with transparency
+       DESIGN TOKENS — now more transparent
     ══════════════════════════════════════════════ */
     :root {
-      --bg-deep:       rgba(6, 6, 13, 0.88);
-      --bg-mid:        rgba(11, 11, 24, 0.90);
-      --bg-card:       rgba(15, 15, 30, 0.85);
+      --bg-deep:       rgba(6, 6, 13, 0.65);
+      --bg-mid:        rgba(11, 11, 24, 0.72);
+      --bg-card:       rgba(15, 15, 30, 0.68);
 
       --border:        rgba(201,168,76,0.12);
       --border-hover:  rgba(201,168,76,0.4);
@@ -150,7 +150,7 @@
       border-bottom: 1px solid transparent;
     }
     #nav.scrolled {
-      background: rgba(6,6,13,0.88);
+      background: rgba(6,6,13,0.75);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       padding: 1rem 0;
@@ -253,11 +253,11 @@
       overflow: hidden;
       background: transparent; /* let canvas show through */
     }
-    /* Radial vignette — pulls focus to center */
+    /* Radial vignette — pulls focus to center, now more transparent */
     .hero-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 75% 70% at center, transparent 20%, rgba(6,6,13,0.65) 65%, rgba(6,6,13,0.95) 95%);
+      background: radial-gradient(ellipse 75% 70% at center, transparent 20%, rgba(6,6,13,0.50) 65%, rgba(6,6,13,0.80) 95%);
       z-index: 1;
     }
     /* Bottom fade into next section */
@@ -575,7 +575,7 @@
       opacity: 0;
       transition: opacity 0.4s;
     }
-    .pillar:hover { background: rgba(17,17,31,0.95); }
+    .pillar:hover { background: rgba(17,17,31,0.85); }
     .pillar:hover::after { opacity: 1; }
     .pillar-icon {
       width: 46px;
@@ -678,7 +678,7 @@
       position: relative;
       transition: background 0.3s;
     }
-    .about-stat-box:hover { background: rgba(18,18,30,0.95); }
+    .about-stat-box:hover { background: rgba(18,18,30,0.85); }
     .about-stat-value {
       display: block;
       font-family: var(--ff-head);
@@ -897,7 +897,7 @@
       padding: 2rem 2.2rem;
       transition: background 0.3s;
     }
-    .problem-card:hover { background: rgba(17,17,31,0.95); }
+    .problem-card:hover { background: rgba(17,17,31,0.85); }
     .problem-number {
       font-family: var(--ff-head);
       font-size: 0.92rem;
@@ -958,7 +958,7 @@
       padding: 2rem 2.2rem;
       transition: background 0.3s;
     }
-    .influence-card:hover { background: rgba(13,13,26,0.95); }
+    .influence-card:hover { background: rgba(13,13,26,0.85); }
     .influence-no {
       font-family: var(--ff-head);
       font-size: 0.92rem;
@@ -1019,7 +1019,7 @@
       opacity: 0;
       transition: opacity 0.3s;
     }
-    .weapon-card:hover { background: rgba(17,17,31,0.95); }
+    .weapon-card:hover { background: rgba(17,17,31,0.85); }
     .weapon-card:hover::before { opacity: 1; }
     .weapon-name {
       font-family: var(--ff-head);
@@ -1307,7 +1307,7 @@
       position: fixed;
       inset: 0;
       z-index: 195;
-      background: rgba(6,6,13,0.97);
+      background: rgba(6,6,13,0.92);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       display: flex;
