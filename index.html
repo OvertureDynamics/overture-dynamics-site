@@ -38,7 +38,7 @@
   </script>
   <style>
     /* ══════════════════════════════════════════════
-       DESIGN TOKENS — now more transparent
+       DESIGN TOKENS
     ══════════════════════════════════════════════ */
     :root {
       --bg-deep:       rgba(6, 6, 13, 0.65);
@@ -70,7 +70,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
-      background: #06060d; /* solid fallback */
+      background: #06060d;
       color: var(--text);
       font-family: var(--ff-body);
       font-weight: 400;
@@ -79,6 +79,21 @@
     }
     a { color: inherit; text-decoration: none; }
     ul { list-style: none; }
+
+    /* ══════════════════════════════════════════════
+       NOISE TEXTURE OVERLAY
+    ══════════════════════════════════════════════ */
+    #noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0.04;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+    }
 
     /* ══════════════════════════════════════════════
        GLOBAL PARTICLE CANVAS (fixed background)
@@ -139,6 +154,75 @@
     .delay-4 { transition-delay: 0.45s; }
 
     /* ══════════════════════════════════════════════
+       3D TILT ON CARDS
+    ══════════════════════════════════════════════ */
+    .tilt-card {
+      transition: transform 0.15s ease-out, box-shadow 0.3s ease;
+      transform-style: preserve-3d;
+      perspective: 800px;
+      will-change: transform;
+    }
+    .tilt-card:hover {
+      transform: perspective(800px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* ══════════════════════════════════════════════
+       MAGNETIC BUTTONS
+    ══════════════════════════════════════════════ */
+    .magnetic-btn {
+      transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), box-shadow 0.25s ease;
+      will-change: transform;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ══════════════════════════════════════════════
+       SECTION PROGRESS INDICATOR
+    ══════════════════════════════════════════════ */
+    #section-progress {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      z-index: 150;
+      font-family: var(--ff-head);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text-dim);
+      background: rgba(6,6,13,0.7);
+      backdrop-filter: blur(8px);
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    #section-progress.visible { opacity: 1; }
+    #section-progress .chapter-num { color: var(--gold); font-weight: 700; }
+
+    @media (max-width: 768px) {
+      #section-progress { left: 1rem; bottom: 1.2rem; font-size: 0.5rem; padding: 0.4rem 0.8rem; }
+    }
+
+    /* ══════════════════════════════════════════════
+       TYPING CURSOR
+    ══════════════════════════════════════════════ */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: var(--gold);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.8s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ══════════════════════════════════════════════
        NAVIGATION
     ══════════════════════════════════════════════ */
     #nav {
@@ -185,7 +269,6 @@
       line-height: 1;
     }
 
-    /* Hero emblem seal */
     .hero-emblem {
       display: flex;
       justify-content: center;
@@ -251,16 +334,14 @@
       justify-content: center;
       text-align: center;
       overflow: hidden;
-      background: transparent; /* let canvas show through */
+      background: transparent;
     }
-    /* Radial vignette — pulls focus to center, now more transparent */
     .hero-vignette {
       position: absolute;
       inset: 0;
       background: radial-gradient(ellipse 75% 70% at center, transparent 20%, rgba(6,6,13,0.50) 65%, rgba(6,6,13,0.80) 95%);
       z-index: 1;
     }
-    /* Bottom fade into next section */
     .hero-bottom-fade {
       position: absolute;
       bottom: 0; left: 0; right: 0;
@@ -268,7 +349,6 @@
       background: linear-gradient(to bottom, transparent, var(--bg-deep));
       z-index: 1;
     }
-    /* Subtle horizontal scan line — cinematic effect */
     .hero-scanline {
       position: absolute;
       inset: 0;
@@ -321,9 +401,6 @@
       text-transform: uppercase;
       color: var(--gold);
     }
-    .hero-meta-value.genre {
-      color: var(--text-muted);
-    }
     .hero-meta-sep {
       color: var(--border-hover);
       font-size: 0.9rem;
@@ -364,8 +441,7 @@
       color: var(--text-muted);
       margin-bottom: 3rem;
       line-height: 1.7;
-      opacity: 0;
-      animation: fadeSlideUp 1.1s 0.85s cubic-bezier(.22,1,.36,1) forwards;
+      min-height: 2.8rem;
     }
     .hero-tagline em {
       font-style: normal;
@@ -381,7 +457,6 @@
       animation: fadeSlideUp 1s 1.05s cubic-bezier(.22,1,.36,1) forwards;
     }
 
-    /* Primary button */
     .btn-primary {
       display: inline-flex;
       flex-direction: column;
@@ -395,7 +470,7 @@
       padding: 1.05rem 2.4rem;
       border: none;
       cursor: pointer;
-      transition: background 0.25s, box-shadow 0.3s;
+      transition: background 0.25s, box-shadow 0.3s, transform 0.25s cubic-bezier(.34,1.56,.64,1);
       line-height: 1.4;
     }
     .btn-primary:hover,
@@ -411,7 +486,6 @@
       margin-top: 0.2rem;
     }
 
-    /* Secondary button */
     .btn-secondary {
       display: inline-block;
       font-family: var(--ff-head);
@@ -423,7 +497,7 @@
       padding: 1.05rem 2.4rem;
       border: 1px solid var(--border);
       cursor: pointer;
-      transition: border-color 0.25s, color 0.25s, box-shadow 0.25s;
+      transition: border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(.34,1.56,.64,1);
     }
     .btn-secondary:hover,
     .btn-secondary:focus-visible {
@@ -433,7 +507,6 @@
       outline: none;
     }
 
-    /* Scroll hint */
     .hero-scroll {
       position: absolute;
       bottom: 2.5rem;
@@ -545,26 +618,23 @@
     }
 
     /* ══════════════════════════════════════════════
-       PILLARS (GAME FEATURES)
+       PILLARS
     ══════════════════════════════════════════════ */
-    #pillars {
-      background: var(--bg-mid);
-    }
+    #pillars { background: var(--bg-mid); }
     .pillars-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1.5px;
       background: var(--border);
     }
-    @media (max-width: 640px) {
-      .pillars-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 640px) { .pillars-grid { grid-template-columns: 1fr; } }
     .pillar {
       position: relative;
       background: var(--bg-mid);
       padding: clamp(2rem, 4.5vw, 3.2rem);
       overflow: hidden;
       transition: background 0.35s;
+      cursor: default;
     }
     .pillar::after {
       content: '';
@@ -635,19 +705,62 @@
     }
 
     /* ══════════════════════════════════════════════
+       PROBLEM SECTION
+    ══════════════════════════════════════════════ */
+    #problem { background: var(--bg-mid); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+    }
+    .problem-card {
+      background: var(--bg-mid);
+      padding: 2rem 2.2rem;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .problem-card:hover { background: rgba(17,17,31,0.85); }
+    .problem-number {
+      font-family: var(--ff-head);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      color: var(--gold-dim);
+      margin-bottom: 0.6rem;
+    }
+    .problem-title {
+      font-family: var(--ff-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .problem-body {
+      font-size: 0.97rem;
+      color: var(--text-dim);
+      line-height: 1.75;
+    }
+    .problem-solve {
+      margin-top: 0.75rem;
+      font-size: 0.97rem;
+      color: var(--gold-dim);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════════════
        ABOUT THE STUDIO
     ══════════════════════════════════════════════ */
     #about { background: var(--bg-deep); }
-
     .about-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: clamp(2.5rem, 7vw, 6rem);
       align-items: start;
     }
-    @media (max-width: 800px) {
-      .about-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 800px) { .about-grid { grid-template-columns: 1fr; } }
     .about-headline {
       font-family: var(--ff-head);
       font-size: clamp(1.5rem, 3.5vw, 2.3rem);
@@ -664,8 +777,6 @@
       line-height: 1.9;
       margin-bottom: 1rem;
     }
-
-    /* Right column stat boxes */
     .about-stats {
       display: flex;
       flex-direction: column;
@@ -677,6 +788,7 @@
       padding: 1.6rem 2rem;
       position: relative;
       transition: background 0.3s;
+      cursor: default;
     }
     .about-stat-box:hover { background: rgba(18,18,30,0.85); }
     .about-stat-value {
@@ -703,7 +815,6 @@
       position: relative;
       overflow: hidden;
     }
-    /* Atmospheric glow from top */
     #founders::before {
       content: '';
       position: absolute;
@@ -718,9 +829,7 @@
       max-width: 680px;
       margin-inline: auto;
     }
-    .founders-price-block {
-      margin: 0.8rem 0 2.2rem;
-    }
+    .founders-price-block { margin: 0.8rem 0 2.2rem; }
     .founders-price {
       font-family: var(--ff-head);
       font-size: clamp(3.5rem, 10vw, 6.5rem);
@@ -781,13 +890,315 @@
     }
 
     /* ══════════════════════════════════════════════
-       DIVIDER
+       MMORPG — THE LIVING WORLD
     ══════════════════════════════════════════════ */
-    .gold-divider {
-      width: 60px;
+    #world { background: var(--bg-deep); }
+    .world-quote {
+      font-family: var(--ff-head);
+      font-size: clamp(1.2rem, 3vw, 1.9rem);
+      font-weight: 600;
+      font-style: italic;
+      line-height: 1.45;
+      letter-spacing: 0.03em;
+      color: var(--text);
+      border-left: 2px solid var(--gold);
+      padding-left: 1.8rem;
+      margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
+      max-width: 720px;
+    }
+    .world-quote em { font-style: normal; color: var(--gold); }
+    .influence-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+    }
+    .influence-card {
+      background: var(--bg-deep);
+      padding: 2rem 2.2rem;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .influence-card:hover { background: rgba(13,13,26,0.85); }
+    .influence-no {
+      font-family: var(--ff-head);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      color: var(--gold-dim);
+      margin-bottom: 0.5rem;
+    }
+    .influence-title {
+      font-family: var(--ff-head);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 0.7rem;
+    }
+    .influence-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ══════════════════════════════════════════════
+       COMBAT & CRAFTING
+    ══════════════════════════════════════════════ */
+    #combat { background: var(--bg-mid); }
+    .combat-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(2rem, 6vw, 5rem);
+      align-items: start;
+    }
+    @media (max-width: 860px) { .combat-layout { grid-template-columns: 1fr; } }
+    .weapons-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5px;
+      background: var(--border);
+      margin-top: 1.8rem;
+    }
+    .weapon-card {
+      background: var(--bg-mid);
+      padding: 1.4rem 1.6rem;
+      transition: background 0.3s;
+      position: relative;
+      cursor: default;
+    }
+    .weapon-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 2rem auto;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .weapon-card:hover { background: rgba(17,17,31,0.85); }
+    .weapon-card:hover::before { opacity: 1; }
+    .weapon-name {
+      font-family: var(--ff-head);
+      font-size: 0.95rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .weapon-desc {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+    .mechanic-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 1.8rem;
+    }
+    .mechanic {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+    .mechanic-icon {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+    .mechanic-icon svg { width: 16px; height: 16px; stroke-width: 1.5; }
+    .mechanic-title {
+      font-family: var(--ff-head);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      margin-bottom: 0.3rem;
+    }
+    .mechanic-body {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .crafting-block {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .crafting-block h3 {
+      font-family: var(--ff-head);
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      color: var(--text);
+      margin-bottom: 0.9rem;
+    }
+    .crafting-body {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ══════════════════════════════════════════════
+       ROADMAP — now with interactive expansion
+    ══════════════════════════════════════════════ */
+    #roadmap { background: var(--bg-deep); }
+    .roadmap-timeline {
+      position: relative;
+      padding-left: 2.5rem;
+    }
+    .roadmap-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.6rem;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
+    }
+    .roadmap-item {
+      position: relative;
+      padding-bottom: 1.5rem;
+      cursor: pointer;
+    }
+    .roadmap-item:last-child { padding-bottom: 0; }
+    .roadmap-item::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 0.55rem;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--bg-deep);
+      border: 1.5px solid var(--gold-dim);
+      transform: translateX(-4px);
+      transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+    .roadmap-item.active::before {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 14px rgba(201,168,76,0.6);
+    }
+    .roadmap-item.active .roadmap-year { color: var(--gold); }
+    .roadmap-item.active .roadmap-stage { color: var(--text); }
+
+    .roadmap-year {
+      font-family: var(--ff-head);
+      font-size: 0.65rem;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+      margin-bottom: 0.2rem;
+      transition: color 0.3s;
+    }
+    .roadmap-stage {
+      font-family: var(--ff-head);
+      font-size: 1.1rem;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .roadmap-item.active .roadmap-stage::after {
+      content: " ⚡ LIVE";
+      font-size: 0.6rem;
+      color: var(--gold);
+      opacity: 0.8;
+      letter-spacing: 0.1em;
+    }
+    .roadmap-expand-icon {
+      display: inline-block;
+      font-size: 0.7rem;
+      color: var(--gold-dim);
+      transition: transform 0.3s ease, color 0.3s ease;
+      margin-left: auto;
+    }
+    .roadmap-item.expanded .roadmap-expand-icon { transform: rotate(180deg); color: var(--gold); }
+
+    .roadmap-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.8;
+      max-width: 620px;
+      margin-bottom: 0.8rem;
+    }
+    .roadmap-item:not(.active) .roadmap-desc { color: var(--text-dim); }
+
+    /* Expanded details — hidden by default */
+    .roadmap-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(.22,1,.36,1), opacity 0.4s ease, margin 0.4s ease;
+      opacity: 0;
+      margin-top: 0;
+    }
+    .roadmap-item.expanded .roadmap-details {
+      max-height: 400px;
+      opacity: 1;
+      margin-top: 0.8rem;
+    }
+    .roadmap-details-inner {
+      background: rgba(15,15,30,0.6);
+      border: 1px solid var(--border);
+      padding: 1.2rem 1.6rem;
+      border-radius: 2px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem 1.5rem;
+    }
+    .roadmap-detail-item {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+    }
+    .roadmap-detail-item .label {
+      color: var(--text-dim);
+      font-family: var(--ff-head);
+      font-size: 0.58rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .roadmap-detail-item .value {
+      color: var(--text);
+      font-weight: 500;
+    }
+    .roadmap-detail-item .value.gold { color: var(--gold); }
+
+    @media (max-width: 560px) {
+      .roadmap-details-inner { grid-template-columns: 1fr; }
+      .roadmap-stage { flex-wrap: wrap; }
+    }
+
+    .roadmap-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.6rem;
+    }
+    .roadmap-tag {
+      font-family: var(--ff-head);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.7rem;
+    }
+    .roadmap-item.active .roadmap-tag {
+      color: var(--gold-dim);
+      border-color: rgba(201,168,76,0.25);
     }
 
     /* ══════════════════════════════════════════════
@@ -884,368 +1295,69 @@
     }
 
     /* ══════════════════════════════════════════════
-       PROBLEM SECTION
+       GOLD DIVIDER
     ══════════════════════════════════════════════ */
-    #problem { background: var(--bg-mid); }
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5px;
-      background: var(--border);
-    }
-    .problem-card {
-      background: var(--bg-mid);
-      padding: 2rem 2.2rem;
-      transition: background 0.3s;
-    }
-    .problem-card:hover { background: rgba(17,17,31,0.85); }
-    .problem-number {
-      font-family: var(--ff-head);
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      color: var(--gold-dim);
-      margin-bottom: 0.6rem;
-    }
-    .problem-title {
-      font-family: var(--ff-head);
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-    .problem-body {
-      font-size: 0.97rem;
-      color: var(--text-dim);
-      line-height: 1.75;
-    }
-    .problem-solve {
-      margin-top: 0.75rem;
-      font-size: 0.97rem;
-      color: var(--gold-dim);
-      font-style: italic;
-      line-height: 1.6;
-    }
-
-    /* ══════════════════════════════════════════════
-       MMORPG — THE LIVING WORLD
-    ══════════════════════════════════════════════ */
-    #world { background: var(--bg-deep); }
-
-    .world-quote {
-      font-family: var(--ff-head);
-      font-size: clamp(1.2rem, 3vw, 1.9rem);
-      font-weight: 600;
-      font-style: italic;
-      line-height: 1.45;
-      letter-spacing: 0.03em;
-      color: var(--text);
-      border-left: 2px solid var(--gold);
-      padding-left: 1.8rem;
-      margin-bottom: clamp(2.5rem, 6vw, 4.5rem);
-      max-width: 720px;
-    }
-    .world-quote em { font-style: normal; color: var(--gold); }
-
-    .influence-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5px;
-      background: var(--border);
-    }
-    .influence-card {
-      background: var(--bg-deep);
-      padding: 2rem 2.2rem;
-      transition: background 0.3s;
-    }
-    .influence-card:hover { background: rgba(13,13,26,0.85); }
-    .influence-no {
-      font-family: var(--ff-head);
-      font-size: 0.92rem;
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      color: var(--gold-dim);
-      margin-bottom: 0.5rem;
-    }
-    .influence-title {
-      font-family: var(--ff-head);
-      font-size: 1.05rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      margin-bottom: 0.7rem;
-    }
-    .influence-body {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-    }
-
-    /* ══════════════════════════════════════════════
-       COMBAT & CRAFTING
-    ══════════════════════════════════════════════ */
-    #combat { background: var(--bg-mid); }
-
-    .combat-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(2rem, 6vw, 5rem);
-      align-items: start;
-    }
-    @media (max-width: 860px) {
-      .combat-layout { grid-template-columns: 1fr; }
-    }
-
-    /* Weapons grid */
-    .weapons-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5px;
-      background: var(--border);
-      margin-top: 1.8rem;
-    }
-    .weapon-card {
-      background: var(--bg-mid);
-      padding: 1.4rem 1.6rem;
-      transition: background 0.3s;
-      position: relative;
-    }
-    .weapon-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
+    .gold-divider {
+      width: 60px;
       height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 2rem auto;
     }
-    .weapon-card:hover { background: rgba(17,17,31,0.85); }
-    .weapon-card:hover::before { opacity: 1; }
-    .weapon-name {
-      font-family: var(--ff-head);
-      font-size: 0.95rem;
-      letter-spacing: 0.1em;
-      color: var(--text);
-      margin-bottom: 0.4rem;
-    }
-    .weapon-desc {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.65;
-    }
-
-    /* Combat mechanics */
-    .mechanic-list {
-      display: flex;
-      flex-direction: column;
-      gap: 1.2rem;
-      margin-top: 1.8rem;
-    }
-    .mechanic {
-      display: flex;
-      gap: 1.2rem;
-      align-items: flex-start;
-    }
-    .mechanic-icon {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--border);
+    .section-divider {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--gold);
+      padding: 0.25rem 0;
+    }
+    .sd-line {
+      flex: 1;
+      height: 1px;
+      max-width: 320px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.22));
+    }
+    .sd-line.right {
+      background: linear-gradient(90deg, rgba(201,168,76,0.22), transparent);
+    }
+    .sd-diamond {
       flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-    .mechanic-icon svg { width: 16px; height: 16px; stroke-width: 1.5; }
-    .mechanic-title {
-      font-family: var(--ff-head);
-      font-size: 0.8rem;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      margin-bottom: 0.3rem;
-    }
-    .mechanic-body {
-      font-size: 0.83rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-    }
-
-    /* Crafting block */
-    .crafting-block {
-      margin-top: 2.5rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-    }
-    .crafting-block h3 {
-      font-family: var(--ff-head);
-      font-size: 1rem;
-      letter-spacing: 0.1em;
-      color: var(--text);
-      margin-bottom: 0.9rem;
-    }
-    .crafting-body {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      margin-bottom: 0.8rem;
+      margin: 0 0.8rem;
+      opacity: 0.55;
     }
 
     /* ══════════════════════════════════════════════
-       ROADMAP
+       BACK TO TOP
     ══════════════════════════════════════════════ */
-    #roadmap { background: var(--bg-deep); }
-
-    .roadmap-timeline {
-      position: relative;
-      padding-left: 2.5rem;
-    }
-    /* Vertical gold line */
-    .roadmap-timeline::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0.6rem;
-      bottom: 0;
-      width: 1px;
-      background: linear-gradient(to bottom, var(--gold), rgba(201,168,76,0.1));
-    }
-    .roadmap-item {
-      position: relative;
-      padding-bottom: 3.5rem;
-    }
-    .roadmap-item:last-child { padding-bottom: 0; }
-
-    /* Circle marker on the line */
-    .roadmap-item::before {
-      content: '';
-      position: absolute;
-      left: -2.5rem;
-      top: 0.55rem;
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: var(--bg-deep);
-      border: 1.5px solid var(--gold-dim);
-      transform: translateX(-4px);
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .roadmap-item.active::before {
-      background: var(--gold);
-      border-color: var(--gold);
-      box-shadow: 0 0 14px rgba(201,168,76,0.6);
-    }
-    .roadmap-item.active .roadmap-year { color: var(--gold); }
-
-    .roadmap-year {
-      font-family: var(--ff-head);
-      font-size: 0.65rem;
-      letter-spacing: 0.28em;
-      text-transform: uppercase;
-      color: var(--gold-dim);
-      margin-bottom: 0.4rem;
-    }
-    .roadmap-stage {
-      font-family: var(--ff-head);
-      font-size: 1.1rem;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      margin-bottom: 0.6rem;
-    }
-    /* "LIVE" badge for active phase */
-    .roadmap-item.active .roadmap-stage::after {
-      content: " ⚡ LIVE";
-      font-size: 0.6rem;
-      color: var(--gold);
-      opacity: 0.8;
-      letter-spacing: 0.1em;
-    }
-    .roadmap-item:not(.active) .roadmap-stage { color: var(--text-muted); }
-    .roadmap-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      max-width: 520px;
-      margin-bottom: 1rem;
-    }
-    .roadmap-item:not(.active) .roadmap-desc { color: var(--text-dim); }
-    .roadmap-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-    }
-    .roadmap-tag {
-      font-family: var(--ff-head);
-      font-size: 0.58rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      background: rgba(201,168,76,0.12);
       border: 1px solid var(--border);
-      padding: 0.3rem 0.7rem;
-    }
-    .roadmap-item.active .roadmap-tag {
-      color: var(--gold-dim);
-      border-color: rgba(201,168,76,0.25);
-    }
-
-    /* ══════════════════════════════════════════════
-       CUSTOM CURSOR — only on hover-capable devices
-    ══════════════════════════════════════════════ */
-    @media (hover: hover) {
-      html { cursor: none; }
-    }
-    /* Fallback: if cursor is hidden, hide the custom element on touch */
-    #custom-cursor {
-      position: fixed;
-      top: 0; left: 0;
-      width: 20px; height: 20px;
-      pointer-events: none;
-      z-index: 99999;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
       opacity: 0;
-      transition: opacity 0.3s ease;
-      margin: -10px 0 0 -10px;
-    }
-    @media (hover: hover) {
-      #custom-cursor.visible { opacity: 1; }
-    }
-    @media (hover: none) {
-      #custom-cursor { display: none !important; }
-    }
-    #custom-cursor svg {
-      display: block;
-      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), filter 0.18s ease;
-    }
-    #custom-cursor.hovering svg {
-      transform: scale(1.55);
-      filter: drop-shadow(0 0 4px rgba(201,168,76,0.9));
-    }
-    #custom-cursor.clicking svg {
-      transform: scale(0.8);
-      filter: drop-shadow(0 0 2px rgba(201,168,76,0.5));
-    }
-
-    /* ══════════════════════════════════════════════
-       CURSOR GLOW
-    ══════════════════════════════════════════════ */
-    #cursor-glow {
-      position: fixed;
-      top: -300px;
-      left: -300px;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, rgba(201,168,76,0.03) 45%, transparent 70%);
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
       pointer-events: none;
-      z-index: 9;
-      will-change: transform;
-      mix-blend-mode: screen;
     }
-
-    /* ══════════════════════════════════════════════
-       HERO PARALLAX
-    ══════════════════════════════════════════════ */
-    .hero-content { will-change: transform, opacity; }
+    #back-to-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    #back-to-top:hover,
+    #back-to-top:focus-visible {
+      background: rgba(201,168,76,0.25);
+      border-color: var(--border-hover);
+      outline: none;
+    }
+    #back-to-top svg { width: 18px; height: 18px; }
 
     /* ══════════════════════════════════════════════
        SCROLL PROGRESS BAR
@@ -1271,7 +1383,7 @@
     }
 
     /* ══════════════════════════════════════════════
-       HAMBURGER BUTTON — expanded touch target
+       HAMBURGER
     ══════════════════════════════════════════════ */
     .nav-hamburger {
       display: none;
@@ -1283,8 +1395,8 @@
       background: none;
       border: none;
       cursor: pointer;
-      padding: 12px;   /* expands hit area to ~52px */
-      margin: -8px;    /* visually keep it in place */
+      padding: 12px;
+      margin: -8px;
       flex-shrink: 0;
       position: relative;
     }
@@ -1301,9 +1413,6 @@
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
     @media (max-width: 640px) { .nav-hamburger { display: flex; } }
 
-    /* ══════════════════════════════════════════════
-       MOBILE NAV OVERLAY
-    ══════════════════════════════════════════════ */
     .mobile-nav {
       position: fixed;
       inset: 0;
@@ -1401,76 +1510,59 @@
     #hero-logo-animated .glow  { animation: logo-glowIn 2s .3s ease both, logo-breathe 5s 7s ease-in-out infinite; }
 
     /* ══════════════════════════════════════════════
-       SECTION DIVIDERS
+       CUSTOM CURSOR
     ══════════════════════════════════════════════ */
-    .section-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.25rem 0;
+    @media (hover: hover) { html { cursor: none; } }
+    #custom-cursor {
+      position: fixed;
+      top: 0; left: 0;
+      width: 20px; height: 20px;
+      pointer-events: none;
+      z-index: 99999;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      margin: -10px 0 0 -10px;
     }
-    .sd-line {
-      flex: 1;
-      height: 1px;
-      max-width: 320px;
-      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.22));
+    @media (hover: hover) { #custom-cursor.visible { opacity: 1; } }
+    @media (hover: none) { #custom-cursor { display: none !important; } }
+    #custom-cursor svg {
+      display: block;
+      transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), filter 0.18s ease;
     }
-    .sd-line.right {
-      background: linear-gradient(90deg, rgba(201,168,76,0.22), transparent);
+    #custom-cursor.hovering svg {
+      transform: scale(1.55);
+      filter: drop-shadow(0 0 4px rgba(201,168,76,0.9));
     }
-    .sd-diamond {
-      flex-shrink: 0;
-      margin: 0 0.8rem;
-      opacity: 0.55;
+    #custom-cursor.clicking svg {
+      transform: scale(0.8);
+      filter: drop-shadow(0 0 2px rgba(201,168,76,0.5));
     }
 
-    /* ══════════════════════════════════════════════
-       BACK TO TOP
-    ══════════════════════════════════════════════ */
-    #back-to-top {
+    #cursor-glow {
       position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 100;
-      width: 44px;
-      height: 44px;
-      background: rgba(201,168,76,0.12);
-      border: 1px solid var(--border);
-      color: var(--gold);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s ease, background 0.3s ease;
+      top: -300px;
+      left: -300px;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, rgba(201,168,76,0.03) 45%, transparent 70%);
       pointer-events: none;
+      z-index: 9;
+      will-change: transform;
+      mix-blend-mode: screen;
     }
-    #back-to-top.visible {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-    }
-    #back-to-top:hover,
-    #back-to-top:focus-visible {
-      background: rgba(201,168,76,0.25);
-      border-color: var(--border-hover);
-      outline: none;
-    }
-    #back-to-top svg { width: 18px; height: 18px; }
+
+    .hero-content { will-change: transform, opacity; }
   </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════
-       GLOBAL PARTICLE BACKGROUND
-  ═══════════════════════════════════════════ -->
+  <div id="noise-overlay" aria-hidden="true"></div>
   <canvas id="global-canvas" aria-hidden="true" tabindex="-1"></canvas>
-
   <div id="scroll-progress"></div>
   <div id="cursor-glow"></div>
+  <div id="section-progress"><span class="chapter-num">0</span> <span id="chapter-label">of 7</span></div>
 
-  <!-- Custom cursor: miniature brand mark (only visible on hover devices) -->
   <div id="custom-cursor" aria-hidden="true">
     <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
       <line x1="10" y1="1"  x2="10" y2="4.5" stroke="#c9a84c" stroke-width="1.2"/>
@@ -1544,7 +1636,7 @@
   </nav>
 
   <!-- ═══════════════════════════════════════════
-       MOBILE NAV OVERLAY
+       MOBILE NAV
   ═══════════════════════════════════════════ -->
   <div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
     <a href="#problem">The Problem</a>
@@ -1567,7 +1659,6 @@
     <div class="hero-bottom-fade" aria-hidden="true"></div>
 
     <div class="hero-content">
-
       <div class="hero-emblem" id="hero-logo-animated" aria-hidden="true">
         <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -1627,17 +1718,16 @@
         <span class="t-oath">Oath</span>
       </h1>
 
-      <p class="hero-tagline">
-        The end of scripted worlds.<br>
-        <em>The beginning of a world that remembers you.</em>
+      <p class="hero-tagline" id="tagline">
+        <span id="typing-text"></span><span class="typing-cursor" id="typing-cursor"></span>
       </p>
 
       <div class="hero-ctas">
-        <a href="#founders" class="btn-primary">
+        <a href="#founders" class="btn-primary magnetic-btn">
           Founder's Pass
           <span class="btn-sub">$299 · Lifetime Access · Coming Soon</span>
         </a>
-        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-secondary" title="Opens in new tab">
+        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-secondary magnetic-btn" title="Opens in new tab">
           Join Discord
         </a>
       </div>
@@ -1694,37 +1784,37 @@
       </div>
 
       <div class="problem-grid">
-        <div class="problem-card reveal">
+        <div class="problem-card reveal tilt-card">
           <p class="problem-number">Failure 01</p>
           <h4 class="problem-title">Linear Quest Design</h4>
           <p class="problem-body">Quests are hand-authored story paths. Once players exhaust them, the world goes silent until a developer writes more.</p>
           <p class="problem-solve">Project Oath: Five AI agents generate events, crises, and history continuously — no developer input required after launch.</p>
         </div>
-        <div class="problem-card reveal delay-1">
+        <div class="problem-card reveal delay-1 tilt-card">
           <p class="problem-number">Failure 02</p>
           <h4 class="problem-title">Hollow NPCs</h4>
           <p class="problem-body">Reactive scripts that wait for player input, remember nothing, and own nothing. Every conversation resets.</p>
           <p class="problem-solve">Project Oath: Every NPC is an ERC-8004 agent — persistent memory, LLM-driven reasoning, genuine asset ownership.</p>
         </div>
-        <div class="problem-card reveal delay-2">
+        <div class="problem-card reveal delay-2 tilt-card">
           <p class="problem-number">Failure 03</p>
           <h4 class="problem-title">Static Economies</h4>
           <p class="problem-body">Developer-tuned prices that don't reflect real supply and demand. Exploits are inevitable. Markets feel fake.</p>
           <p class="problem-solve">Project Oath: The Economy Agent tracks every transaction in real time. Prices and scarcity emerge from behavior — never set by a developer.</p>
         </div>
-        <div class="problem-card reveal">
+        <div class="problem-card reveal tilt-card">
           <p class="problem-number">Failure 04</p>
           <h4 class="problem-title">Content Treadmills</h4>
           <p class="problem-body">Publishers spend hundreds of millions on expansion packs just to keep worlds alive between developer releases.</p>
           <p class="problem-solve">Project Oath: A world governed by AI agents never goes static. There is no content gap to fill. No DLC. Ever.</p>
         </div>
-        <div class="problem-card reveal delay-1">
+        <div class="problem-card reveal delay-1 tilt-card">
           <p class="problem-number">Failure 05</p>
           <h4 class="problem-title">No World Memory</h4>
           <p class="problem-body">Player actions rarely leave lasting consequences. History doesn't stick. The same dungeon resets. The same NPC forgets.</p>
           <p class="problem-solve">Project Oath: The world accumulates a permanent geological, political, and social record. Nothing resets. History is real.</p>
         </div>
-        <div class="problem-card reveal delay-2">
+        <div class="problem-card reveal delay-2 tilt-card">
           <p class="problem-number">Failure 06</p>
           <h4 class="problem-title">No Living Factions</h4>
           <p class="problem-body">Guilds and factions are scripted states with fixed power — not emergent outcomes of actual player and NPC behavior.</p>
@@ -1746,9 +1836,7 @@
       </div>
 
       <div class="pillars-grid">
-
-        <!-- I: Living World -->
-        <div class="pillar reveal">
+        <div class="pillar reveal tilt-card">
           <div class="pillar-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <circle cx="12" cy="12" r="3.5"/>
@@ -1767,8 +1855,7 @@
           </ul>
         </div>
 
-        <!-- II: ERC-8004 -->
-        <div class="pillar reveal delay-2">
+        <div class="pillar reveal delay-2 tilt-card">
           <div class="pillar-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <rect x="3" y="11" width="18" height="11" rx="1"/>
@@ -1786,7 +1873,6 @@
             <li class="pillar-list-item">World historian system logs major events — players live through history</li>
           </ul>
         </div>
-
       </div>
     </div>
   </section>
@@ -1811,32 +1897,32 @@
       </p>
 
       <div class="influence-grid">
-        <div class="influence-card reveal">
+        <div class="influence-card reveal tilt-card">
           <p class="influence-no">Economic Power</p>
           <h4 class="influence-title">Control the Markets</h4>
           <p class="influence-body">Players control supply chains, corner rare materials, and move markets. A single guild that monopolises a region's ore production can dictate prices across multiple empires. Every other player — and every NPC — feels the consequence.</p>
         </div>
-        <div class="influence-card reveal delay-1">
+        <div class="influence-card reveal delay-1 tilt-card">
           <p class="influence-no">Reputation &amp; Relationships</p>
           <h4 class="influence-title">Build Your Legacy With NPCs</h4>
           <p class="influence-body">NPCs remember every interaction permanently. Help a merchant survive a drought and they become a lasting ally. Betray a faction leader and that reputation propagates across the NPC network. Who you are is built through action, not character selection.</p>
         </div>
-        <div class="influence-card reveal delay-2">
+        <div class="influence-card reveal delay-2 tilt-card">
           <p class="influence-no">Political Influence</p>
           <h4 class="influence-title">Govern Territories</h4>
           <p class="influence-body">Players hold faction titles, govern territories, and run for political office. The political map is an emergent outcome of player behaviour — alliances form, wars start, and territorial borders shift based on what players actually do.</p>
         </div>
-        <div class="influence-card reveal">
+        <div class="influence-card reveal tilt-card">
           <p class="influence-no">Permanent World Legacy</p>
           <h4 class="influence-title">Leave a Mark That Lasts</h4>
           <p class="influence-body">Player actions leave marks that outlast each session. A destroyed biome, a collapsed trade route, a historically significant battle — all logged permanently by the world historian. Players become part of the world's recorded history.</p>
         </div>
-        <div class="influence-card reveal delay-1">
+        <div class="influence-card reveal delay-1 tilt-card">
           <p class="influence-no">Combat &amp; Faction Warfare</p>
           <h4 class="influence-title">Fight for the World</h4>
           <p class="influence-body">Ranked arenas, open-world PvP, and instanced raids all feed into faction standing and territorial control. A victory in open-world combat can shift a region's political balance. Combat is meaningful because the world it takes place in is genuinely alive.</p>
         </div>
-        <div class="influence-card reveal delay-2">
+        <div class="influence-card reveal delay-2 tilt-card">
           <p class="influence-no">Offline Presence</p>
           <h4 class="influence-title">The World Never Pauses</h4>
           <p class="influence-body">Player characters run as ERC-8004 agents when logged off — gathering resources, trading on standing instructions, and patrolling territory. A player's influence on the world continues even when they are not actively playing.</p>
@@ -1857,40 +1943,37 @@
       </div>
 
       <div class="combat-layout">
-
-        <!-- Left: Weapons -->
         <div>
           <span class="eyebrow reveal" style="margin-bottom:0.3rem;">Six Weapon Archetypes</span>
           <p class="about-p reveal delay-1" style="margin-top:0.3rem;">No class selection. Your equipped weapon defines your identity, your abilities, and your role. Six archetypes at launch — each with a distinct mechanical identity and advanced techniques discovered through play.</p>
           <div class="weapons-grid reveal delay-1">
-            <div class="weapon-card">
+            <div class="weapon-card tilt-card">
               <p class="weapon-name">Greatsword</p>
               <p class="weapon-desc">Slow, powerful sweeps with massive poise. The foundation of frontline play — trades speed for dominance in a zone.</p>
             </div>
-            <div class="weapon-card">
+            <div class="weapon-card tilt-card">
               <p class="weapon-name">Dual Blades</p>
               <p class="weapon-desc">High-speed combo chains with aggressive repositioning. Rewards continuous pressure and animation-cancel mastery.</p>
             </div>
-            <div class="weapon-card">
+            <div class="weapon-card tilt-card">
               <p class="weapon-name">Staff</p>
               <p class="weapon-desc">Mid-range elemental projection and AoE. Requires positional discipline — power scales with distance management.</p>
             </div>
-            <div class="weapon-card">
+            <div class="weapon-card tilt-card">
               <p class="weapon-name">Bow</p>
               <p class="weapon-desc">Long-range precision built around movement-based kiting and charged shots. Punishes overextension from a distance. Unforgiving to master.</p>
             </div>
-            <div class="weapon-card">
+            <div class="weapon-card tilt-card">
               <p class="weapon-name">Spear</p>
               <p class="weapon-desc">Range control and zone denial. Keeps enemies at distance with thrusting combos and sweeping arcs — punishes overaggression before it lands.</p>
             </div>
-            <div class="weapon-card">
+            <div class="weapon-card tilt-card">
               <p class="weapon-name">Bracers</p>
               <p class="weapon-desc">Close-range brawler with rapid strikes and armor-break chains. Built around counter-attack windows — punishes aggression at point-blank range.</p>
             </div>
           </div>
         </div>
 
-        <!-- Right: Combat mechanics + Crafting -->
         <div>
           <span class="eyebrow reveal" style="margin-bottom:0.3rem;">Core Mechanics</span>
           <p class="about-p reveal delay-1" style="margin-top:0.3rem;">No tab-targeting. No cooldown rotation. Skill is expressed through positioning, timing, and weapon mastery.</p>
@@ -1940,29 +2023,39 @@
             <p class="crafting-body">One weapon system serves all content modes — ranked PvP arenas, open-world faction conflict, and instanced raids. No split meta. A weapon mastered in PvP is the same weapon used in raid content.</p>
           </div>
         </div>
-
       </div>
     </div>
   </section>
 
   <!-- ═══════════════════════════════════════════
-       ROADMAP
+       ROADMAP — interactive expanded
   ═══════════════════════════════════════════ -->
   <section id="roadmap" class="section" aria-label="Development roadmap">
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Development Roadmap</span>
         <h2>The path to a <span class="gold">living world.</span></h2>
-        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. Phased revenue from subscriptions and the Founder's Pass funds every subsequent stage, reducing dependency on a single large raise.</p>
+        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. Click any phase to expand full details from our pitch deck.</p>
       </div>
 
       <div class="roadmap-timeline">
 
         <!-- Phase 1 -->
-        <div class="roadmap-item active reveal">
+        <div class="roadmap-item active reveal" data-phase="1">
           <p class="roadmap-year">2026 – 2027 &nbsp;·&nbsp; Phase 1</p>
-          <h3 class="roadmap-stage">Foundation · Pre-Seed &amp; Seed</h3>
-          <p class="roadmap-desc">Raising $500K pre-seed to build the three proof-of-concept assets — ERC-8004 NPC prototype, UE5 combat vertical slice, and GDD. Seed round of $3M closes by end of 2027 after live NPC demo, playable combat build, and 1,000+ Discord members. First full-time engineering and AI hires join. Economy Agent goes live.</p>
+          <div class="roadmap-stage">
+            Foundation · Pre-Seed &amp; Seed
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
+          <p class="roadmap-desc">Raising $500K pre-seed to build the three proof-of-concept assets — ERC-8004 NPC prototype, UE5 combat vertical slice, and GDD. Seed round of $3M closes by end of 2027 after live NPC demo, playable combat build, and 1,000+ Discord members.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">5–12 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate, GDD complete, ERC-8004 prototype</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat vertical slice on UE5, Discord 1,000+, pre-seed close</span></div>
+            </div>
+          </div>
           <div class="roadmap-tags">
             <span class="roadmap-tag">$500K Pre-Seed</span>
             <span class="roadmap-tag">ERC-8004 Prototype</span>
@@ -1974,56 +2067,98 @@
         </div>
 
         <!-- Phase 2 -->
-        <div class="roadmap-item reveal delay-1">
+        <div class="roadmap-item reveal delay-1" data-phase="2">
           <p class="roadmap-year">2028 &nbsp;·&nbsp; Phase 2</p>
-          <h3 class="roadmap-stage">Pre-Alpha · Series A</h3>
-          <p class="roadmap-desc">$15M Series A raises on demonstrated NPC stability and all simulation agents integrated. A 25–50 person team builds toward internal alpha. Weapon crafting, marketplace v1, and all five world agents run simultaneously for the first time.</p>
+          <div class="roadmap-stage">
+            Pre-Alpha · Series A
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
+          <p class="roadmap-desc">$15M Series A raises on demonstrated NPC stability and all simulation agents integrated. A 10–18 person team builds toward internal alpha. Weapon crafting, marketplace v1, and all five world agents run simultaneously for the first time.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">10–18 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M (Series A)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All simulation agents integrated</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Weapon crafting complete, marketplace v1, Series A raise</span></div>
+            </div>
+          </div>
           <div class="roadmap-tags">
             <span class="roadmap-tag">$15M Series A</span>
             <span class="roadmap-tag">All 5 Agents Integrated</span>
             <span class="roadmap-tag">Internal Alpha</span>
             <span class="roadmap-tag">Marketplace v1</span>
-            <span class="roadmap-tag">25–50 Person Team</span>
           </div>
         </div>
 
         <!-- Phase 3 -->
-        <div class="roadmap-item reveal delay-2">
+        <div class="roadmap-item reveal delay-2" data-phase="3">
           <p class="roadmap-year">2029 – 2030 &nbsp;·&nbsp; Phase 3</p>
-          <h3 class="roadmap-stage">Closed Alpha</h3>
-          <p class="roadmap-desc">Closed alpha opens exclusively to Founder's Pass holders — the only way to play during this phase. Full world simulation runs live for the first time with real players. Series B preparation begins.</p>
+          <div class="roadmap-stage">
+            Closed Alpha
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
+          <p class="roadmap-desc">Founder's Pass holders access the world — the only way to play during this phase. Full world simulation runs live for the first time with real players. 1K-player closed alpha. Series B preparation begins.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">15–22 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M (Series A/B)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass holders access the world</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player closed alpha, full world simulation live, Series B prep</span></div>
+            </div>
+          </div>
           <div class="roadmap-tags">
             <span class="roadmap-tag">Founders-Only Access</span>
             <span class="roadmap-tag">Full World Simulation Live</span>
             <span class="roadmap-tag">Series B Prep</span>
+            <span class="roadmap-tag">1K-Player Alpha</span>
           </div>
         </div>
 
         <!-- Phase 4 -->
-        <div class="roadmap-item reveal delay-3">
+        <div class="roadmap-item reveal delay-3" data-phase="4">
           <p class="roadmap-year">2031 – 2032 &nbsp;·&nbsp; Phase 4</p>
-          <h3 class="roadmap-stage">Open Beta · Full Subscription Launch</h3>
-          <p class="roadmap-desc">Public subscription launch. Player base grows from ~20K to ~33K. $500K MRR target by end of 2032 — $6M subscription ARR. The world is generating its own history, politics, and crises continuously. Press and influencer push begins in earnest.</p>
+          <div class="roadmap-stage">
+            Open Beta · Full Subscription Launch
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
+          <p class="roadmap-desc">Public subscription launch. 5K–20K players, full subscription launch, economy tuning, press & influencer push. $500K MRR target by end of 2032 — $6M subscription ARR.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">20–28 people</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M (Series B/C)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Full subscription launch, economy tuning, press & influencer push</span></div>
+            </div>
+          </div>
           <div class="roadmap-tags">
             <span class="roadmap-tag">Open Beta</span>
             <span class="roadmap-tag">$500K MRR Target</span>
-            <span class="roadmap-tag">~33K Subscribers</span>
+            <span class="roadmap-tag">5K–20K Players</span>
             <span class="roadmap-tag">Series B / C</span>
-            <span class="roadmap-tag">75–100 Person Team</span>
           </div>
         </div>
 
         <!-- Phase 5 -->
-        <div class="roadmap-item reveal delay-4">
+        <div class="roadmap-item reveal delay-4" data-phase="5">
           <p class="roadmap-year">2033 – 2034 &nbsp;·&nbsp; Phase 5</p>
-          <h3 class="roadmap-stage">Release · The Living World</h3>
-          <p class="roadmap-desc">Full public launch targeting 200,000–500,000 registered players. ~120K subscribers generating $21.6M subscription ARR plus marketplace fees by end of 2034. On-chain ownership layer activates. The world runs itself — entirely.</p>
+          <div class="roadmap-stage">
+            Release · The Living World
+            <span class="roadmap-expand-icon">▾</span>
+          </div>
+          <p class="roadmap-desc">Full public launch targeting 200,000–500,000 registered players. ~120K subscribers generating $21.6M subscription ARR plus marketplace fees. On-chain ownership layer activates. The world runs itself — entirely.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">30 people (cap)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M (Series B/C)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch, on-chain ownership layer activates</span></div>
+            </div>
+          </div>
           <div class="roadmap-tags">
             <span class="roadmap-tag">Public Launch</span>
             <span class="roadmap-tag">200K–500K Players</span>
             <span class="roadmap-tag">$20M–$25M ARR</span>
             <span class="roadmap-tag">On-Chain Ownership Activates</span>
-            <span class="roadmap-tag">100-Person Team Cap</span>
           </div>
         </div>
 
@@ -2037,8 +2172,6 @@
   <section id="about" class="section" aria-label="About the studio">
     <div class="container">
       <div class="about-grid">
-
-        <!-- Left: narrative -->
         <div>
           <span class="eyebrow reveal">Overture Dynamics</span>
           <h2 class="about-headline reveal delay-1">
@@ -2058,26 +2191,24 @@
           </p>
         </div>
 
-        <!-- Right: stat boxes -->
         <div class="about-stats reveal delay-2">
-          <div class="about-stat-box">
+          <div class="about-stat-box tilt-card">
             <span class="about-stat-value">Unreal Engine 5</span>
             <span class="about-stat-desc">AAA visual fidelity from day one. Built for scale on the world's leading real-time 3D engine.</span>
           </div>
-          <div class="about-stat-box">
+          <div class="about-stat-box tilt-card">
             <span class="about-stat-value">ERC-8004</span>
             <span class="about-stat-desc">A new on-chain standard for persistent, memory-driven NPC agents — developed internally by Overture Dynamics.</span>
           </div>
-          <div class="about-stat-box">
+          <div class="about-stat-box tilt-card">
             <span class="about-stat-value">5 World Agents</span>
             <span class="about-stat-desc">Economy · Weather · Ecology · Geology · Narrative — coordinated by the central Main Engine Agent. No developer scripting post-launch.</span>
           </div>
-          <div class="about-stat-box">
+          <div class="about-stat-box tilt-card">
             <span class="about-stat-value">No DLC. Ever.</span>
             <span class="about-stat-desc">A world that generates its own content never runs out of story. Traditional expansions exist to fill the silence. Project Oath doesn't go silent.</span>
           </div>
         </div>
-
       </div>
     </div>
   </section>
@@ -2088,7 +2219,6 @@
   <section id="founders" class="section" aria-label="Founder's Pass">
     <div class="container">
       <div class="founders-wrap">
-
         <span class="eyebrow reveal">Founder's Lifetime Pass</span>
 
         <div class="founders-price-block reveal delay-1">
@@ -2104,36 +2234,19 @@
         </p>
 
         <div class="founders-perks reveal delay-2">
-          <div class="perk">
-            <span class="perk-dot"></span>
-            <span>Closed alpha access (2029–2030) — the only way to play before public launch</span>
-          </div>
-          <div class="perk">
-            <span class="perk-dot"></span>
-            <span>Lifetime subscription — no $14.99/mo fee, ever. Pay once, play forever</span>
-          </div>
-          <div class="perk">
-            <span class="perk-dot"></span>
-            <span>NPCs remember you permanently — relationships, history, and reputation persist across every session</span>
-          </div>
-          <div class="perk">
-            <span class="perk-dot"></span>
-            <span>Offline player agent — your character gathers, trades, and acts in the world while you sleep</span>
-          </div>
-          <div class="perk">
-            <span class="perk-dot"></span>
-            <span>NPCs reference your founding status as permanent in-world historical fact</span>
-          </div>
+          <div class="perk"><span class="perk-dot"></span><span>Closed alpha access (2029–2030) — the only way to play before public launch</span></div>
+          <div class="perk"><span class="perk-dot"></span><span>Lifetime subscription — no $14.99/mo fee, ever. Pay once, play forever</span></div>
+          <div class="perk"><span class="perk-dot"></span><span>NPCs remember you permanently — relationships, history, and reputation persist across every session</span></div>
+          <div class="perk"><span class="perk-dot"></span><span>Offline player agent — your character gathers, trades, and acts in the world while you sleep</span></div>
+          <div class="perk"><span class="perk-dot"></span><span>NPCs reference your founding status as permanent in-world historical fact</span></div>
         </div>
 
-        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener"
-           class="btn-primary reveal delay-3" title="Opens in new tab">
+        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-primary reveal delay-3 magnetic-btn" title="Opens in new tab">
           Join the Community
           <span class="btn-sub">Founder's Pass — Coming Soon</span>
         </a>
 
         <p class="founders-cap-note reveal delay-4">Capped at 10,000 passes worldwide. Pre-launch only. Never offered again.</p>
-
       </div>
     </div>
   </section>
@@ -2188,18 +2301,12 @@
       </div>
 
       <div class="footer-bottom">
-        <p class="footer-copy">
-          © 2026 Overture Dynamics. All rights reserved.
-          All game designs, combat systems, and mechanics are original to Overture Dynamics.
-        </p>
+        <p class="footer-copy">© 2026 Overture Dynamics. All rights reserved. All game designs, combat systems, and mechanics are original to Overture Dynamics.</p>
         <p class="footer-wordmark">Play. Own. Evolve.</p>
       </div>
     </div>
   </footer>
 
-  <!-- ═══════════════════════════════════════════
-       BACK TO TOP
-  ═══════════════════════════════════════════ -->
   <button id="back-to-top" aria-label="Back to top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
       <path d="M12 5v14M5 12l7-7 7 7"/>
@@ -2218,8 +2325,30 @@
       document.documentElement.setAttribute('data-cursor-disabled', 'true');
     }
 
-    /* ── Check for hover capability ────────────── */
     const hasHover = window.matchMedia('(hover: hover)').matches;
+
+    /* ── Typing Effect ────────────────────────── */
+    (function() {
+      const text = "The end of scripted worlds. The beginning of a world that remembers you.";
+      const container = document.getElementById('typing-text');
+      const cursor = document.getElementById('typing-cursor');
+      let charIndex = 0;
+      let isTypingComplete = false;
+
+      function typeChar() {
+        if (charIndex < text.length) {
+          container.textContent += text.charAt(charIndex);
+          charIndex++;
+          setTimeout(typeChar, 28 + Math.random() * 12);
+        } else {
+          isTypingComplete = true;
+          cursor.style.animation = 'blink 0.8s step-end infinite';
+        }
+      }
+
+      // Start typing after the hero logo animation finishes (~2.5s)
+      setTimeout(typeChar, 2800);
+    })();
 
     /* ── Nav: glass on scroll ────────────────── */
     const nav = document.getElementById('nav');
@@ -2238,37 +2367,78 @@
     }, { threshold: 0.1 });
     revealEls.forEach(el => revealObserver.observe(el));
 
-    /* ── Global particle background (colour‑shifting) ── */
+    /* ── 3D Tilt Effect ──────────────────────── */
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -3;
+        const rotateY = ((x - centerX) / centerX) * 3;
+        card.style.setProperty('--tilt-x', rotateX + 'deg');
+        card.style.setProperty('--tilt-y', rotateY + 'deg');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--tilt-x', '0deg');
+        card.style.setProperty('--tilt-y', '0deg');
+      });
+    });
+
+    /* ── Magnetic Buttons ────────────────────── */
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const dist = Math.sqrt(x * x + y * y);
+        const maxDist = Math.min(rect.width, rect.height) * 1.2;
+        const strength = Math.min(1, 1 - (dist / maxDist)) * 8;
+        const angle = Math.atan2(y, x);
+        const moveX = Math.cos(angle) * strength;
+        const moveY = Math.sin(angle) * strength;
+        btn.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0, 0) scale(1)';
+      });
+    });
+
+    /* ── Global particle background ──────────── */
     (function () {
       const canvas = document.getElementById('global-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
 
+      const BLUE_R = 0, BLUE_G = 150, BLUE_B = 255;
+      const DARK_R = 10, DARK_G = 15, DARK_B = 25;
       let W, H, nodes;
       let animationId = null;
       let isVisible = true;
-      let hue = 210; // start at blue, will drift
+      let hue = 210;
+      let mouseX = -1000, mouseY = -1000;
 
       function resize() {
-        W = canvas.width  = window.innerWidth;
+        W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
         buildNodes();
       }
 
       function buildNodes() {
-        const count = Math.max(60, Math.floor((W * H) / 12000));
+        const count = Math.max(70, Math.floor((W * H) / 11000));
         nodes = Array.from({ length: count }, (_, i) => {
-          // Strictly alternating 2‑step cycle: Blue → Dark
           const type = (i % 2 === 0) ? 'blue' : 'dark';
           return {
-            x:  Math.random() * W,
-            y:  Math.random() * H,
-            vx: (Math.random() - 0.5) * 0.22,
-            vy: (Math.random() - 0.5) * 0.22,
-            r:  Math.random() * 1.6 + 0.5,
+            x: Math.random() * W,
+            y: Math.random() * H,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25,
+            r: Math.random() * 2.0 + 0.5,
             type,
-            phase:      Math.random() * Math.PI * 2,
-            phaseSpeed: 0.008 + Math.random() * 0.014,
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: 0.006 + Math.random() * 0.016,
+            baseX: 0, baseY: 0
           };
         });
       }
@@ -2279,34 +2449,51 @@
           return;
         }
 
-        // Slowly drift the hue (0.05° per frame → ~360° in 2 hours, smooth and subtle)
-        hue = (hue + 0.05) % 360;
-
+        hue = (hue + 0.04) % 360;
         ctx.clearRect(0, 0, W, H);
 
-        const maxD  = Math.min(W, H) * 0.18;
+        const blueRGB = hslToRgb(hue / 360, 0.80, 0.55);
+        const maxD = Math.min(W, H) * 0.18;
         const maxD2 = maxD * maxD;
 
-        // Convert current hue to RGB for blue nodes
-        const blueRGB = hslToRgb(hue / 360, 0.85, 0.55);
+        // Mouse influence on particles
+        const influenceRadius = Math.min(W, H) * 0.3;
+        nodes.forEach(n => {
+          const dx = n.x - mouseX;
+          const dy = n.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < influenceRadius && dist > 10) {
+            const force = (1 - dist / influenceRadius) * 1.2;
+            const angle = Math.atan2(dy, dx);
+            n.vx += Math.cos(angle) * force * 0.04;
+            n.vy += Math.sin(angle) * force * 0.04;
+          }
+          // Damping
+          n.vx *= 0.998;
+          n.vy *= 0.998;
+          // Clamp velocity
+          const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
+          if (speed > 0.8) {
+            n.vx = (n.vx / speed) * 0.8;
+            n.vy = (n.vy / speed) * 0.8;
+          }
+        });
 
         // Draw edges
         for (let i = 0; i < nodes.length; i++) {
           const a = nodes[i];
           for (let j = i + 1; j < nodes.length; j++) {
-            const b  = nodes[j];
+            const b = nodes[j];
             const dx = b.x - a.x;
             const dy = b.y - a.y;
             const d2 = dx * dx + dy * dy;
             if (d2 >= maxD2) continue;
-
             const t = 1 - Math.sqrt(d2) / maxD;
-
             if (a.type === 'blue' || b.type === 'blue') {
               ctx.strokeStyle = `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, ${t * 0.30})`;
               ctx.lineWidth = 1.2;
             } else {
-              ctx.strokeStyle = `rgba(15, 20, 35, ${t * 0.15})`;
+              ctx.strokeStyle = `rgba(${DARK_R + 5}, ${DARK_G + 5}, ${DARK_B + 10}, ${t * 0.15})`;
               ctx.lineWidth = 0.6;
             }
             ctx.beginPath();
@@ -2320,9 +2507,7 @@
         nodes.forEach(n => {
           n.phase += n.phaseSpeed;
           const pulse = 0.65 + 0.35 * Math.sin(n.phase);
-
           if (n.type === 'blue') {
-            // Glowing orb with current hue
             const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 5);
             grd.addColorStop(0, `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, ${0.85 * pulse})`);
             grd.addColorStop(1, `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, 0)`);
@@ -2330,36 +2515,33 @@
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 5, 0, Math.PI * 2);
             ctx.fill();
-
             ctx.fillStyle = `rgba(${blueRGB.r}, ${blueRGB.g}, ${blueRGB.b}, 1)`;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 1.1, 0, Math.PI * 2);
             ctx.fill();
           } else {
-            // Dark nodes – stay near‑black but pulse slightly
             const darkPulse = 0.15 + 0.15 * pulse;
-            ctx.fillStyle = `rgba(10, 15, 28, ${darkPulse})`;
+            ctx.fillStyle = `rgba(${DARK_R}, ${DARK_G}, ${DARK_B}, ${darkPulse})`;
             ctx.beginPath();
             ctx.arc(n.x, n.y, n.r * 0.7, 0, Math.PI * 2);
             ctx.fill();
           }
-
-          n.x += n.vx;  if (n.x < 0) n.x = W;  if (n.x > W) n.x = 0;
-          n.y += n.vy;  if (n.y < 0) n.y = H;  if (n.y > H) n.y = 0;
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 0) n.x = W;
+          if (n.x > W) n.x = 0;
+          if (n.y < 0) n.y = H;
+          if (n.y > H) n.y = 0;
         });
 
         animationId = requestAnimationFrame(draw);
       }
 
-      // Helper: convert HSL to RGB (all values 0–255)
       function hslToRgb(h, s, l) {
         let r, g, b;
-        if (s === 0) {
-          r = g = b = l;
-        } else {
+        if (s === 0) { r = g = b = l; } else {
           const hue2rgb = (p, q, t) => {
-            if (t < 0) t += 1;
-            if (t > 1) t -= 1;
+            if (t < 0) t += 1; if (t > 1) t -= 1;
             if (t < 1/6) return p + (q - p) * 6 * t;
             if (t < 1/2) return q;
             if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
@@ -2373,6 +2555,9 @@
         }
         return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
       }
+
+      document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
+      document.addEventListener('mouseleave', () => { mouseX = -1000; mouseY = -1000; });
 
       const ro = new ResizeObserver(resize);
       ro.observe(document.body);
@@ -2389,10 +2574,44 @@
       });
     })();
 
-    /* ── Custom cursor (only on hover devices) ── */
+    /* ── Interactive Roadmap (click to expand) ── */
+    document.querySelectorAll('.roadmap-item').forEach(item => {
+      item.addEventListener('click', function(e) {
+        // Don't toggle if clicking a link inside
+        if (e.target.closest('a')) return;
+        this.classList.toggle('expanded');
+      });
+    });
+
+    /* ── Section Progress Indicator ──────────── */
+    const sections = ['hero', 'problem', 'pillars', 'world', 'combat', 'roadmap', 'founders'];
+    const progressEl = document.getElementById('section-progress');
+    const chapterNum = progressEl.querySelector('.chapter-num');
+    const chapterLabel = document.getElementById('chapter-label');
+
+    function updateProgress() {
+      const scrollY = window.scrollY + window.innerHeight / 2;
+      let activeIndex = 0;
+      for (let i = 0; i < sections.length; i++) {
+        const el = document.getElementById(sections[i]);
+        if (!el) continue;
+        const top = el.offsetTop;
+        const bottom = top + el.offsetHeight;
+        if (scrollY >= top && scrollY < bottom) { activeIndex = i; break; }
+        if (scrollY >= bottom) activeIndex = i;
+      }
+      const displayIndex = Math.min(activeIndex + 1, sections.length);
+      chapterNum.textContent = displayIndex;
+      chapterLabel.textContent = `of ${sections.length}`;
+      progressEl.classList.toggle('visible', window.scrollY > 300);
+    }
+
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    /* ── Custom cursor ────────────────────────── */
     const cursor = document.getElementById('custom-cursor');
     let cursorVisible = false;
-
     if (hasHover && !prefersReducedMotion) {
       document.addEventListener('mousemove', e => {
         cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
@@ -2400,13 +2619,11 @@
       });
       document.addEventListener('mouseleave', () => cursor.classList.remove('visible'));
       document.addEventListener('mouseenter', () => { if (cursorVisible) cursor.classList.add('visible'); });
-
       document.addEventListener('mouseover', e => {
         cursor.classList.toggle('hovering', !!e.target.closest('a, button, [role="button"], input, select, textarea, label'));
       });
-
       document.addEventListener('mousedown', () => { cursor.classList.remove('hovering'); cursor.classList.add('clicking'); });
-      document.addEventListener('mouseup',   () => cursor.classList.remove('clicking'));
+      document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
     }
 
     /* ── Cursor glow ──────────────────────────── */
@@ -2423,17 +2640,17 @@
       requestAnimationFrame(glowLoop);
     })();
 
-    /* ── Hero parallax + scroll progress ──────── */
+    /* ── Hero parallax ────────────────────────── */
     const heroContent = document.querySelector('.hero-content');
     const progressBar = document.getElementById('scroll-progress');
-
     let ticking = false;
+
     function updateScrollState() {
-      const y  = window.scrollY;
+      const y = window.scrollY;
       const vh = window.innerHeight;
       if (y <= vh * 1.5) {
         heroContent.style.transform = `translateY(${y * 0.38}px)`;
-        heroContent.style.opacity   = Math.max(0, 1 - (y / vh) * 1.4);
+        heroContent.style.opacity = Math.max(0, 1 - (y / vh) * 1.4);
       }
       const docH = document.documentElement.scrollHeight - window.innerHeight;
       progressBar.style.width = (docH > 0 ? y / docH * 100 : 0) + '%';
@@ -2441,19 +2658,16 @@
 
     window.addEventListener('scroll', () => {
       if (!ticking) {
-        requestAnimationFrame(() => {
-          updateScrollState();
-          ticking = false;
-        });
+        requestAnimationFrame(() => { updateScrollState(); ticking = false; });
         ticking = true;
       }
     }, { passive: true });
 
     /* ── Active nav highlighting ─────────────── */
-    const navAnchors    = document.querySelectorAll('.nav-links a[href^="#"]');
+    const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
     const mobileAnchors = document.querySelectorAll('.mobile-nav a[href^="#"]');
-    const sectionIds    = [...navAnchors].map(a => a.getAttribute('href').slice(1));
-    const sectionEls    = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+    const sectionIds = [...navAnchors].map(a => a.getAttribute('href').slice(1));
+    const sectionEls = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
 
     function setActive(id) {
       navAnchors.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
@@ -2467,19 +2681,17 @@
 
     /* ── Animated stat counters ──────────────── */
     function animateCounter(el) {
-      const target   = parseInt(el.dataset.target, 10);
-      const from     = parseInt(el.dataset.from || '0', 10);
-      const prefix   = el.dataset.prefix || '';
-      const suffix   = el.dataset.suffix || '';
-      const comma    = el.dataset.comma === 'true';
+      const target = parseInt(el.dataset.target, 10);
+      const from = parseInt(el.dataset.from || '0', 10);
+      const comma = el.dataset.comma === 'true';
       const duration = 1600;
-      const t0       = performance.now();
+      const t0 = performance.now();
 
       function tick(now) {
-        const p     = Math.min((now - t0) / duration, 1);
+        const p = Math.min((now - t0) / duration, 1);
         const eased = 1 - Math.pow(1 - p, 3);
-        const val   = Math.round(from + (target - from) * eased);
-        el.textContent = prefix + (comma ? val.toLocaleString() : val) + suffix;
+        const val = Math.round(from + (target - from) * eased);
+        el.textContent = comma ? val.toLocaleString() : val;
         if (p < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
@@ -2497,8 +2709,8 @@
     counterEls.forEach(el => counterObserver.observe(el));
 
     /* ── Hamburger / mobile nav ──────────────── */
-    const hamburger  = document.getElementById('hamburger');
-    const mobileNav  = document.getElementById('mobile-nav');
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobile-nav');
 
     hamburger.addEventListener('click', () => {
       const open = mobileNav.classList.toggle('open');
@@ -2533,11 +2745,7 @@
     const backToTop = document.getElementById('back-to-top');
 
     function updateBackToTop() {
-      if (window.scrollY > 600) {
-        backToTop.classList.add('visible');
-      } else {
-        backToTop.classList.remove('visible');
-      }
+      backToTop.classList.toggle('visible', window.scrollY > 600);
     }
 
     window.addEventListener('scroll', updateBackToTop, { passive: true });
@@ -2557,7 +2765,7 @@
 
     /* ── Smooth scroll with offset ────────────── */
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
+      anchor.addEventListener('click', function(e) {
         const targetId = this.getAttribute('href');
         if (targetId === '#') return;
         const target = document.querySelector(targetId);
