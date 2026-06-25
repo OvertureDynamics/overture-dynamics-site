@@ -82,9 +82,12 @@
 
     /* ══════════════════════════════════════════════
        CUSTOM CURSOR — only on hover-capable devices
+       Hide ALL default cursors
     ══════════════════════════════════════════════ */
     @media (hover: hover) {
-      html { cursor: none; }
+      html, body, * {
+        cursor: none !important;
+      }
     }
     #custom-cursor {
       position: fixed;
