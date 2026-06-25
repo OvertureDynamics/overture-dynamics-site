@@ -1045,7 +1045,7 @@
     }
 
     /* ══════════════════════════════════════════════
-       ROADMAP — now with interactive expansion
+       ROADMAP — interactive expansion, no subtext
     ══════════════════════════════════════════════ */
     #roadmap { background: var(--bg-deep); }
     .roadmap-timeline {
@@ -1123,15 +1123,6 @@
       margin-left: auto;
     }
     .roadmap-item.expanded .roadmap-expand-icon { transform: rotate(180deg); color: var(--gold); }
-
-    .roadmap-desc {
-      font-size: 0.92rem;
-      color: var(--text-muted);
-      line-height: 1.8;
-      max-width: 620px;
-      margin-bottom: 0.8rem;
-    }
-    .roadmap-item:not(.active) .roadmap-desc { color: var(--text-dim); }
 
     /* Expanded details — hidden by default */
     .roadmap-details {
@@ -1538,14 +1529,17 @@
       filter: drop-shadow(0 0 2px rgba(201,168,76,0.5));
     }
 
+    /* ══════════════════════════════════════════════
+       CURSOR GLOW — reduced bloom
+    ══════════════════════════════════════════════ */
     #cursor-glow {
       position: fixed;
-      top: -300px;
-      left: -300px;
-      width: 600px;
-      height: 600px;
+      top: -150px;
+      left: -150px;
+      width: 300px;
+      height: 300px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,168,76,0.09) 0%, rgba(201,168,76,0.03) 45%, transparent 70%);
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.02) 45%, transparent 70%);
       pointer-events: none;
       z-index: 9;
       will-change: transform;
@@ -2028,7 +2022,7 @@
   </section>
 
   <!-- ═══════════════════════════════════════════
-       ROADMAP — interactive expanded
+       ROADMAP — interactive expanded, subtext removed
   ═══════════════════════════════════════════ -->
   <section id="roadmap" class="section" aria-label="Development roadmap">
     <div class="container">
@@ -2047,7 +2041,6 @@
             Foundation · Pre-Seed &amp; Seed
             <span class="roadmap-expand-icon">▾</span>
           </div>
-          <p class="roadmap-desc">Raising $500K pre-seed to build the three proof-of-concept assets — ERC-8004 NPC prototype, UE5 combat vertical slice, and GDD. Seed round of $3M closes by end of 2027 after live NPC demo, playable combat build, and 1,000+ Discord members.</p>
           <div class="roadmap-details">
             <div class="roadmap-details-inner">
               <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">5–12 people</span></div>
@@ -2073,7 +2066,6 @@
             Pre-Alpha · Series A
             <span class="roadmap-expand-icon">▾</span>
           </div>
-          <p class="roadmap-desc">$15M Series A raises on demonstrated NPC stability and all simulation agents integrated. A 10–18 person team builds toward internal alpha. Weapon crafting, marketplace v1, and all five world agents run simultaneously for the first time.</p>
           <div class="roadmap-details">
             <div class="roadmap-details-inner">
               <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">10–18 people</span></div>
@@ -2097,7 +2089,6 @@
             Closed Alpha
             <span class="roadmap-expand-icon">▾</span>
           </div>
-          <p class="roadmap-desc">Founder's Pass holders access the world — the only way to play during this phase. Full world simulation runs live for the first time with real players. 1K-player closed alpha. Series B preparation begins.</p>
           <div class="roadmap-details">
             <div class="roadmap-details-inner">
               <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">15–22 people</span></div>
@@ -2121,7 +2112,6 @@
             Open Beta · Full Subscription Launch
             <span class="roadmap-expand-icon">▾</span>
           </div>
-          <p class="roadmap-desc">Public subscription launch. 5K–20K players, full subscription launch, economy tuning, press & influencer push. $500K MRR target by end of 2032 — $6M subscription ARR.</p>
           <div class="roadmap-details">
             <div class="roadmap-details-inner">
               <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">20–28 people</span></div>
@@ -2145,7 +2135,6 @@
             Release · The Living World
             <span class="roadmap-expand-icon">▾</span>
           </div>
-          <p class="roadmap-desc">Full public launch targeting 200,000–500,000 registered players. ~120K subscribers generating $21.6M subscription ARR plus marketplace fees. On-chain ownership layer activates. The world runs itself — entirely.</p>
           <div class="roadmap-details">
             <div class="roadmap-details-inner">
               <div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">30 people (cap)</span></div>
@@ -2346,7 +2335,6 @@
         }
       }
 
-      // Start typing after the hero logo animation finishes (~2.5s)
       setTimeout(typeChar, 2800);
     })();
 
@@ -2468,10 +2456,8 @@
             n.vx += Math.cos(angle) * force * 0.04;
             n.vy += Math.sin(angle) * force * 0.04;
           }
-          // Damping
           n.vx *= 0.998;
           n.vy *= 0.998;
-          // Clamp velocity
           const speed = Math.sqrt(n.vx * n.vx + n.vy * n.vy);
           if (speed > 0.8) {
             n.vx = (n.vx / speed) * 0.8;
@@ -2577,7 +2563,6 @@
     /* ── Interactive Roadmap (click to expand) ── */
     document.querySelectorAll('.roadmap-item').forEach(item => {
       item.addEventListener('click', function(e) {
-        // Don't toggle if clicking a link inside
         if (e.target.closest('a')) return;
         this.classList.toggle('expanded');
       });
