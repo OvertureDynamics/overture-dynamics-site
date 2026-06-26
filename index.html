@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;1,14..32,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,300&display=swap" rel="stylesheet" />
   <!-- Structured Data (JSON-LD) -->
   <script type="application/ld+json">
   {
@@ -346,6 +346,7 @@
       transition: background 0.25s, box-shadow 0.25s;
       white-space: nowrap;
       box-shadow: 0 2px 8px rgba(201,168,76,0.15);
+      font-weight: 700;
     }
     .btn-nav:hover,
     .btn-nav:focus-visible {
@@ -491,14 +492,14 @@
       animation: fadeSlideUp 1s 1.05s cubic-bezier(.22,1,.36,1) forwards;
     }
 
-    /* ── Primary Button: dark text on gold for contrast ── */
+    /* ── Primary Button: dark text on gold, bold, wider spacing ── */
     .btn-primary {
       display: inline-flex;
       flex-direction: column;
       align-items: center;
       font-family: var(--ff-head);
       font-size: 0.7rem;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: #1a1a1a;
       background: var(--gold);
@@ -509,6 +510,7 @@
       text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 20px rgba(201, 168, 76, 0.2);
       cursor: pointer;
+      font-weight: 700;
     }
     .btn-primary:hover,
     .btn-primary:focus-visible {
@@ -519,18 +521,19 @@
     }
     .btn-primary .btn-sub {
       font-size: 0.52rem;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.05em;
       opacity: 0.6;
       margin-top: 0.2rem;
       color: #1a1a1a;
+      font-weight: 600;
     }
 
-    /* ── Secondary Button: bright gold text + border ── */
+    /* ── Secondary Button: bright gold text + border, also bold ── */
     .btn-secondary {
       display: inline-block;
       font-family: var(--ff-head);
       font-size: 0.7rem;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.05em;
       text-transform: uppercase;
       color: var(--gold);
       background: transparent;
@@ -538,6 +541,7 @@
       border: 1px solid var(--gold);
       transition: border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(.34,1.56,.64,1), background 0.25s;
       cursor: pointer;
+      font-weight: 700;
     }
     .btn-secondary:hover,
     .btn-secondary:focus-visible {
