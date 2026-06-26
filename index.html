@@ -339,7 +339,7 @@
       font-size: 0.6rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
-      color: var(--bg-deep);
+      color: #ffffff;
       background: var(--gold);
       padding: 0.6rem 1.3rem;
       border: none;
@@ -490,6 +490,7 @@
       animation: fadeSlideUp 1s 1.05s cubic-bezier(.22,1,.36,1) forwards;
     }
 
+    /* ── Primary Button: dark text on gold for contrast ── */
     .btn-primary {
       display: inline-flex;
       flex-direction: column;
@@ -498,43 +499,50 @@
       font-size: 0.7rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--bg-deep);
+      color: #1a1a1a;
       background: var(--gold);
       padding: 1.05rem 2.4rem;
       border: none;
       transition: background 0.25s, box-shadow 0.3s, transform 0.25s cubic-bezier(.34,1.56,.64,1);
       line-height: 1.4;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(201, 168, 76, 0.2);
     }
     .btn-primary:hover,
     .btn-primary:focus-visible {
-      background: #dbb94f;
-      box-shadow: 0 0 50px rgba(201,168,76,0.45);
+      background: #deb95a;
+      box-shadow: 0 8px 40px rgba(201, 168, 76, 0.35);
+      transform: translateY(-2px) scale(1.01);
       outline: none;
     }
     .btn-primary .btn-sub {
       font-size: 0.52rem;
       letter-spacing: 0.22em;
-      opacity: 0.65;
+      opacity: 0.6;
       margin-top: 0.2rem;
+      color: #1a1a1a;
     }
 
+    /* ── Secondary Button: bright gold text + border ── */
     .btn-secondary {
       display: inline-block;
       font-family: var(--ff-head);
       font-size: 0.7rem;
       letter-spacing: 0.22em;
       text-transform: uppercase;
-      color: var(--text);
+      color: var(--gold);
       background: transparent;
       padding: 1.05rem 2.4rem;
-      border: 1px solid var(--border);
-      transition: border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(.34,1.56,.64,1);
+      border: 1px solid var(--gold);
+      transition: border-color 0.25s, color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(.34,1.56,.64,1), background 0.25s;
+      cursor: pointer;
     }
     .btn-secondary:hover,
     .btn-secondary:focus-visible {
-      border-color: var(--border-hover);
-      color: var(--gold);
-      box-shadow: 0 0 24px rgba(201,168,76,0.1);
+      border-color: #deb95a;
+      color: #deb95a;
+      box-shadow: 0 0 30px rgba(201,168,76,0.2), inset 0 0 30px rgba(201,168,76,0.05);
+      background: rgba(201,168,76,0.06);
       outline: none;
     }
 
