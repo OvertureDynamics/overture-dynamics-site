@@ -228,13 +228,12 @@
       text-transform:uppercase;
     }
 
-    /* --- FIX: Prevent nav links from wrapping vertically --- */
     .nav-links {
       display:flex;
       align-items:center;
       gap:.45rem;
       justify-content:center;
-      flex-wrap:nowrap; /* force single line */
+      flex-wrap:nowrap;
     }
     .nav-links a {
       font:600 .62rem/1 var(--ff-head);
@@ -244,8 +243,8 @@
       border:1px solid rgba(201,168,76,.15);
       padding:.35rem .7rem;
       transition:color .25s,border-color .25s,background .25s;
-      white-space:nowrap;  /* keep text on one line */
-      flex-shrink:0;       /* prevent shrinking */
+      white-space:nowrap;
+      flex-shrink:0;
     }
     .nav-links a:hover,
     .nav-links a:focus-visible {
@@ -877,7 +876,7 @@
       margin-bottom:.8rem;
     }
 
-    /* ===== ROADMAP ===== */
+    /* ===== ROADMAP (UPDATED TO MATCH PITCH DECK) ===== */
     #roadmap { background:var(--bg-deep); }
     .roadmap-timeline {
       position:relative;
@@ -1334,7 +1333,6 @@
           <li><a href="#roadmap">Roadmap</a></li>
           <li><a href="#about">Studio</a></li>
           <li><a href="#founders">Founder's Pass</a></li>
-          <!-- Careers: opens in same window -->
           <li><a href="https://careers.overturedynamics.com">Careers</a></li>
         </ul>
         <div class="nav-right">
@@ -1355,7 +1353,6 @@
     <a href="#roadmap">Roadmap</a>
     <a href="#about">Studio</a>
     <a href="#founders">Founder's Pass</a>
-    <!-- Careers: opens in same window -->
     <a href="https://careers.overturedynamics.com">Careers</a>
     <div class="mobile-nav-sep"></div>
     <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-nav" title="Opens in new tab">Join Discord</a>
@@ -1434,7 +1431,6 @@
   <section id="stats" aria-label="Key statistics">
     <div class="container">
       <div class="stats-row">
-        <!-- Updated stats to match Pitch Deck -->
         <div class="stat reveal"><span class="stat-val" data-target="6">6</span><span class="stat-lbl">Weapon Archetypes</span></div>
         <div class="stat-sep"></div>
         <div class="stat reveal delay-1"><span class="stat-val">$25B</span><span class="stat-lbl">MMO Market</span></div>
@@ -1453,7 +1449,6 @@
       <div class="section-head center reveal">
         <span class="eyebrow">The Problem</span>
         <h2>Every major MMO suffers <span class="gold">the same six failures.</span></h2>
-        <!-- Pitch Deck: "Uncontested category" note -->
         <p class="section-desc">Project Oath was designed to solve all six simultaneously — creating an entirely uncontested category: no existing MMO combines action-combat depth with a living AI world.</p>
       </div>
       <div class="problem-grid">
@@ -1499,7 +1494,6 @@
         <span class="eyebrow">Massively Multiplayer</span>
         <h2>One server. <span class="gold">One shared history.</span></h2>
       </div>
-      <!-- Pitch Deck quote: "You don't play in the world. You shape it." -->
       <p class="world-quote reveal delay-1">"You don't play in the world —<br><em>you shape it.</em>"</p>
       <p class="about-p reveal delay-1" style="max-width:680px; margin-bottom:clamp(2rem,5vw,3.5rem);">Project Oath runs on a single shard per region. Every player inhabits the same world, shares the same economy, and lives through the same history. There is no critical path. A player can spend their first month trading ore, building faction alliances, following an NPC merchant's fortunes, or fighting in PvP arenas. All of it is the game — simultaneously. Every player's experience is genuinely non-linear and unrepeatable.</p>
       <div class="influence-grid">
@@ -1553,6 +1547,7 @@
     </div>
   </section>
 
+  <!-- ===== ROADMAP – UPDATED TO MATCH PITCH DECK EXACTLY ===== -->
   <section id="roadmap" class="section" aria-label="Development roadmap">
     <div class="container">
       <div class="section-head reveal">
@@ -1561,35 +1556,75 @@
         <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. <strong style="color:var(--gold-dim);">Click any phase to expand details.</strong></p>
       </div>
       <div class="roadmap-timeline">
+        <!-- Phase 1 -->
         <div class="roadmap-item active reveal" data-phase="1">
-          <p class="roadmap-year">2026 – 2027 &nbsp;·&nbsp; Phase 1</p>
+          <p class="roadmap-year">2026–2027 · Years 1–2</p>
           <div class="roadmap-stage">Foundation · Pre-Seed &amp; Seed <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">Raising $500K pre-seed to build the three proof-of-concept assets — ERC-8004 NPC prototype, UE5 combat vertical slice, and GDD. Seed round of $3M closes by end of 2027 after live NPC demo, playable combat build, and 1,000+ Discord members. First full-time engineering and AI hires join. Economy Agent goes live.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">5–12 people</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate, GDD complete, ERC-8004 prototype</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat vertical slice on UE5, Discord 1,000+, pre-seed close</span></div></div></div>
+          <p class="roadmap-desc">5–15 people · $5M–$18M (Pre-Seed + Seed)<br>Incorporate, GDD complete, ERC-8004 NPC prototype, combat vertical slice on UE5, Discord 1,000+, pre-seed close. Seed raise $3M, NPC demo public, first external playtests.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">5–15</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate · GDD · ERC-8004 prototype</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat slice · Discord 1,000+ · Seed raise</span></div>
+            </div>
+          </div>
         </div>
+        <!-- Phase 2 -->
         <div class="roadmap-item reveal delay-1" data-phase="2">
-          <p class="roadmap-year">2028 &nbsp;·&nbsp; Phase 2</p>
+          <p class="roadmap-year">2028 · Year 3</p>
           <div class="roadmap-stage">Pre-Alpha · Series A <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">$15M Series A raises on demonstrated NPC stability and all simulation agents integrated. A 10–18 person team builds toward internal alpha. Weapon crafting, marketplace v1, and all five world agents run simultaneously for the first time.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">10–18 people</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M (Series A)</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All simulation agents integrated</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Weapon crafting complete, marketplace v1, Series A raise</span></div></div></div>
+          <p class="roadmap-desc">12–25 people · $15M (Series A)<br>All simulation agents integrated, weapon crafting complete, marketplace v1, Series A raise.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">12–25</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All agents integrated · Crafting complete</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Marketplace v1 · Series A raise</span></div>
+            </div>
+          </div>
         </div>
+        <!-- Phase 3 -->
         <div class="roadmap-item reveal delay-2" data-phase="3">
-          <p class="roadmap-year">2029 – 2030 &nbsp;·&nbsp; Phase 3</p>
+          <p class="roadmap-year">2029–2030 · Years 4–5</p>
           <div class="roadmap-stage">Closed Alpha <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">Founder's Pass holders access the world — the only way to play during this phase. Full world simulation runs live for the first time with real players. 1K-player closed alpha. Series B preparation begins.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">15–22 people</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M (Series A/B)</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass holders access the world</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player closed alpha, full world simulation live, Series B prep</span></div></div></div>
+          <p class="roadmap-desc">20–35 people · $15M–$40M (Series A / B)<br>Founder pass holders access the world. 1K-player closed alpha, full world simulation live, Series B preparation.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">20–35</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass access · Full world live</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player alpha · Series B prep</span></div>
+            </div>
+          </div>
         </div>
+        <!-- Phase 4 -->
         <div class="roadmap-item reveal delay-3" data-phase="4">
-          <p class="roadmap-year">2031 – 2032 &nbsp;·&nbsp; Phase 4</p>
+          <p class="roadmap-year">2031–2032 · Years 6–7</p>
           <div class="roadmap-stage">Open Beta · Full Subscription Launch <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">Public subscription launch. 5K–20K players, full subscription launch, economy tuning, press & influencer push. $500K MRR target by end of 2032 — $6M subscription ARR.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">20–28 people</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M (Series B/C)</span></div><div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Full subscription launch, economy tuning, press & influencer push</span></div></div></div>
+          <p class="roadmap-desc">35–45 people · $40M–$80M (Series B / C)<br>5K–20K players, full subscription launch, economy tuning, press &amp; influencer push.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">35–45</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Subscription launch · Economy tuning</span></div>
+            </div>
+          </div>
         </div>
+        <!-- Phase 5 -->
         <div class="roadmap-item reveal delay-4" data-phase="5">
-          <p class="roadmap-year">2033 – 2034 &nbsp;·&nbsp; Phase 5</p>
+          <p class="roadmap-year">2033–2034 · Years 8–9</p>
           <div class="roadmap-stage">Release · The Living World <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">Full public launch targeting 200,000–500,000 registered players. ~120K subscribers generating $21.6M subscription ARR plus marketplace fees. On-chain ownership layer activates. The world runs itself — entirely.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team Size</span><span class="value">30 people (cap)</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M (Series B/C)</span></div><div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch, on-chain ownership layer activates</span></div></div></div>
+          <p class="roadmap-desc">50 people (cap) · $40M–$80M (Series B / C)<br>Public launch, 200K–500K player target, on-chain ownership layer activates.</p>
+          <div class="roadmap-details">
+            <div class="roadmap-details-inner">
+              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">50 (cap)</span></div>
+              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div>
+              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div>
+              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch · On-chain ownership</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -1668,11 +1703,10 @@
   <script>
     'use strict';
 
-    // ===== REDUCED MOTION =====
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
 
-    // ===== TYPING EFFECT (updated to match Pitch Deck tagline) =====
+    // ===== TYPING EFFECT =====
     (function() {
       const text = "The first MMO where the world is truly alive.";
       const container = document.getElementById('typing-text');
@@ -1715,7 +1749,7 @@
     }, { threshold: 0.1 });
     revealEls.forEach(el => revealObserver.observe(el));
 
-    // ===== 3D TILT (throttled) =====
+    // ===== 3D TILT =====
     document.querySelectorAll('.tilt-card').forEach(card => {
       let rafId = null;
       card.addEventListener('mousemove', e => {
@@ -1738,7 +1772,7 @@
       }, { passive: true });
     });
 
-    // ===== MAGNETIC BUTTONS (throttled) =====
+    // ===== MAGNETIC BUTTONS =====
     document.querySelectorAll('.magnetic-btn').forEach(btn => {
       let rafId = null;
       btn.addEventListener('mousemove', e => {
