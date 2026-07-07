@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Oath — Overture Dynamics</title>
-  <meta name="description" content="The first truly living MMO. AI-driven NPCs that think, remember, and evolve. Real-time action combat in a world that never runs out of story. By Overture Dynamics." />
+  <meta name="description" content="The first MMO where the world is truly alive. AI-driven NPCs that think, remember, and evolve. Real-time action combat in a world that never runs out of story. By Overture Dynamics." />
   <meta property="og:title" content="Project Oath — Overture Dynamics" />
-  <meta property="og:description" content="The end of scripted worlds. The beginning of a world that remembers you." />
+  <meta property="og:description" content="The first MMO where the world is truly alive. The end of scripted worlds. The beginning of a world that remembers you." />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#06060d" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23c9a84c' stroke-width='1.2'/%3E%3Cpolygon points='50,5 95,50 50,95 5,50' fill='none' stroke='%23c9a84c' stroke-width='1.4'/%3E%3Ccircle cx='50' cy='50' r='3' fill='%23c9a84c'/%3E%3C/svg%3E" />
@@ -18,7 +18,7 @@
     "@context": "https://schema.org",
     "@type": "VideoGame",
     "name": "Project Oath",
-    "description": "The first truly living MMO. AI-driven NPCs that think, remember, and evolve.",
+    "description": "The first MMO where the world is truly alive. AI-driven NPCs that think, remember, and evolve.",
     "gamePlatform": "PC",
     "gameEdition": "Founder's Pass",
     "offers": { "@type": "Offer", "price": "299", "priceCurrency": "USD" },
@@ -227,11 +227,14 @@
       letter-spacing:.22em;
       text-transform:uppercase;
     }
+
+    /* --- FIX: Prevent nav links from wrapping vertically --- */
     .nav-links {
       display:flex;
       align-items:center;
       gap:.45rem;
       justify-content:center;
+      flex-wrap:nowrap; /* force single line */
     }
     .nav-links a {
       font:600 .62rem/1 var(--ff-head);
@@ -241,6 +244,8 @@
       border:1px solid rgba(201,168,76,.15);
       padding:.35rem .7rem;
       transition:color .25s,border-color .25s,background .25s;
+      white-space:nowrap;  /* keep text on one line */
+      flex-shrink:0;       /* prevent shrinking */
     }
     .nav-links a:hover,
     .nav-links a:focus-visible {
@@ -1329,7 +1334,7 @@
           <li><a href="#roadmap">Roadmap</a></li>
           <li><a href="#about">Studio</a></li>
           <li><a href="#founders">Founder's Pass</a></li>
-          <!-- Careers: opens in same window (no target) -->
+          <!-- Careers: opens in same window -->
           <li><a href="https://careers.overturedynamics.com">Careers</a></li>
         </ul>
         <div class="nav-right">
@@ -1429,9 +1434,10 @@
   <section id="stats" aria-label="Key statistics">
     <div class="container">
       <div class="stats-row">
+        <!-- Updated stats to match Pitch Deck -->
         <div class="stat reveal"><span class="stat-val" data-target="6">6</span><span class="stat-lbl">Weapon Archetypes</span></div>
         <div class="stat-sep"></div>
-        <div class="stat reveal delay-1"><span class="stat-val">AI-First</span><span class="stat-lbl">Studio</span></div>
+        <div class="stat reveal delay-1"><span class="stat-val">$25B</span><span class="stat-lbl">MMO Market</span></div>
         <div class="stat-sep"></div>
         <div class="stat reveal delay-2"><span class="stat-val" data-target="5">5</span><span class="stat-lbl">AI World Agents</span></div>
         <div class="stat-sep"></div>
@@ -1447,7 +1453,8 @@
       <div class="section-head center reveal">
         <span class="eyebrow">The Problem</span>
         <h2>Every major MMO suffers <span class="gold">the same six failures.</span></h2>
-        <p class="section-desc">Project Oath was designed to solve all six simultaneously — not patch one while ignoring the rest.</p>
+        <!-- Pitch Deck: "Uncontested category" note -->
+        <p class="section-desc">Project Oath was designed to solve all six simultaneously — creating an entirely uncontested category: no existing MMO combines action-combat depth with a living AI world.</p>
       </div>
       <div class="problem-grid">
         <div class="problem-card reveal tilt-card"><p class="problem-number">Failure 01</p><h4 class="problem-title">Linear Quest Design</h4><p class="problem-body">Quests are hand-authored story paths. Once players exhaust them, the world goes silent until a developer writes more.</p><p class="problem-solve">Project Oath: Five AI agents generate events, crises, and history continuously — no developer input required after launch.</p></div>
@@ -1492,7 +1499,8 @@
         <span class="eyebrow">Massively Multiplayer</span>
         <h2>One server. <span class="gold">One shared history.</span></h2>
       </div>
-      <p class="world-quote reveal delay-1">"Players do not play in the world —<br><em>they shape it.</em>"</p>
+      <!-- Pitch Deck quote: "You don't play in the world. You shape it." -->
+      <p class="world-quote reveal delay-1">"You don't play in the world —<br><em>you shape it.</em>"</p>
       <p class="about-p reveal delay-1" style="max-width:680px; margin-bottom:clamp(2rem,5vw,3.5rem);">Project Oath runs on a single shard per region. Every player inhabits the same world, shares the same economy, and lives through the same history. There is no critical path. A player can spend their first month trading ore, building faction alliances, following an NPC merchant's fortunes, or fighting in PvP arenas. All of it is the game — simultaneously. Every player's experience is genuinely non-linear and unrepeatable.</p>
       <div class="influence-grid">
         <div class="influence-card reveal tilt-card"><p class="influence-no">Economic Power</p><h4 class="influence-title">Control the Markets</h4><p class="influence-body">Players control supply chains, corner rare materials, and move markets. A single guild that monopolises a region's ore production can dictate prices across multiple empires. Every other player — and every NPC — feels the consequence.</p></div>
@@ -1517,12 +1525,12 @@
           <span class="eyebrow reveal" style="margin-bottom:.3rem;">Six Weapon Archetypes</span>
           <p class="about-p reveal delay-1" style="margin-top:.3rem;">No class selection. Your equipped weapon defines your identity, your abilities, and your role. Six archetypes at launch — each with a distinct mechanical identity and advanced techniques discovered through play.</p>
           <div class="weapons-grid reveal delay-1">
-            <div class="weapon-card tilt-card"><p class="weapon-name">Greatsword</p><p class="weapon-desc">Slow, powerful sweeps with massive poise. The foundation of frontline play — trades speed for dominance in a zone.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Dual Blades</p><p class="weapon-desc">High-speed combo chains with aggressive repositioning. Rewards continuous pressure and animation-cancel mastery.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Staff</p><p class="weapon-desc">Mid-range elemental projection and AoE. Requires positional discipline — power scales with distance management.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Bow</p><p class="weapon-desc">Long-range precision built around movement-based kiting and charged shots. Punishes overextension from a distance. Unforgiving to master.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Spear</p><p class="weapon-desc">Range control and zone denial. Keeps enemies at distance with thrusting combos and sweeping arcs — punishes overaggression before it lands.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Bracers</p><p class="weapon-desc">Close-range brawler with rapid strikes and armor-break chains. Built around counter-attack windows — punishes aggression at point-blank range.</p></div>
+            <div class="weapon-card tilt-card"><p class="weapon-name">Greatsword</p><p class="weapon-desc">Heavy melee — wide sweeps, stagger and zone control.</p></div>
+            <div class="weapon-card tilt-card"><p class="weapon-name">Dual Blades</p><p class="weapon-desc">High-speed combos — relentless pressure and interrupt chains.</p></div>
+            <div class="weapon-card tilt-card"><p class="weapon-name">Staff</p><p class="weapon-desc">Elemental spells — AoE burst and sustained field control.</p></div>
+            <div class="weapon-card tilt-card"><p class="weapon-name">Bow</p><p class="weapon-desc">Precision ranged — movement-based kiting and charged shots.</p></div>
+            <div class="weapon-card tilt-card"><p class="weapon-name">Spear</p><p class="weapon-desc">Reach &amp; precision — thrusting combos, poke pressure and execute range.</p></div>
+            <div class="weapon-card tilt-card"><p class="weapon-name">Bracers</p><p class="weapon-desc">Close-range brawler — rapid strikes, armor break and counter-attack windows.</p></div>
           </div>
         </div>
         <div>
@@ -1664,9 +1672,9 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
 
-    // ===== TYPING EFFECT =====
+    // ===== TYPING EFFECT (updated to match Pitch Deck tagline) =====
     (function() {
-      const text = "The end of scripted worlds. The beginning of a world that remembers you.";
+      const text = "The first MMO where the world is truly alive.";
       const container = document.getElementById('typing-text');
       const cursor = document.getElementById('typing-cursor');
       let i = 0;
