@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Project Oath · Living World MMO</title>
-  <!-- Font & icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    /* ===== Original visual style – preserved ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: #0b0d11;
@@ -30,16 +26,15 @@
       padding: 0 24px;
     }
 
-    /* ===== HEADER / NAV ===== */
+    /* ===== Nav ===== */
     .navbar {
       padding: 20px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
     }
-
     .logo {
       font-size: 24px;
       font-weight: 800;
@@ -49,7 +44,6 @@
       -webkit-text-fill-color: transparent;
     }
     .logo span { font-weight: 400; color: #9aa3b3; -webkit-text-fill-color: #9aa3b3; }
-
     .nav-links {
       display: flex;
       gap: 32px;
@@ -71,7 +65,7 @@
     }
     .btn-outline:hover { border-color: #7b8cff; background: rgba(123, 140, 255, 0.05); }
 
-    /* ===== HERO ===== */
+    /* ===== Hero ===== */
     .hero {
       padding: 80px 0 60px;
       text-align: center;
@@ -136,22 +130,32 @@
     }
     .btn-secondary:hover { border-color: #6a7cff; background: rgba(106, 124, 255, 0.06); }
 
-    /* ===== SECTION BASE ===== */
-    section { padding: 70px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    /* ===== Sections ===== */
+    section { padding: 70px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
     .section-title {
       font-size: 36px;
       font-weight: 700;
       letter-spacing: -0.5px;
       margin-bottom: 12px;
     }
-    .section-title .highlight { background: linear-gradient(135deg, #b7a8f0, #7b8cff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .section-title .highlight {
+      background: linear-gradient(135deg, #b7a8f0, #7b8cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
     .section-sub {
       font-size: 18px;
       color: #9aa8c9;
       max-width: 700px;
       margin-bottom: 40px;
     }
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+
+    /* ===== Grid & Cards ===== */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 28px;
+    }
     .card {
       background: #131821;
       border-radius: 20px;
@@ -164,8 +168,12 @@
     .card h4 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
     .card p { color: #a8b2c9; font-size: 15px; }
 
-    /* ===== LIVING SYSTEMS ===== */
-    .systems-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    /* ===== Systems (small cards) ===== */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
     .system-item {
       background: #111722;
       border-radius: 16px;
@@ -173,10 +181,11 @@
       text-align: center;
       border: 1px solid #1f2840;
     }
+    .system-item i { font-size: 28px; color: #7b8cff; display: block; margin-bottom: 8px; }
     .system-item h5 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
     .system-item p { font-size: 14px; color: #9aa8c9; }
 
-    /* ===== ROADMAP ===== */
+    /* ===== Roadmap ===== */
     .roadmap-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -187,41 +196,88 @@
       background: #111722;
       border-radius: 20px;
       padding: 24px 20px;
-      border-left: 4px solid #6a7cff;
       border: 1px solid #1f2840;
       border-left-width: 6px;
+      border-left-color: #6a7cff;
     }
-    .road-card .phase { font-size: 13px; font-weight: 700; color: #7b8cff; letter-spacing: 1px; text-transform: uppercase; }
+    .road-card .phase {
+      font-size: 13px;
+      font-weight: 700;
+      color: #7b8cff;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
     .road-card h4 { font-size: 20px; font-weight: 700; margin: 6px 0 4px; }
     .road-card .meta { font-size: 14px; color: #9aa8c9; margin-bottom: 8px; }
     .road-card ul { list-style: none; font-size: 14px; color: #c8d0e0; }
     .road-card ul li { margin-bottom: 4px; padding-left: 18px; position: relative; }
     .road-card ul li::before { content: "▹"; position: absolute; left: 0; color: #6a7cff; }
 
-    /* ===== TABLES ===== */
+    /* ===== Tables ===== */
     .table-wrap { overflow-x: auto; margin: 24px 0; }
-    table { width: 100%; border-collapse: collapse; font-size: 14px; background: #111722; border-radius: 16px; overflow: hidden; }
-    th { background: #1a2335; color: #b7c8ff; font-weight: 600; padding: 14px 16px; text-align: left; }
-    td { padding: 14px 16px; border-bottom: 1px solid #1f2840; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: #111722;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    th {
+      background: #1a2335;
+      color: #b7c8ff;
+      font-weight: 600;
+      padding: 14px 16px;
+      text-align: left;
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1f2840;
+    }
     tr:last-child td { border-bottom: none; }
     .table-highlight { background: #1a2335; }
 
-    /* ===== CAP TABLE ===== */
-    .cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; background: #111722; padding: 24px; border-radius: 20px; border: 1px solid #1f2840; }
+    /* ===== Cap Table ===== */
+    .cap-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      background: #111722;
+      padding: 24px;
+      border-radius: 20px;
+      border: 1px solid #1f2840;
+    }
     .cap-item { text-align: center; }
     .cap-item .label { font-size: 14px; color: #9aa8c9; }
     .cap-item .value { font-size: 20px; font-weight: 700; }
 
-    /* ===== USE OF FUNDS ===== */
-    .funds-bar { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
-    .funds-bar .segment { padding: 8px 16px; border-radius: 40px; background: #1a2335; font-weight: 600; font-size: 14px; }
+    /* ===== Funds bar ===== */
+    .funds-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 20px 0;
+    }
+    .funds-bar .segment {
+      padding: 8px 16px;
+      border-radius: 40px;
+      background: #1a2335;
+      font-weight: 600;
+      font-size: 14px;
+    }
     .segment span { color: #9aa8c9; font-weight: 400; }
 
-    /* ===== FOOTER ===== */
-    footer { padding: 40px 0 24px; text-align: center; color: #5c6b8a; font-size: 14px; border-top: 1px solid #1a2335; }
+    /* ===== Footer ===== */
+    footer {
+      padding: 40px 0 24px;
+      text-align: center;
+      color: #5c6b8a;
+      font-size: 14px;
+      border-top: 1px solid #1a2335;
+    }
     footer a { color: #7b8cff; text-decoration: none; }
 
-    /* ===== RESPONSIVE ===== */
+    /* ===== Responsive ===== */
     @media (max-width: 700px) {
       .hero h1 { font-size: 40px; }
       .navbar { flex-direction: column; gap: 16px; }
@@ -232,7 +288,7 @@
 </head>
 <body>
 
-  <!-- ========== NAV ========== -->
+  <!-- ===== NAV ===== -->
   <div class="container">
     <nav class="navbar">
       <div class="logo">Project Oath <span>·</span> living world</div>
@@ -246,7 +302,7 @@
     </nav>
   </div>
 
-  <!-- ========== HERO ========== -->
+  <!-- ===== HERO ===== -->
   <div class="container">
     <div class="hero">
       <div class="tag"><i class="fas fa-globe-americas" style="margin-right: 8px;"></i> The first MMO where the world is truly alive</div>
@@ -259,7 +315,7 @@
     </div>
   </div>
 
-  <!-- ========== WHY MMOs FEEL DEAD ========== -->
+  <!-- ===== WHY MMOs FEEL DEAD ===== -->
   <section>
     <div class="container">
       <div class="section-title">Why existing MMOs feel <span class="highlight">dead</span></div>
@@ -275,7 +331,7 @@
     </div>
   </section>
 
-  <!-- ========== UNCONTESTED CATEGORY ========== -->
+  <!-- ===== UNCONTESTED CATEGORY ===== -->
   <section>
     <div class="container">
       <div class="section-title">A living world in an <span class="highlight">uncontested category</span></div>
@@ -295,7 +351,7 @@
     </div>
   </section>
 
-  <!-- ========== COMBAT ========== -->
+  <!-- ===== COMBAT ===== -->
   <section>
     <div class="container">
       <div class="section-title">Weapon-defined identity — <span class="highlight">your playstyle is your character</span></div>
@@ -317,21 +373,21 @@
     </div>
   </section>
 
-  <!-- ========== LIVING SYSTEMS ========== -->
+  <!-- ===== LIVING SYSTEMS ===== -->
   <section>
     <div class="container">
       <div class="section-title">Five interlocked living systems — <span class="highlight">not scripted, not static</span></div>
       <div class="systems-grid">
-        <div class="system-item"><i class="fas fa-chart-line" style="font-size: 28px; color: #7b8cff;"></i><h5>Economy Engine</h5><p>Supply/demand markets, weather/ecology feed scarcity. Prices emerge.</p></div>
-        <div class="system-item"><i class="fas fa-cloud-sun" style="font-size: 28px; color: #7b8cff;"></i><h5>Weather & Climate</h5><p>Regional climate affects NPC schedules, crop yields, trade routes.</p></div>
-        <div class="system-item"><i class="fas fa-leaf" style="font-size: 28px; color: #7b8cff;"></i><h5>Ecology Layer</h5><p>Flora/fauna evolve. Over-harvest depletes until biome recovers.</p></div>
-        <div class="system-item"><i class="fas fa-mountain" style="font-size: 28px; color: #7b8cff;"></i><h5>Geological Events</h5><p>Tectonic stress, volcanic activity, flooding — world-history moments.</p></div>
-        <div class="system-item"><i class="fas fa-robot" style="font-size: 28px; color: #7b8cff;"></i><h5>AI Narrative Engine</h5><p>LLM-powered NPCs with memory, faction loyalty. Emergent lore.</p></div>
+        <div class="system-item"><i class="fas fa-chart-line"></i><h5>Economy Engine</h5><p>Supply/demand markets, weather/ecology feed scarcity. Prices emerge.</p></div>
+        <div class="system-item"><i class="fas fa-cloud-sun"></i><h5>Weather & Climate</h5><p>Regional climate affects NPC schedules, crop yields, trade routes.</p></div>
+        <div class="system-item"><i class="fas fa-leaf"></i><h5>Ecology Layer</h5><p>Flora/fauna evolve. Over-harvest depletes until biome recovers.</p></div>
+        <div class="system-item"><i class="fas fa-mountain"></i><h5>Geological Events</h5><p>Tectonic stress, volcanic activity, flooding — world-history moments.</p></div>
+        <div class="system-item"><i class="fas fa-robot"></i><h5>AI Narrative Engine</h5><p>LLM-powered NPCs with memory, faction loyalty. Emergent lore.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== EMERGENT GAMEPLAY ========== -->
+  <!-- ===== EMERGENT GAMEPLAY ===== -->
   <section>
     <div class="container">
       <div class="section-title">No quest lines. <span class="highlight">The world writes the stories.</span></div>
@@ -344,7 +400,7 @@
     </div>
   </section>
 
-  <!-- ========== ERC-8004 NPCs ========== -->
+  <!-- ===== ERC-8004 NPCs ===== -->
   <section>
     <div class="container">
       <div class="section-title">ERC-8004 Standard — <span class="highlight">truly alive NPCs</span></div>
@@ -356,11 +412,13 @@
         <div class="card"><i class="fas fa-people-arrows"></i><h4>Proactive Behavior</h4><p>NPCs plan and act without player input — relocate, hire, close shop.</p></div>
         <div class="card"><i class="fas fa-user-astronaut"></i><h4>Offline Player Agents</h4><p>Player characters run as agents when logged off — gather, trade, patrol.</p></div>
       </div>
-      <div style="margin-top: 24px; background: #0f1625; padding: 18px 24px; border-radius: 40px; display: inline-block; border: 1px solid #2d3650;"><i class="fas fa-cube" style="margin-right: 10px; color: #7b8cff;"></i> Future: ERC-721 guild hall deeds & historic equipment (post-launch)</div>
+      <div style="margin-top:24px; background:#0f1625; padding:18px 24px; border-radius:40px; display:inline-block; border:1px solid #2d3650;">
+        <i class="fas fa-cube" style="margin-right:10px; color:#7b8cff;"></i> Future: ERC-721 guild hall deeds & historic equipment (post-launch)
+      </div>
     </div>
   </section>
 
-  <!-- ========== YOU SHAPE THE WORLD ========== -->
+  <!-- ===== YOU SHAPE THE WORLD ===== -->
   <section>
     <div class="container">
       <div class="section-title">You don't play in the world. <span class="highlight">You shape it.</span></div>
@@ -375,7 +433,7 @@
     </div>
   </section>
 
-  <!-- ========== ROADMAP ========== -->
+  <!-- ===== ROADMAP (updated to match pitch deck) ===== -->
   <section>
     <div class="container">
       <div class="section-title">Five phases to a <span class="highlight">living world</span></div>
@@ -386,51 +444,53 @@
         <div class="road-card"><div class="phase">Phase 4 · Open Beta</div><h4>2031–2032</h4><div class="meta">35–45 people · $40M–$80M</div><ul><li>5K–20K players</li><li>Full subscription launch</li><li>Economy tuning</li><li>Press & influencer push</li></ul></div>
         <div class="road-card"><div class="phase">Phase 5 · Release</div><h4>2033–2034</h4><div class="meta">50 people · $40M–$80M</div><ul><li>Public launch</li><li>200K–500K players</li><li>On-chain ownership layer</li><li>Live operations</li></ul></div>
       </div>
-      <div style="margin-top: 28px; background: #111722; padding: 16px 24px; border-radius: 40px; border: 1px solid #2d3650; display: inline-block;"><i class="fas fa-clock" style="margin-right: 10px; color: #7b8cff;"></i> Total 9-year horizon: $60M–$138M · Team capped at 50 · Phased revenue</div>
-    </div>
-  </section>
-
-  <!-- ========== REVENUE ========== -->
-  <section>
-    <div class="container">
-      <div class="section-title">Revenue & growth trajectory — <span class="highlight">conservative estimates</span></div>
-      <div style="display: flex; flex-wrap: wrap; gap: 24px; justify-content: space-between; background: #111722; padding: 32px 28px; border-radius: 24px; border: 1px solid #1f2840;">
-        <div><span style="color: #9aa8c9;">Grants + Founder passes</span><br><strong style="font-size: 28px;">$200K</strong> <span style="color:#9aa8c9;">target</span></div>
-        <div><span style="color: #9aa8c9;">Closed alpha</span><br><strong style="font-size: 28px;">$—</strong> <span style="color:#9aa8c9;">subscription beta</span></div>
-        <div><span style="color: #9aa8c9;">Open beta</span><br><strong style="font-size: 28px;">$500K MRR</strong> <span style="color:#9aa8c9;">· $6M ARR</span><br><span style="font-size: 14px; color:#9aa8c9;">33K subscribers</span></div>
-        <div><span style="color: #9aa8c9;">Release</span><br><strong style="font-size: 28px;">$20M–$25M ARR</strong><br><span style="font-size: 14px; color:#9aa8c9;">120K subscribers</span></div>
+      <div style="margin-top:28px; background:#111722; padding:16px 24px; border-radius:40px; border:1px solid #2d3650; display:inline-block;">
+        <i class="fas fa-clock" style="margin-right:10px; color:#7b8cff;"></i> Total 9-year horizon: $60M–$138M · Team capped at 50 · Phased revenue
       </div>
     </div>
   </section>
 
-  <!-- ========== CAPITAL PLAN ========== -->
+  <!-- ===== REVENUE ===== -->
+  <section>
+    <div class="container">
+      <div class="section-title">Revenue & growth trajectory — <span class="highlight">conservative estimates</span></div>
+      <div style="display:flex; flex-wrap:wrap; gap:24px; justify-content:space-between; background:#111722; padding:32px 28px; border-radius:20px; border:1px solid #1f2840;">
+        <div><span style="color:#9aa8c9;">Grants + Founder passes</span><br><strong style="font-size:28px;">$200K</strong> <span style="color:#9aa8c9;">target</span></div>
+        <div><span style="color:#9aa8c9;">Closed alpha</span><br><strong style="font-size:28px;">$—</strong> <span style="color:#9aa8c9;">subscription beta</span></div>
+        <div><span style="color:#9aa8c9;">Open beta</span><br><strong style="font-size:28px;">$500K MRR</strong> <span style="color:#9aa8c9;">· $6M ARR</span><br><span style="font-size:14px; color:#9aa8c9;">33K subscribers</span></div>
+        <div><span style="color:#9aa8c9;">Release</span><br><strong style="font-size:28px;">$20M–$25M ARR</strong><br><span style="font-size:14px; color:#9aa8c9;">120K subscribers</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CAPITAL PLAN ===== -->
   <section>
     <div class="container">
       <div class="section-title">Three-stage capital plan — <span class="highlight">raising pre-seed now</span></div>
       <div class="grid-2">
-        <div class="card" style="border-left: 4px solid #6a7cff;"><h4>PRE-SEED</h4><p style="font-size: 24px; font-weight: 700;">$500K</p><p><strong>2026</strong> · Personal network & founder capital · Non-dilutive grants · Angel networks</p><p style="margin-top: 12px; color: #b7c8ff;">Founder + CTO + 1 engineer · ERC-8004 prototype · combat vertical slice · GDD · Discord 1,000+</p></div>
-        <div class="card" style="border-left: 4px solid #8a9cff;"><h4>SEED</h4><p style="font-size: 24px; font-weight: 700;">$3M</p><p><strong>Late 2027</strong> · AI-focused gaming VCs · Top-tier accelerator</p><p style="margin-top: 12px; color: #b7c8ff;">First 5–10 hires · NPC demo public · combat alpha · press launch</p></div>
-        <div class="card" style="border-left: 4px solid #a0b0ff;"><h4>SERIES A</h4><p style="font-size: 24px; font-weight: 700;">$15M</p><p><strong>Early 2029</strong> · Tier-1 AI & gaming crossover VCs · Strategic partners</p><p style="margin-top: 12px; color: #b7c8ff;">20–35 person team · closed alpha · all simulation agents live · Series B prep</p></div>
+        <div class="card" style="border-left:4px solid #6a7cff;"><h4>PRE-SEED</h4><p style="font-size:24px; font-weight:700;">$500K</p><p><strong>2026</strong> · Personal network & founder capital · Non-dilutive grants · Angel networks</p><p style="margin-top:12px; color:#b7c8ff;">Founder + CTO + 1 engineer · ERC-8004 prototype · combat vertical slice · GDD · Discord 1,000+</p></div>
+        <div class="card" style="border-left:4px solid #8a9cff;"><h4>SEED</h4><p style="font-size:24px; font-weight:700;">$3M</p><p><strong>Late 2027</strong> · AI-focused gaming VCs · Top-tier accelerator</p><p style="margin-top:12px; color:#b7c8ff;">First 5–10 hires · NPC demo public · combat alpha · press launch</p></div>
+        <div class="card" style="border-left:4px solid #a0b0ff;"><h4>SERIES A</h4><p style="font-size:24px; font-weight:700;">$15M</p><p><strong>Early 2029</strong> · Tier-1 AI & gaming crossover VCs · Strategic partners</p><p style="margin-top:12px; color:#b7c8ff;">20–35 person team · closed alpha · all simulation agents live · Series B prep</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== CAP TABLE ========== -->
+  <!-- ===== CAP TABLE ===== -->
   <section>
     <div class="container">
       <div class="section-title">Cap table & <span class="highlight">option pool</span></div>
       <div class="cap-grid">
-        <div><div class="label">Founder</div><div class="value">100% → 45%</div><div style="font-size:13px; color:#9aa8c9;">post-Series A</div></div>
-        <div><div class="label">Employee Option Pool</div><div class="value">— → 10%</div><div style="font-size:13px; color:#9aa8c9;">post-Series A</div></div>
-        <div><div class="label">Pre-Seed Investors</div><div class="value">— → 2%</div></div>
-        <div><div class="label">Seed Investors</div><div class="value">— → 17%</div></div>
-        <div><div class="label">Series A Investors</div><div class="value">— → 25–30%</div></div>
+        <div class="cap-item"><div class="label">Founder</div><div class="value">100% → 45%</div><div style="font-size:13px; color:#9aa8c9;">post-Series A</div></div>
+        <div class="cap-item"><div class="label">Employee Option Pool</div><div class="value">— → 10%</div><div style="font-size:13px; color:#9aa8c9;">post-Series A</div></div>
+        <div class="cap-item"><div class="label">Pre-Seed Investors</div><div class="value">— → 2%</div></div>
+        <div class="cap-item"><div class="label">Seed Investors</div><div class="value">— → 17%</div></div>
+        <div class="cap-item"><div class="label">Series A Investors</div><div class="value">— → 25–30%</div></div>
       </div>
-      <div style="margin-top: 12px; font-size: 14px; color: #9aa8c9;">Option pool — indicative hire grants drawn from ESOP at time of hire</div>
+      <div style="margin-top:12px; font-size:14px; color:#9aa8c9;">Option pool — indicative hire grants drawn from ESOP at time of hire</div>
     </div>
   </section>
 
-  <!-- ========== USE OF FUNDS ========== -->
+  <!-- ===== USE OF FUNDS ===== -->
   <section>
     <div class="container">
       <div class="section-title">Use of funds — <span class="highlight">where the capital goes</span></div>
@@ -440,32 +500,32 @@
         <span class="segment">20% <span>Art & NPC Visual Design</span></span>
         <span class="segment">20% <span>Marketing & Community</span></span>
       </div>
-      <div style="background: #111722; padding: 20px 24px; border-radius: 20px; border: 1px solid #1f2840; margin-top: 8px;">
-        <p><i class="fas fa-file-signature" style="color: #7b8cff; margin-right: 10px;"></i> Investors receive <strong>SAFE note</strong> converting at Seed. Pre-seed investors enter at the lowest valuation.</p>
+      <div style="background:#111722; padding:20px 24px; border-radius:20px; border:1px solid #1f2840; margin-top:8px;">
+        <p><i class="fas fa-file-signature" style="color:#7b8cff; margin-right:10px;"></i> Investors receive <strong>SAFE note</strong> converting at Seed. Pre-seed investors enter at the lowest valuation.</p>
       </div>
     </div>
   </section>
 
-  <!-- ========== SUMMARY / ASK ========== -->
-  <section style="border-bottom: none;">
+  <!-- ===== SUMMARY / ASK ===== -->
+  <section style="border-bottom:none;">
     <div class="container">
       <div class="section-title">Project Oath — <span class="highlight">one world. infinite stories. forever alive.</span></div>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;">
+      <div class="grid-2">
         <div class="card"><i class="fas fa-bullseye"></i><h4>$25B MMO Market</h4><p>Zero titles combining action-combat depth & living AI world. Uncontested category.</p></div>
         <div class="card"><i class="fas fa-gamepad"></i><h4>Classless Combat + 5 Systems</h4><p>Weapon-defined playstyle, physics hitboxes, economy/weather/ecology/geology/AI narrative.</p></div>
         <div class="card"><i class="fas fa-microchip"></i><h4>ERC-8004 NPC Standard</h4><p>Persistent memory, LLM dialogue, on-chain state. NPCs own assets, hold grudges.</p></div>
         <div class="card"><i class="fas fa-dollar-sign"></i><h4>Business Model</h4><p>$39.99 buy-in + $14.99/mo sub + Founder's Pass ($299). Tiered marketplace fees. No DLC.</p></div>
         <div class="card"><i class="fas fa-rocket"></i><h4>Timeline</h4><p>Pre-seed 2026 · Foundation 2026–2027 · Pre-Alpha 2028 · Closed Alpha 2030 · Open Beta 2032 · Release 2034</p></div>
-        <div class="card" style="border: 2px solid #6a7cff;"><i class="fas fa-hand-holding-usd"></i><h4>The Ask</h4><p><strong>$500K pre-seed</strong> via SAFE note. 18-month deliverables: ERC-8004 prototype, combat slice, GDD, Discord 1,000+, CTO hired, seed close.</p></div>
+        <div class="card" style="border:2px solid #6a7cff;"><i class="fas fa-hand-holding-usd"></i><h4>The Ask</h4><p><strong>$500K pre-seed</strong> via SAFE note. 18-month deliverables: ERC-8004 prototype, combat slice, GDD, Discord 1,000+, CTO hired, seed close.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ========== FOOTER ========== -->
+  <!-- ===== FOOTER ===== -->
   <footer>
     <div class="container">
-      <p>© 2026 Project Oath · Overture Dynamics · <a href="#">overture.gg</a> · <i class="fab fa-discord" style="margin: 0 4px;"></i> <i class="fab fa-twitter" style="margin: 0 4px;"></i> <i class="fab fa-github" style="margin: 0 4px;"></i></p>
-      <p style="margin-top: 8px; font-size: 13px; color: #3d4a66;">Built on UE5 · ERC-8004 · Living AI · Classless Combat</p>
+      <p>© 2026 Project Oath · Overture Dynamics · <a href="#">overture.gg</a> · <i class="fab fa-discord" style="margin:0 4px;"></i> <i class="fab fa-twitter" style="margin:0 4px;"></i> <i class="fab fa-github" style="margin:0 4px;"></i></p>
+      <p style="margin-top:8px; font-size:13px; color:#3d4a66;">Built on UE5 · ERC-8004 · Living AI · Classless Combat</p>
     </div>
   </footer>
 
