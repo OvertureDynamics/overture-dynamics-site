@@ -20,19 +20,105 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+
+  <!-- FAQ Schema (SEO) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "VideoGame",
-    "name": "Project Oath",
-    "description": "The first MMO where the world is truly alive. AI-driven NPCs that think, remember, and evolve.",
-    "gamePlatform": "PC",
-    "gameEdition": "Founder's Pass",
-    "offers": { "@type": "Offer", "price": "299", "priceCurrency": "USD" },
-    "developer": { "@type": "Organization", "name": "Overture Dynamics" }
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "When is the closed alpha?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Closed alpha begins in 2029–2030. Founder's Pass holders get exclusive access during Phase 3."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is ERC-8004?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "ERC-8004 is a new on-chain standard developed by Overture Dynamics for persistent, memory-driven NPC agents that own assets and remember player interactions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a subscription fee?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The game costs $39.99 to own, and a $14.99/month subscription is required to play. The Founder's Pass grants a permanent subscription with no monthly fee."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What makes Project Oath different from other MMOs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Project Oath combines classless real-time action combat with a multi-agent AI world simulation — economy, weather, ecology, geology, and narrative — that runs continuously without developer scripting."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Will there be DLC or expansion packs?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Because the world generates its own content through AI agents, there is no content gap to fill. Project Oath has no DLC, ever."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the Founder's Pass?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The Founder's Pass costs $299, is capped at 10,000, and grants closed alpha access, a permanent lifetime subscription, and in-world recognition as a founding member of the world's history."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Who is developing Project Oath?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Project Oath is developed by Overture Dynamics, an AI-first game studio based in New York, NY, founded in 2026."
+        }
+      }
+    ]
   }
   </script>
+
   <style>
+    /* ===== PRELOADER ===== */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #06060d;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .8s ease, visibility .8s ease;
+      gap: 1.5rem;
+    }
+    #preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #preloader svg {
+      width: 72px;
+      height: 72px;
+      animation: spin 1.2s cubic-bezier(.4,0,.2,1) infinite;
+    }
+    #preloader p {
+      font: 600 .7rem/1 var(--ff-head);
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold-dim);
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
     /* ===== DESIGN TOKENS ===== */
     :root {
       --bg-deep: rgba(6,6,13,0.65);
@@ -144,21 +230,33 @@
     .delay-3 { transition-delay:.3s; }
     .delay-4 { transition-delay:.45s; }
 
-    .tilt-card {
-      transition:transform .15s ease-out,box-shadow .3s;
-      transform-style:preserve-3d;
-      perspective:800px;
-      will-change:transform;
+    /* ===== PERFORMANCE: content-visibility on sections ===== */
+    .section, #stats, #news, #waitlist {
+      content-visibility: auto;
+      contain-intrinsic-size: 0 500px;
     }
-    .tilt-card:hover {
-      transform:perspective(800px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));
-      box-shadow:0 20px 60px rgba(0,0,0,.4);
+
+    /* ===== TILT & MAGNETIC – disabled on touch ===== */
+    @media (hover: hover) {
+      .tilt-card {
+        transition:transform .15s ease-out,box-shadow .3s;
+        transform-style:preserve-3d;
+        perspective:800px;
+        will-change:transform;
+      }
+      .tilt-card:hover {
+        transform:perspective(800px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));
+        box-shadow:0 20px 60px rgba(0,0,0,.4);
+      }
+      .magnetic-btn {
+        transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;
+        will-change:transform;
+        position:relative;
+        z-index:2;
+      }
     }
-    .magnetic-btn {
-      transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;
-      will-change:transform;
-      position:relative;
-      z-index:2;
+    @media (hover: none) {
+      .tilt-card, .magnetic-btn { transition: none; }
     }
 
     /* ===== SECTION PROGRESS ===== */
@@ -347,13 +445,16 @@
     }
     .hero-meta-sep { color:var(--border-hover); font-size:.9rem; margin-top:.6rem; }
     .hero-title {
-      font:700 clamp(3.5rem,12vw,9.5rem)/.95 var(--ff-head);
+      font:700 clamp(2.8rem,12vw,9.5rem)/.95 var(--ff-head);
       letter-spacing:.05em;
       text-transform:uppercase;
       color:var(--text);
       margin-bottom:1.5rem;
       opacity:0;
       animation:fadeSlideUp 1.1s .6s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @media (max-width:480px) {
+      .hero-title { font-size: clamp(2.2rem, 15vw, 3.5rem); letter-spacing: .02em; }
     }
     .hero-title .t-project {
       display:block;
@@ -744,6 +845,26 @@
       text-transform:uppercase;
       color:#c9a84c;
     }
+    /* Notify button inside Founder's Pass */
+    .btn-notify {
+      display:inline-block;
+      font:700 .7rem/1 var(--ff-head);
+      letter-spacing:.05em;
+      text-transform:uppercase;
+      color:#1a1a1a;
+      background:var(--gold);
+      padding:1rem 2.4rem;
+      border:none;
+      transition:background .25s,box-shadow .3s,transform .25s;
+      box-shadow:0 4px 20px rgba(201,168,76,.2);
+      cursor:pointer;
+      margin-top:.5rem;
+    }
+    .btn-notify:hover {
+      background:#deb95a;
+      box-shadow:0 8px 40px rgba(201,168,76,.35);
+      transform:translateY(-2px);
+    }
 
     /* ===== WORLD ===== */
     #world { background:var(--bg-deep); }
@@ -1016,6 +1137,179 @@
       .roadmap-item { padding:.8rem .8rem 2.5rem; margin:0 -.8rem; }
     }
 
+    /* ===== NEWS / DEV LOGS (SEO & fresh content) ===== */
+    #news { background:var(--bg-mid); }
+    .news-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:1.5px;
+      background:var(--border);
+      margin-top:1.8rem;
+    }
+    .news-card {
+      background:var(--bg-deep);
+      padding:2rem 2rem 2.5rem;
+      transition:background .3s;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+    }
+    .news-card:hover { background:rgba(13,13,26,.85); }
+    .news-date {
+      font:700 .65rem/1 var(--ff-head);
+      letter-spacing:.15em;
+      color:var(--gold-dim);
+      text-transform:uppercase;
+    }
+    .news-title {
+      font:700 1.1rem/1.3 var(--ff-head);
+      letter-spacing:.04em;
+      color:var(--text);
+    }
+    .news-excerpt {
+      font-size:.88rem;
+      color:var(--text-muted);
+      line-height:1.7;
+      flex:1;
+    }
+    .news-link {
+      font:700 .7rem/1 var(--ff-head);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--gold);
+      border-bottom:1px solid var(--border-hover);
+      padding-bottom:.3rem;
+      align-self:flex-start;
+      transition:border-color .3s,color .3s;
+    }
+    .news-link:hover { color:#deb95a; border-color:#deb95a; }
+
+    /* ===== WAITLIST SECTION (Conversion Funnel) ===== */
+    #waitlist {
+      background:var(--bg-deep);
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:clamp(3.5rem,8vw,6rem) 0;
+    }
+    .waitlist-wrap {
+      max-width:600px;
+      margin:0 auto;
+      text-align:center;
+    }
+    .waitlist-wrap h2 { margin-bottom:.5rem; }
+    .waitlist-wrap .section-desc { margin:0 auto 2rem; }
+    .waitlist-form {
+      display:flex;
+      gap:.5rem;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .waitlist-form input[type="email"] {
+      flex:1;
+      min-width:220px;
+      background:var(--bg-mid);
+      border:1px solid var(--border);
+      padding:.9rem 1.2rem;
+      color:var(--text);
+      font:400 .95rem/1 var(--ff-body);
+      border-radius:2px;
+      transition:border-color .3s,box-shadow .3s;
+    }
+    .waitlist-form input[type="email"]:focus {
+      outline:none;
+      border-color:var(--gold);
+      box-shadow:0 0 24px rgba(201,168,76,.08);
+    }
+    .waitlist-form input[type="email"]::placeholder {
+      color:var(--text-dim);
+      font-style:italic;
+    }
+    .btn-waitlist {
+      font:700 .7rem/1 var(--ff-head);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#1a1a1a;
+      background:var(--gold);
+      padding:.9rem 2rem;
+      border:none;
+      border-radius:2px;
+      transition:background .25s,box-shadow .3s,transform .25s;
+      box-shadow:0 4px 20px rgba(201,168,76,.15);
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn-waitlist:hover {
+      background:#deb95a;
+      box-shadow:0 8px 40px rgba(201,168,76,.3);
+      transform:translateY(-2px);
+    }
+    .waitlist-note {
+      margin-top:1rem;
+      font-size:.75rem;
+      color:var(--text-dim);
+      letter-spacing:.04em;
+    }
+
+    /* ===== STICKY CTA BAR ===== */
+    #sticky-cta {
+      position:fixed;
+      bottom:0;
+      left:0;
+      right:0;
+      z-index:300;
+      background:rgba(6,6,13,.92);
+      backdrop-filter:blur(16px);
+      border-top:1px solid var(--border);
+      padding:.6rem 1.5rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:.5rem 1rem;
+      transform:translateY(100%);
+      opacity:0;
+      transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s ease;
+      pointer-events:none;
+    }
+    #sticky-cta.visible {
+      transform:translateY(0);
+      opacity:1;
+      pointer-events:all;
+    }
+    #sticky-cta .cta-label {
+      font:600 .7rem/1 var(--ff-head);
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+    }
+    #sticky-cta .cta-price {
+      font:700 1.2rem/1 var(--ff-head);
+      color:var(--gold);
+    }
+    #sticky-cta .cta-btn {
+      font:700 .65rem/1 var(--ff-head);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#1a1a1a;
+      background:var(--gold);
+      padding:.6rem 1.8rem;
+      border:none;
+      border-radius:2px;
+      transition:background .25s,box-shadow .3s,transform .25s;
+      cursor:pointer;
+      box-shadow:0 2px 12px rgba(201,168,76,.2);
+    }
+    #sticky-cta .cta-btn:hover {
+      background:#deb95a;
+      box-shadow:0 4px 24px rgba(201,168,76,.35);
+      transform:scale(1.02);
+    }
+    @media (max-width:500px) {
+      #sticky-cta { padding:.5rem 1rem; justify-content:center; }
+      #sticky-cta .cta-label { font-size:.6rem; }
+      #sticky-cta .cta-price { font-size:1rem; }
+    }
+
     /* ===== FOOTER ===== */
     footer {
       background:var(--bg-deep);
@@ -1172,6 +1466,8 @@
     .nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
     .nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
     @media (max-width:640px) { .nav-hamburger { display:flex; } }
+
+    /* ===== MOBILE NAV – bigger tap targets ===== */
     .mobile-nav {
       position:fixed;
       inset:0;
@@ -1194,18 +1490,19 @@
       pointer-events:all;
     }
     .mobile-nav a {
-      font:700 1rem/1 var(--ff-head);
+      font:700 1.1rem/1 var(--ff-head);  /* bigger font */
       letter-spacing:.25em;
       text-transform:uppercase;
       color:var(--text-muted);
       transition:color .25s;
+      padding:.4rem .8rem;  /* bigger tap target */
     }
     .mobile-nav a:hover,
     .mobile-nav a:focus-visible,
     .mobile-nav a.active { color:var(--gold); }
     .mobile-nav .btn-nav {
-      font-size:.68rem;
-      padding:.85rem 2.2rem;
+      font-size:.8rem;
+      padding:1rem 2.6rem;  /* bigger tap target */
       margin-top:.8rem;
     }
     .mobile-nav-sep {
@@ -1278,11 +1575,22 @@
   </style>
 </head>
 <body>
+
+  <!-- ===== PRELOADER ===== -->
+  <div id="preloader" role="status" aria-label="Loading">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
+      <polygon points="100,9 191,100 100,191 9,100" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
+      <circle cx="100" cy="100" r="5" fill="#c9a84c"/>
+    </svg>
+    <p>Loading the living world…</p>
+  </div>
+
   <div id="noise-overlay" aria-hidden="true"></div>
   <canvas id="global-canvas" aria-hidden="true" tabindex="-1"></canvas>
   <div id="scroll-progress"></div>
   <div id="cursor-glow"></div>
-  <div id="section-progress"><span class="chapter-num">0</span> <span id="chapter-label">of 7</span></div>
+  <div id="section-progress"><span class="chapter-num">0</span> <span id="chapter-label">of 8</span></div>
 
   <div id="custom-cursor" aria-hidden="true">
     <svg width="20" height="20" viewBox="0 0 20 20">
@@ -1670,11 +1978,56 @@
           <div class="perk"><span class="perk-dot"></span><span>Offline player agent — your character gathers, trades, and acts in the world while you sleep</span></div>
           <div class="perk"><span class="perk-dot"></span><span>NPCs reference your founding status as permanent in-world historical fact</span></div>
         </div>
-        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-primary reveal delay-3 magnetic-btn" title="Opens in new tab">
-          Join the Community
-          <span class="btn-sub">Founder's Pass — Coming Soon</span>
-        </a>
-        <p class="founders-cap-note reveal delay-4">Capped at 10,000 passes worldwide. Pre-launch only. Never offered again.</p>
+        <!-- Notify Me button -->
+        <a href="#waitlist" class="btn-notify reveal delay-3">Notify Me When Available</a>
+        <p class="founders-cap-note reveal delay-4" style="margin-top:1.5rem;">Capped at 10,000 passes worldwide. Pre-launch only. Never offered again.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NEWS / DEV LOGS (SEO fresh content) ===== -->
+  <section id="news" class="section" aria-label="Latest news and dev logs">
+    <div class="container">
+      <div class="section-head reveal">
+        <span class="eyebrow">Latest News</span>
+        <h2>Dev logs &amp; <span class="gold">world updates</span></h2>
+        <p class="section-desc">Fresh updates from the living world — new agent behaviors, combat refinements, and community milestones.</p>
+      </div>
+      <div class="news-grid">
+        <article class="news-card reveal tilt-card">
+          <span class="news-date">June 2026</span>
+          <h3 class="news-title">Economy Agent v1.0 Live on Testnet</h3>
+          <p class="news-excerpt">The first version of our economy simulation is now running — tracking supply, demand, and real-time price discovery across a closed player group.</p>
+          <a href="#" class="news-link">Read more →</a>
+        </article>
+        <article class="news-card reveal delay-1 tilt-card">
+          <span class="news-date">May 2026</span>
+          <h3 class="news-title">Combat Vertical Slice – Greatsword Gameplay</h3>
+          <p class="news-excerpt">We're showcasing the first 3‑minute playable build on Unreal Engine 5. Real‑time physics, dodge‑cancel, and interrupt windows in action.</p>
+          <a href="#" class="news-link">Watch the demo →</a>
+        </article>
+        <article class="news-card reveal delay-2 tilt-card">
+          <span class="news-date">April 2026</span>
+          <h3 class="news-title">ERC-8004 White Paper Released</h3>
+          <p class="news-excerpt">We've published the technical specification for our on‑chain NPC standard — persistent memory, asset ownership, and autonomous decision‑making.</p>
+          <a href="#" class="news-link">Read the paper →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WAITLIST (Conversion Funnel) ===== -->
+  <section id="waitlist" aria-label="Join the waitlist">
+    <div class="container">
+      <div class="waitlist-wrap reveal">
+        <span class="eyebrow">Stay in the loop</span>
+        <h2>Join the <span class="gold">world waitlist</span></h2>
+        <p class="section-desc">Be the first to know when the Founder's Pass goes live, when new dev logs drop, and when the closed alpha opens.</p>
+        <form class="waitlist-form" action="#" method="post">
+          <input type="email" name="email" placeholder="Enter your email address" required aria-label="Email address" />
+          <button type="submit" class="btn-waitlist">Notify Me</button>
+        </form>
+        <p class="waitlist-note">No spam · Unsubscribe anytime · We respect your inbox.</p>
       </div>
     </div>
   </section>
@@ -1697,12 +2050,24 @@
     </div>
   </footer>
 
+  <!-- ===== STICKY CTA BAR ===== -->
+  <div id="sticky-cta">
+    <span class="cta-label">Founder's Pass</span>
+    <span class="cta-price">$299</span>
+    <a href="#founders" class="cta-btn">Secure Lifetime Access</a>
+  </div>
+
   <button id="back-to-top" aria-label="Back to top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
   </button>
 
   <script>
     'use strict';
+
+    // ===== PRELOADER =====
+    window.addEventListener('load', () => {
+      document.getElementById('preloader').classList.add('hidden');
+    });
 
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
@@ -1750,53 +2115,55 @@
     }, { threshold: 0.1 });
     revealEls.forEach(el => revealObserver.observe(el));
 
-    // ===== 3D TILT =====
-    document.querySelectorAll('.tilt-card').forEach(card => {
-      let rafId = null;
-      card.addEventListener('mousemove', e => {
-        if (rafId) return;
-        rafId = requestAnimationFrame(() => {
-          const rect = card.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-          const cx = rect.width / 2;
-          const cy = rect.height / 2;
-          card.style.setProperty('--tilt-x', ((y - cy) / cy * -3) + 'deg');
-          card.style.setProperty('--tilt-y', ((x - cx) / cx * 3) + 'deg');
-          rafId = null;
-        });
-      }, { passive: true });
-      card.addEventListener('mouseleave', () => {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        card.style.setProperty('--tilt-x', '0deg');
-        card.style.setProperty('--tilt-y', '0deg');
-      }, { passive: true });
-    });
+    // ===== 3D TILT – only on hover-capable devices =====
+    if (window.matchMedia('(hover: hover)').matches) {
+      document.querySelectorAll('.tilt-card').forEach(card => {
+        let rafId = null;
+        card.addEventListener('mousemove', e => {
+          if (rafId) return;
+          rafId = requestAnimationFrame(() => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const cx = rect.width / 2;
+            const cy = rect.height / 2;
+            card.style.setProperty('--tilt-x', ((y - cy) / cy * -3) + 'deg');
+            card.style.setProperty('--tilt-y', ((x - cx) / cx * 3) + 'deg');
+            rafId = null;
+          });
+        }, { passive: true });
+        card.addEventListener('mouseleave', () => {
+          if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+          card.style.setProperty('--tilt-x', '0deg');
+          card.style.setProperty('--tilt-y', '0deg');
+        }, { passive: true });
+      });
 
-    // ===== MAGNETIC BUTTONS =====
-    document.querySelectorAll('.magnetic-btn').forEach(btn => {
-      let rafId = null;
-      btn.addEventListener('mousemove', e => {
-        if (rafId) return;
-        rafId = requestAnimationFrame(() => {
-          const rect = btn.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          const dist = Math.sqrt(x*x + y*y);
-          const maxDist = Math.min(rect.width, rect.height) * 1.2;
-          const strength = Math.min(1, 1 - dist/maxDist) * 8;
-          const angle = Math.atan2(y, x);
-          btn.style.transform = `translate(${Math.cos(angle)*strength}px, ${Math.sin(angle)*strength}px) scale(1.02)`;
-          rafId = null;
-        });
-      }, { passive: true });
-      btn.addEventListener('mouseleave', () => {
-        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-        btn.style.transform = 'translate(0,0) scale(1)';
-      }, { passive: true });
-    });
+      // ===== MAGNETIC BUTTONS =====
+      document.querySelectorAll('.magnetic-btn').forEach(btn => {
+        let rafId = null;
+        btn.addEventListener('mousemove', e => {
+          if (rafId) return;
+          rafId = requestAnimationFrame(() => {
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const dist = Math.sqrt(x*x + y*y);
+            const maxDist = Math.min(rect.width, rect.height) * 1.2;
+            const strength = Math.min(1, 1 - dist/maxDist) * 8;
+            const angle = Math.atan2(y, x);
+            btn.style.transform = `translate(${Math.cos(angle)*strength}px, ${Math.sin(angle)*strength}px) scale(1.02)`;
+            rafId = null;
+          });
+        }, { passive: true });
+        btn.addEventListener('mouseleave', () => {
+          if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+          btn.style.transform = 'translate(0,0) scale(1)';
+        }, { passive: true });
+      });
+    }
 
-    // ===== GLOBAL PARTICLE CANVAS =====
+    // ===== GLOBAL PARTICLE CANVAS (30fps + pause when hidden) =====
     (function() {
       const canvas = document.getElementById('global-canvas');
       if (!canvas) return;
@@ -1805,6 +2172,12 @@
       let W, H, nodes;
       let hue = 210, mouseX = -1000, mouseY = -1000;
       let animationId = null;
+      let frameCount = 0;
+      let isTabVisible = true;
+
+      document.addEventListener('visibilitychange', () => {
+        isTabVisible = !document.hidden;
+      });
 
       function resize() {
         W = canvas.width = window.innerWidth;
@@ -1841,6 +2214,17 @@
         return { r: Math.round(r*255), g: Math.round(g*255), b: Math.round(b*255) };
       }
       function draw() {
+        if (!isTabVisible) {
+          animationId = requestAnimationFrame(draw);
+          return;
+        }
+        frameCount++;
+        // 30fps – skip every other frame
+        if (frameCount % 2 === 0) {
+          animationId = requestAnimationFrame(draw);
+          return;
+        }
+
         hue = (hue + .04) % 360;
         ctx.clearRect(0,0,W,H);
         const blue = hslToRgb(hue/360, .8, .55);
@@ -1998,6 +2382,34 @@
       }
     }, { threshold: 0.4 });
     document.querySelectorAll('.section').forEach(s => progressObserver.observe(s));
+
+    // ===== STICKY CTA (appears after scrolling past hero) =====
+    const stickyCta = document.getElementById('sticky-cta');
+    const hero = document.getElementById('hero');
+    const heroObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) {
+          stickyCta.classList.add('visible');
+        } else {
+          stickyCta.classList.remove('visible');
+        }
+      });
+    }, { threshold: 0.3 });
+    heroObserver.observe(hero);
+
+    // ===== WAITLIST FORM (simple demo handler) =====
+    const waitlistForm = document.querySelector('.waitlist-form');
+    if (waitlistForm) {
+      waitlistForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = waitlistForm.querySelector('input[type="email"]');
+        const email = input.value.trim();
+        if (email) {
+          alert('Thank you! You\'ll be the first to know when the world opens.');
+          input.value = '';
+        }
+      });
+    }
   </script>
 </body>
 </html>
