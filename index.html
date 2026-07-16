@@ -231,7 +231,7 @@
     .delay-4 { transition-delay:.45s; }
 
     /* ===== PERFORMANCE: content-visibility on sections ===== */
-    .section, #stats, #news, #waitlist {
+    .section, #stats, #waitlist {
       content-visibility: auto;
       contain-intrinsic-size: 0 500px;
     }
@@ -1137,53 +1137,6 @@
       .roadmap-item { padding:.8rem .8rem 2.5rem; margin:0 -.8rem; }
     }
 
-    /* ===== NEWS / DEV LOGS (SEO & fresh content) ===== */
-    #news { background:var(--bg-mid); }
-    .news-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:1.5px;
-      background:var(--border);
-      margin-top:1.8rem;
-    }
-    .news-card {
-      background:var(--bg-deep);
-      padding:2rem 2rem 2.5rem;
-      transition:background .3s;
-      display:flex;
-      flex-direction:column;
-      gap:.5rem;
-    }
-    .news-card:hover { background:rgba(13,13,26,.85); }
-    .news-date {
-      font:700 .65rem/1 var(--ff-head);
-      letter-spacing:.15em;
-      color:var(--gold-dim);
-      text-transform:uppercase;
-    }
-    .news-title {
-      font:700 1.1rem/1.3 var(--ff-head);
-      letter-spacing:.04em;
-      color:var(--text);
-    }
-    .news-excerpt {
-      font-size:.88rem;
-      color:var(--text-muted);
-      line-height:1.7;
-      flex:1;
-    }
-    .news-link {
-      font:700 .7rem/1 var(--ff-head);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:var(--gold);
-      border-bottom:1px solid var(--border-hover);
-      padding-bottom:.3rem;
-      align-self:flex-start;
-      transition:border-color .3s,color .3s;
-    }
-    .news-link:hover { color:#deb95a; border-color:#deb95a; }
-
     /* ===== WAITLIST SECTION (Conversion Funnel) ===== */
     #waitlist {
       background:var(--bg-deep);
@@ -1248,66 +1201,6 @@
       font-size:.75rem;
       color:var(--text-dim);
       letter-spacing:.04em;
-    }
-
-    /* ===== STICKY CTA BAR ===== */
-    #sticky-cta {
-      position:fixed;
-      bottom:0;
-      left:0;
-      right:0;
-      z-index:300;
-      background:rgba(6,6,13,.92);
-      backdrop-filter:blur(16px);
-      border-top:1px solid var(--border);
-      padding:.6rem 1.5rem;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      gap:.5rem 1rem;
-      transform:translateY(100%);
-      opacity:0;
-      transition:transform .4s cubic-bezier(.22,1,.36,1), opacity .4s ease;
-      pointer-events:none;
-    }
-    #sticky-cta.visible {
-      transform:translateY(0);
-      opacity:1;
-      pointer-events:all;
-    }
-    #sticky-cta .cta-label {
-      font:600 .7rem/1 var(--ff-head);
-      letter-spacing:.15em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-    }
-    #sticky-cta .cta-price {
-      font:700 1.2rem/1 var(--ff-head);
-      color:var(--gold);
-    }
-    #sticky-cta .cta-btn {
-      font:700 .65rem/1 var(--ff-head);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:#1a1a1a;
-      background:var(--gold);
-      padding:.6rem 1.8rem;
-      border:none;
-      border-radius:2px;
-      transition:background .25s,box-shadow .3s,transform .25s;
-      cursor:pointer;
-      box-shadow:0 2px 12px rgba(201,168,76,.2);
-    }
-    #sticky-cta .cta-btn:hover {
-      background:#deb95a;
-      box-shadow:0 4px 24px rgba(201,168,76,.35);
-      transform:scale(1.02);
-    }
-    @media (max-width:500px) {
-      #sticky-cta { padding:.5rem 1rem; justify-content:center; }
-      #sticky-cta .cta-label { font-size:.6rem; }
-      #sticky-cta .cta-price { font-size:1rem; }
     }
 
     /* ===== FOOTER ===== */
@@ -1590,7 +1483,7 @@
   <canvas id="global-canvas" aria-hidden="true" tabindex="-1"></canvas>
   <div id="scroll-progress"></div>
   <div id="cursor-glow"></div>
-  <div id="section-progress"><span class="chapter-num">0</span> <span id="chapter-label">of 8</span></div>
+  <div id="section-progress"><span class="chapter-num">0</span> <span id="chapter-label">of 7</span></div>
 
   <div id="custom-cursor" aria-hidden="true">
     <svg width="20" height="20" viewBox="0 0 20 20">
@@ -1985,37 +1878,6 @@
     </div>
   </section>
 
-  <!-- ===== NEWS / DEV LOGS (SEO fresh content) ===== -->
-  <section id="news" class="section" aria-label="Latest news and dev logs">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Latest News</span>
-        <h2>Dev logs &amp; <span class="gold">world updates</span></h2>
-        <p class="section-desc">Fresh updates from the living world — new agent behaviors, combat refinements, and community milestones.</p>
-      </div>
-      <div class="news-grid">
-        <article class="news-card reveal tilt-card">
-          <span class="news-date">June 2026</span>
-          <h3 class="news-title">Economy Agent v1.0 Live on Testnet</h3>
-          <p class="news-excerpt">The first version of our economy simulation is now running — tracking supply, demand, and real-time price discovery across a closed player group.</p>
-          <a href="#" class="news-link">Read more →</a>
-        </article>
-        <article class="news-card reveal delay-1 tilt-card">
-          <span class="news-date">May 2026</span>
-          <h3 class="news-title">Combat Vertical Slice – Greatsword Gameplay</h3>
-          <p class="news-excerpt">We're showcasing the first 3‑minute playable build on Unreal Engine 5. Real‑time physics, dodge‑cancel, and interrupt windows in action.</p>
-          <a href="#" class="news-link">Watch the demo →</a>
-        </article>
-        <article class="news-card reveal delay-2 tilt-card">
-          <span class="news-date">April 2026</span>
-          <h3 class="news-title">ERC-8004 White Paper Released</h3>
-          <p class="news-excerpt">We've published the technical specification for our on‑chain NPC standard — persistent memory, asset ownership, and autonomous decision‑making.</p>
-          <a href="#" class="news-link">Read the paper →</a>
-        </article>
-      </div>
-    </div>
-  </section>
-
   <!-- ===== WAITLIST (Conversion Funnel) ===== -->
   <section id="waitlist" aria-label="Join the waitlist">
     <div class="container">
@@ -2049,13 +1911,6 @@
       <div class="footer-bottom"><p class="footer-copy">© 2026 Overture Dynamics. All rights reserved. All game designs, combat systems, and mechanics are original to Overture Dynamics.</p><p class="footer-wordmark">Play. Own. Evolve.</p></div>
     </div>
   </footer>
-
-  <!-- ===== STICKY CTA BAR ===== -->
-  <div id="sticky-cta">
-    <span class="cta-label">Founder's Pass</span>
-    <span class="cta-price">$299</span>
-    <a href="#founders" class="cta-btn">Secure Lifetime Access</a>
-  </div>
 
   <button id="back-to-top" aria-label="Back to top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
@@ -2382,20 +2237,6 @@
       }
     }, { threshold: 0.4 });
     document.querySelectorAll('.section').forEach(s => progressObserver.observe(s));
-
-    // ===== STICKY CTA (appears after scrolling past hero) =====
-    const stickyCta = document.getElementById('sticky-cta');
-    const hero = document.getElementById('hero');
-    const heroObserver = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (!e.isIntersecting) {
-          stickyCta.classList.add('visible');
-        } else {
-          stickyCta.classList.remove('visible');
-        }
-      });
-    }, { threshold: 0.3 });
-    heroObserver.observe(hero);
 
     // ===== WAITLIST FORM (simple demo handler) =====
     const waitlistForm = document.querySelector('.waitlist-form');
