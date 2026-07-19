@@ -183,7 +183,7 @@
       background-size:256px 256px;
     }
 
-    /* ===== GLOBAL CANVAS ===== */
+    /* ===== GLOBAL CANVAS (smoke background) ===== */
     #global-canvas {
       position:fixed;
       inset:0;
@@ -412,6 +412,64 @@
       padding:9rem 1.5rem 6rem;
       max-width:900px;
     }
+
+    /* ===== ANIMATED HERO LOGO (restored) ===== */
+    .hero-emblem {
+      display:flex;
+      justify-content:center;
+      margin-bottom:2.5rem;
+      opacity:0;
+      animation:fadeSlideDown 1.1s 0.15s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    #hero-logo-animated .outer-ring   { stroke-dasharray:553; stroke-dashoffset:553; animation:logo-draw 1.4s .2s cubic-bezier(.4,0,.2,1) both; }
+    #hero-logo-animated .tick         { animation:logo-fadeIn .3s ease both; }
+    #hero-logo-animated .t1 { animation-delay:1.5s; }
+    #hero-logo-animated .t2 { animation-delay:1.58s; }
+    #hero-logo-animated .t3 { animation-delay:1.66s; }
+    #hero-logo-animated .t4 { animation-delay:1.74s; }
+    #hero-logo-animated .t5 { animation-delay:1.82s; }
+    #hero-logo-animated .t6 { animation-delay:1.9s; }
+    #hero-logo-animated .t7 { animation-delay:1.98s; }
+    #hero-logo-animated .t8 { animation-delay:2.06s; }
+    #hero-logo-animated .diamond-frame { stroke-dasharray:515; stroke-dashoffset:515; animation:logo-draw 1.1s 1.8s ease both; }
+    #hero-logo-animated .acc,
+    #hero-logo-animated .mid,
+    #hero-logo-animated .crossguard,
+    #hero-logo-animated .pommel,
+    #hero-logo-animated .node-dot,
+    #hero-logo-animated .center-node  { transform-box:fill-box; transform-origin:center; }
+    #hero-logo-animated .acc          { animation:logo-popIn .25s cubic-bezier(.34,1.56,.64,1) both; }
+    #hero-logo-animated .acc-n { animation-delay:2.8s; }
+    #hero-logo-animated .acc-e { animation-delay:2.9s; }
+    #hero-logo-animated .acc-s { animation-delay:3s;   }
+    #hero-logo-animated .acc-w { animation-delay:3.1s; }
+    #hero-logo-animated .mid           { animation:logo-popIn .2s ease both; }
+    #hero-logo-animated .mid-ne { animation-delay:3.05s; }
+    #hero-logo-animated .mid-se { animation-delay:3.1s;  }
+    #hero-logo-animated .mid-sw { animation-delay:3.15s; }
+    #hero-logo-animated .mid-nw { animation-delay:3.2s;  }
+    #hero-logo-animated .inner-ring    { stroke-dasharray:346; stroke-dashoffset:346; animation:logo-draw .9s 3s ease both; }
+    #hero-logo-animated .blade-fill    { animation:logo-fadeIn .5s 3.7s ease both; opacity:0; }
+    #hero-logo-animated .blade-stroke  { stroke-dasharray:198; stroke-dashoffset:198; animation:logo-draw .7s 3.5s ease both; }
+    #hero-logo-animated .crossguard    { animation:logo-popIn .3s 4s cubic-bezier(.34,1.56,.64,1) both; }
+    #hero-logo-animated .pommel        { animation:logo-popIn .2s 4.2s ease both; }
+    #hero-logo-animated .node-dot      { animation:logo-popIn .25s cubic-bezier(.34,1.56,.64,1) both, logo-pulse 3s ease-in-out infinite; }
+    #hero-logo-animated .node-n { animation-delay:4.3s,6.5s; }
+    #hero-logo-animated .node-e { animation-delay:4.4s,6.7s; }
+    #hero-logo-animated .node-s { animation-delay:4.5s,6.9s; }
+    #hero-logo-animated .node-w { animation-delay:4.6s,7.1s; }
+    #hero-logo-animated .center-node   { animation:logo-popIn .3s 4.9s cubic-bezier(.34,1.56,.64,1) both, logo-pulse 3s 6.3s ease-in-out infinite; }
+    #hero-logo-animated .ew-e  { stroke-dasharray:46; stroke-dashoffset:46; animation:logo-draw .35s 4.75s ease both; }
+    #hero-logo-animated .ew-w  { stroke-dasharray:46; stroke-dashoffset:46; animation:logo-draw .35s 4.8s ease both; }
+    #hero-logo-animated .glow  { animation:logo-glowIn 2s .3s ease both, logo-breathe 5s 7s ease-in-out infinite; }
+
+    @keyframes logo-draw    { to { stroke-dashoffset:0; } }
+    @keyframes logo-fadeIn  { from { opacity:0; } to { opacity:1; } }
+    @keyframes logo-glowIn  { from { opacity:0; } to { opacity:.18; } }
+    @keyframes logo-popIn   { from { opacity:0; transform:scale(0); } to { opacity:1; transform:scale(1); } }
+    @keyframes logo-pulse   { 0%,100% { opacity:1; } 50% { opacity:.4; } }
+    @keyframes logo-breathe { 0%,100% { opacity:.18; } 50% { opacity:.28; } }
+
     .hero-meta {
       display:flex;
       align-items:center;
@@ -1137,7 +1195,7 @@
       .roadmap-item { padding:.8rem .8rem 2.5rem; margin:0 -.8rem; }
     }
 
-    /* ===== WAITLIST SECTION (Conversion Funnel) ===== */
+    /* ===== WAITLIST SECTION ===== */
     #waitlist {
       background:var(--bg-deep);
       border-top:1px solid var(--border);
@@ -1439,55 +1497,6 @@
       background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),transparent);
     }
 
-    /* ===== ANIMATED HERO LOGO ===== */
-    @keyframes logo-draw { to { stroke-dashoffset:0; } }
-    @keyframes logo-fadeIn { from{opacity:0} to{opacity:1} }
-    @keyframes logo-glowIn { from{opacity:0} to{opacity:.18} }
-    @keyframes logo-popIn { from{opacity:0;transform:scale(0)} to{opacity:1;transform:scale(1)} }
-    @keyframes logo-pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
-    @keyframes logo-breathe { 0%,100%{opacity:.18} 50%{opacity:.28} }
-    #hero-logo-animated .outer-ring { stroke-dasharray:553; stroke-dashoffset:553; animation:logo-draw 1.4s .2s cubic-bezier(.4,0,.2,1) both; }
-    #hero-logo-animated .tick { animation:logo-fadeIn .3s ease both; }
-    #hero-logo-animated .t1 { animation-delay:1.5s; }
-    #hero-logo-animated .t2 { animation-delay:1.58s; }
-    #hero-logo-animated .t3 { animation-delay:1.66s; }
-    #hero-logo-animated .t4 { animation-delay:1.74s; }
-    #hero-logo-animated .t5 { animation-delay:1.82s; }
-    #hero-logo-animated .t6 { animation-delay:1.9s; }
-    #hero-logo-animated .t7 { animation-delay:1.98s; }
-    #hero-logo-animated .t8 { animation-delay:2.06s; }
-    #hero-logo-animated .diamond-frame { stroke-dasharray:515; stroke-dashoffset:515; animation:logo-draw 1.1s 1.8s ease both; }
-    #hero-logo-animated .acc,
-    #hero-logo-animated .mid,
-    #hero-logo-animated .crossguard,
-    #hero-logo-animated .pommel,
-    #hero-logo-animated .node-dot,
-    #hero-logo-animated .center-node { transform-box:fill-box; transform-origin:center; }
-    #hero-logo-animated .acc { animation:logo-popIn .25s cubic-bezier(.34,1.56,.64,1) both; }
-    #hero-logo-animated .acc-n { animation-delay:2.8s; }
-    #hero-logo-animated .acc-e { animation-delay:2.9s; }
-    #hero-logo-animated .acc-s { animation-delay:3s; }
-    #hero-logo-animated .acc-w { animation-delay:3.1s; }
-    #hero-logo-animated .mid { animation:logo-popIn .2s ease both; }
-    #hero-logo-animated .mid-ne { animation-delay:3.05s; }
-    #hero-logo-animated .mid-se { animation-delay:3.1s; }
-    #hero-logo-animated .mid-sw { animation-delay:3.15s; }
-    #hero-logo-animated .mid-nw { animation-delay:3.2s; }
-    #hero-logo-animated .inner-ring { stroke-dasharray:346; stroke-dashoffset:346; animation:logo-draw .9s 3s ease both; }
-    #hero-logo-animated .blade-fill { animation:logo-fadeIn .5s 3.7s ease both; opacity:0; }
-    #hero-logo-animated .blade-stroke { stroke-dasharray:198; stroke-dashoffset:198; animation:logo-draw .7s 3.5s ease both; }
-    #hero-logo-animated .crossguard { animation:logo-popIn .3s 4s cubic-bezier(.34,1.56,.64,1) both; }
-    #hero-logo-animated .pommel { animation:logo-popIn .2s 4.2s ease both; }
-    #hero-logo-animated .node-dot { animation:logo-popIn .25s cubic-bezier(.34,1.56,.64,1) both, logo-pulse 3s ease-in-out infinite; }
-    #hero-logo-animated .node-n { animation-delay:4.3s,6.5s; }
-    #hero-logo-animated .node-e { animation-delay:4.4s,6.7s; }
-    #hero-logo-animated .node-s { animation-delay:4.5s,6.9s; }
-    #hero-logo-animated .node-w { animation-delay:4.6s,7.1s; }
-    #hero-logo-animated .center-node { animation:logo-popIn .3s 4.9s cubic-bezier(.34,1.56,.64,1) both, logo-pulse 3s 6.3s ease-in-out infinite; }
-    #hero-logo-animated .ew-e { stroke-dasharray:46; stroke-dashoffset:46; animation:logo-draw .35s 4.75s ease both; }
-    #hero-logo-animated .ew-w { stroke-dasharray:46; stroke-dashoffset:46; animation:logo-draw .35s 4.8s ease both; }
-    #hero-logo-animated .glow { animation:logo-glowIn 2s .3s ease both, logo-breathe 5s 7s ease-in-out infinite; }
-
     /* ===== CURSOR GLOW ===== */
     #cursor-glow {
       position:fixed;
@@ -1607,9 +1616,15 @@
     <div class="hero-scanline" aria-hidden="true"></div>
     <div class="hero-bottom-fade" aria-hidden="true"></div>
     <div class="hero-content">
+      <!-- ===== RESTORED ANIMATED HERO LOGO ===== -->
       <div class="hero-emblem" id="hero-logo-animated" aria-hidden="true">
-        <svg width="140" height="140" viewBox="0 0 200 200">
-          <defs><radialGradient id="hero-logo-bg" cx="50%" cy="42%" r="48%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="1"/><stop offset="100%" stop-color="#06060d" stop-opacity="0"/></radialGradient></defs>
+        <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hero-logo-bg" cx="50%" cy="42%" r="48%">
+              <stop offset="0%" stop-color="#c9a84c" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#06060d" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
           <circle class="glow" cx="100" cy="100" r="100" fill="url(#hero-logo-bg)" opacity="0"/>
           <circle class="outer-ring" cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width=".8"/>
           <line class="tick t1" x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
@@ -1643,6 +1658,7 @@
           <circle class="center-node" cx="100" cy="100" r="5" fill="#c9a84c"/>
         </svg>
       </div>
+
       <div class="hero-meta">
         <div class="hero-meta-item">
           <span class="hero-meta-label">Studio</span>
@@ -1689,6 +1705,7 @@
   </section>
 
   <section id="problem" class="section" aria-label="The Problem">
+    <!-- (same content as before – omitted for brevity, but fully intact) -->
     <div class="container">
       <div class="section-head center reveal">
         <span class="eyebrow">The Problem</span>
@@ -1707,6 +1724,7 @@
   </section>
 
   <section id="pillars" class="section" aria-label="Game pillars">
+    <!-- ... content unchanged ... -->
     <div class="container">
       <div class="section-head center reveal">
         <span class="eyebrow">The Game</span>
@@ -1733,6 +1751,7 @@
   </section>
 
   <section id="world" class="section" aria-label="The living world">
+    <!-- ... content unchanged ... -->
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Massively Multiplayer</span>
@@ -1752,6 +1771,7 @@
   </section>
 
   <section id="combat" class="section" aria-label="Combat and crafting">
+    <!-- ... content unchanged ... -->
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Combat &amp; Crafting</span>
@@ -1792,6 +1812,7 @@
   </section>
 
   <section id="roadmap" class="section" aria-label="Development roadmap">
+    <!-- ... content unchanged ... -->
     <div class="container">
       <div class="section-head reveal">
         <span class="eyebrow">Development Roadmap</span>
@@ -1869,6 +1890,7 @@
   </section>
 
   <section id="about" class="section" aria-label="About the studio">
+    <!-- ... content unchanged ... -->
     <div class="container">
       <div class="about-grid">
         <div>
@@ -1890,6 +1912,7 @@
   </section>
 
   <section id="founders" class="section" aria-label="Founder's Pass">
+    <!-- ... content unchanged ... -->
     <div class="container">
       <div class="founders-wrap">
         <span class="eyebrow reveal">Founder's Lifetime Pass</span>
@@ -1907,7 +1930,6 @@
           <div class="perk"><span class="perk-dot"></span><span>Offline player agent — your character gathers, trades, and acts in the world while you sleep</span></div>
           <div class="perk"><span class="perk-dot"></span><span>NPCs reference your founding status as permanent in-world historical fact</span></div>
         </div>
-        <!-- Notify Me button -->
         <a href="#waitlist" class="btn-notify reveal delay-3">Notify Me When Available</a>
         <p class="founders-cap-note reveal delay-4" style="margin-top:1.5rem;">Capped at 10,000 passes worldwide. Pre-launch only. Never offered again.</p>
       </div>
@@ -1941,6 +1963,7 @@
   </section>
 
   <footer>
+    <!-- ... footer unchanged ... -->
     <div class="container">
       <div class="footer-main">
         <div><div class="footer-brand">Overture Dynamics<span class="footer-brand-sub">New York, NY &nbsp;·&nbsp; Est. 2026</span></div></div>
@@ -2067,16 +2090,16 @@
       });
     }
 
-    // ===== GLOBAL PARTICLE CANVAS (30fps + pause when hidden) =====
+    // ===== GLOBAL CANVAS – SMOKE / MIST EFFECT =====
     (function() {
       const canvas = document.getElementById('global-canvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
-      const DARK_R = 10, DARK_G = 15, DARK_B = 25;
-      let W, H, nodes;
-      let hue = 210, mouseX = -1000, mouseY = -1000;
+
+      let W, H;
+      let particles = [];
+      let mouseX = -1000, mouseY = -1000;
       let animationId = null;
-      let frameCount = 0;
       let isTabVisible = true;
 
       document.addEventListener('visibilitychange', () => {
@@ -2086,107 +2109,104 @@
       function resize() {
         W = canvas.width = window.innerWidth;
         H = canvas.height = window.innerHeight;
-        buildNodes();
+        buildSmoke();
       }
-      function buildNodes() {
-        const count = Math.max(60, Math.floor((W * H) / 14000));
-        nodes = Array.from({ length: count }, (_, i) => ({
-          x: Math.random() * W, y: Math.random() * H,
-          vx: (Math.random() - .5) * .25, vy: (Math.random() - .5) * .25,
-          r: Math.random() * 2 + .5,
-          type: i % 2 === 0 ? 'blue' : 'dark',
-          phase: Math.random() * Math.PI * 2,
-          phaseSpeed: .006 + Math.random() * .016
-        }));
-      }
-      function hslToRgb(h,s,l) {
-        let r,g,b;
-        if (s===0) { r=g=b=l; } else {
-          const hue2rgb = (p,q,t) => {
-            if (t<0) t+=1; if (t>1) t-=1;
-            if (t<1/6) return p+(q-p)*6*t;
-            if (t<1/2) return q;
-            if (t<2/3) return p+(q-p)*(2/3-t)*6;
-            return p;
-          };
-          const q = l<.5 ? l*(1+s) : l+s-l*s;
-          const p = 2*l-q;
-          r = hue2rgb(p,q,h+1/3);
-          g = hue2rgb(p,q,h);
-          b = hue2rgb(p,q,h-1/3);
+
+      function buildSmoke() {
+        const count = Math.max(30, Math.floor((W * H) / 20000));
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            radius: 40 + Math.random() * 160,
+            baseRadius: 40 + Math.random() * 160,
+            vx: (Math.random() - 0.5) * 0.12,
+            vy: (Math.random() - 0.5) * 0.12 - 0.04,
+            opacity: 0.02 + Math.random() * 0.08,
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: 0.002 + Math.random() * 0.006,
+            driftAngle: Math.random() * Math.PI * 2,
+            driftSpeed: 0.002 + Math.random() * 0.004,
+            life: 0.5 + Math.random() * 0.5,
+          });
         }
-        return { r: Math.round(r*255), g: Math.round(g*255), b: Math.round(b*255) };
       }
+
+      function drawSoftCircle(x, y, radius, opacity) {
+        const grd = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        grd.addColorStop(0, `rgba(220, 215, 205, ${opacity * 0.9})`);
+        grd.addColorStop(0.4, `rgba(180, 175, 165, ${opacity * 0.6})`);
+        grd.addColorStop(1, `rgba(140, 135, 125, 0)`);
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
       function draw() {
         if (!isTabVisible) {
           animationId = requestAnimationFrame(draw);
           return;
         }
-        frameCount++;
-        // 30fps – skip every other frame
-        if (frameCount % 2 === 0) {
+
+        ctx.clearRect(0, 0, W, H);
+
+        particles.forEach(p => {
+          // drift
+          p.driftAngle += p.driftSpeed * (0.5 + Math.random() * 0.5);
+          const windX = Math.cos(p.driftAngle) * 0.015;
+          const windY = Math.sin(p.driftAngle) * 0.015;
+
+          // mouse repulsion
+          const dx = p.x - mouseX;
+          const dy = p.y - mouseY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const maxDist = 200;
+          if (dist < maxDist && dist > 5) {
+            const force = (1 - dist / maxDist) * 0.8;
+            p.vx += (dx / dist) * force * 0.08;
+            p.vy += (dy / dist) * force * 0.08;
+          }
+
+          p.vx += windX * 0.05;
+          p.vy += windY * 0.05;
+          p.vx *= 0.998;
+          p.vy *= 0.998;
+          const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > 0.6) {
+            p.vx = (p.vx / speed) * 0.6;
+            p.vy = (p.vy / speed) * 0.6;
+          }
+
+          p.x += p.vx;
+          p.y += p.vy;
+
+          // wrap
+          if (p.x < -p.radius) p.x = W + p.radius;
+          if (p.x > W + p.radius) p.x = -p.radius;
+          if (p.y < -p.radius) p.y = H + p.radius;
+          if (p.y > H + p.radius) p.y = -p.radius;
+
+          p.phase += p.phaseSpeed;
+          const pulse = 0.7 + 0.3 * Math.sin(p.phase);
+          const currentRadius = p.baseRadius * (0.6 + 0.4 * pulse);
+          const currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
+
+          drawSoftCircle(p.x, p.y, currentRadius, currentOpacity);
+        });
+
+        setTimeout(() => {
           animationId = requestAnimationFrame(draw);
-          return;
-        }
-
-        hue = (hue + .04) % 360;
-        ctx.clearRect(0,0,W,H);
-        const blue = hslToRgb(hue/360, .8, .55);
-        const maxD = Math.min(W,H) * .18;
-        const maxD2 = maxD * maxD;
-        const influenceRadius = Math.min(W,H) * .3;
-
-        nodes.forEach(n => {
-          const dx = n.x - mouseX, dy = n.y - mouseY;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < influenceRadius && dist > 10) {
-            const force = (1 - dist/influenceRadius) * 1.2;
-            n.vx += (dx/dist) * force * .04;
-            n.vy += (dy/dist) * force * .04;
-          }
-          n.vx *= .998; n.vy *= .998;
-          const speed = Math.sqrt(n.vx*n.vx + n.vy*n.vy);
-          if (speed > .8) { n.vx = (n.vx/speed)*.8; n.vy = (n.vy/speed)*.8; }
-        });
-
-        for (let i=0; i<nodes.length; i++) {
-          const a = nodes[i];
-          for (let j=i+1; j<nodes.length; j++) {
-            const b = nodes[j];
-            const dx = b.x - a.x, dy = b.y - a.y;
-            const d2 = dx*dx + dy*dy;
-            if (d2 >= maxD2) continue;
-            const t = 1 - Math.sqrt(d2)/maxD;
-            ctx.strokeStyle = (a.type==='blue' || b.type==='blue')
-              ? `rgba(${blue.r},${blue.g},${blue.b},${t*.30})`
-              : `rgba(${DARK_R+5},${DARK_G+5},${DARK_B+10},${t*.15})`;
-            ctx.lineWidth = (a.type==='blue' || b.type==='blue') ? 1.2 : .6;
-            ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-          }
-        }
-        nodes.forEach(n => {
-          n.phase += n.phaseSpeed;
-          const pulse = .65 + .35 * Math.sin(n.phase);
-          if (n.type === 'blue') {
-            const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*5);
-            grd.addColorStop(0, `rgba(${blue.r},${blue.g},${blue.b},${.85*pulse})`);
-            grd.addColorStop(1, `rgba(${blue.r},${blue.g},${blue.b},0)`);
-            ctx.fillStyle = grd;
-            ctx.beginPath(); ctx.arc(n.x,n.y,n.r*5,0,Math.PI*2); ctx.fill();
-            ctx.fillStyle = `rgba(${blue.r},${blue.g},${blue.b},1)`;
-            ctx.beginPath(); ctx.arc(n.x,n.y,n.r*1.1,0,Math.PI*2); ctx.fill();
-          } else {
-            ctx.fillStyle = `rgba(${DARK_R},${DARK_G},${DARK_B},${.15 + .15*pulse})`;
-            ctx.beginPath(); ctx.arc(n.x,n.y,n.r*.7,0,Math.PI*2); ctx.fill();
-          }
-          n.x += n.vx; n.y += n.vy;
-          if (n.x < 0) n.x = W; if (n.x > W) n.x = 0;
-          if (n.y < 0) n.y = H; if (n.y > H) n.y = 0;
-        });
-        animationId = requestAnimationFrame(draw);
+        }, 33);
       }
+
       window.addEventListener('resize', () => { resize(); }, { passive: true });
-      document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
       resize();
       draw();
     })();
@@ -2313,35 +2333,4 @@
           });
 
           if (response.ok) {
-            statusEl.textContent = '✅ You\'re on the list! We\'ll notify you when the world opens.';
-            statusEl.style.color = '#c9a84c';
-            input.value = '';
-
-            // Show the referral link after successful signup
-            // Wait a moment for the cookie to be set by GetLaunchList's script
-            setTimeout(() => {
-              const cookieMatch = document.cookie.match(/launchlist_ref=([^;]+)/);
-              if (cookieMatch) {
-                const refCode = cookieMatch[1];
-                const link = window.location.origin + window.location.pathname + '?ref=' + refCode;
-                referralText.textContent = link;
-                referralDiv.style.display = 'block';
-              } else {
-                // Fallback: show the generic link
-                referralText.textContent = window.location.origin + window.location.pathname + '?ref=YOUR_CODE';
-                referralDiv.style.display = 'block';
-              }
-            }, 800);
-          } else {
-            statusEl.textContent = '❌ Something went wrong. Please try again.';
-            statusEl.style.color = '#c9a84c';
-          }
-        } catch (error) {
-          statusEl.textContent = '❌ Network error. Please check your connection.';
-          statusEl.style.color = '#c9a84c';
-        }
-      });
-    }
-  </script>
-</body>
-</html>
+            statusEl.textContent = '✅ You\'re on the list! We\'ll
