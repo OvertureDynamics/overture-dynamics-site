@@ -1,3 +1,383 @@
+<script>
+  'use strict';
+
+  // ===== PRELOADER – WITH TIMEOUT FALLBACK =====
+  function hidePreloader() {
+    var preloader = document.getElementById('preloader');
+    if (preloader) {
+      preloader.classList.add('hidden');
+    }
+  }
+
+  // Hide on load
+  window.addEventListener('load', hidePreloader);
+
+  // FORCE HIDE after 3 seconds (in case 'load' never fires)
+  setTimeout(hidePreloader, 3000);
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
+
+  // ===== TYPING EFFECT =====
+  (function() {
+    const text = "The first MMO where the world is truly alive.";
+    const container = document.getElementById('typing-text');
+    const cursor = document.getElementById('typing-cursor');
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        container.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, 28 + Math.random() * 12);
+      } else {
+        cursor.style.animation = 'blink 0.8s step-end infinite';
+      }
+    }
+    setTimeout(type, 2800);
+  })();
+
+  // ===== NAV SCROLL =====
+  const nav = document.getElementById('nav');
+  let ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(function() {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // ===== SCROLL REVEAL =====
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  revealEls.forEach(function(el) { revealObserver.observe(el); });
+
+  // ===== 3D TILT – only on hover-capable devices =====
+  if (window.matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.tilt-card').forEach(function(card) {
+      let rafId = null;
+      card.addEventListener('mousemove', function(e) {
+        if (rafId) return;
+        rafId = requestAnimationFrame(function() {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const cx = rect.width / 2;
+          const cy = rect.height / 2;
+          card.style.setProperty('--tilt-x', ((y - cy) / cy * -3) + 'deg');
+          card.style.setProperty('--tilt-y', ((x - cx) / cx * 3) + 'deg');
+          rafId = null;
+        });
+      }, { passive: true });
+      card.addEventListener('mouseleave', function() {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        card.style.setProperty('--tilt-x', '0deg');
+        card.style.setProperty('--tilt-y', '0deg');
+      }, { passive: true });
+    });
+
+    // ===== MAGNETIC BUTTONS =====
+    document.querySelectorAll('.magnetic-btn').forEach(function(btn) {
+      let rafId = null;
+      btn.addEventListener('mousemove', function(e) {
+        if (rafId) return;
+        rafId = requestAnimationFrame(function() {
+          const rect = btn.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          const dist = Math.sqrt(x*x + y*y);
+          const maxDist = Math.min(rect.width, rect.height) * 1.2;
+          const strength = Math.min(1, 1 - dist/maxDist) * 8;
+          const angle = Math.atan2(y, x);
+          btn.style.transform = 'translate(' + (Math.cos(angle)*strength) + 'px, ' + (Math.sin(angle)*strength) + 'px) scale(1.02)';
+          rafId = null;
+        });
+      }, { passive: true });
+      btn.addEventListener('mouseleave', function() {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        btn.style.transform = 'translate(0,0) scale(1)';
+      }, { passive: true });
+    });
+  }
+
+  // ===== GLOBAL CANVAS – SMOKE / MIST EFFECT =====
+  (function() {
+    const canvas = document.getElementById('global-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let W, H;
+    let particles = [];
+    let mouseX = -1000, mouseY = -1000;
+    let animationId = null;
+    let isTabVisible = true;
+
+    document.addEventListener('visibilitychange', function() {
+      isTabVisible = !document.hidden;
+    });
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+      buildSmoke();
+    }
+
+    function buildSmoke() {
+      var count = Math.max(30, Math.floor((W * H) / 20000));
+      particles = [];
+      for (var i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          radius: 40 + Math.random() * 160,
+          baseRadius: 40 + Math.random() * 160,
+          vx: (Math.random() - 0.5) * 0.12,
+          vy: (Math.random() - 0.5) * 0.12 - 0.04,
+          opacity: 0.02 + Math.random() * 0.08,
+          phase: Math.random() * Math.PI * 2,
+          phaseSpeed: 0.002 + Math.random() * 0.006,
+          driftAngle: Math.random() * Math.PI * 2,
+          driftSpeed: 0.002 + Math.random() * 0.004,
+          life: 0.5 + Math.random() * 0.5,
+        });
+      }
+    }
+
+    function drawSoftCircle(x, y, radius, opacity) {
+      var grd = ctx.createRadialGradient(x, y, 0, x, y, radius);
+      grd.addColorStop(0, 'rgba(220, 215, 205, ' + (opacity * 0.9) + ')');
+      grd.addColorStop(0.4, 'rgba(180, 175, 165, ' + (opacity * 0.6) + ')');
+      grd.addColorStop(1, 'rgba(140, 135, 125, 0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function draw() {
+      if (!isTabVisible) {
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
+
+      ctx.clearRect(0, 0, W, H);
+
+      for (var i = 0; i < particles.length; i++) {
+        var p = particles[i];
+
+        p.driftAngle += p.driftSpeed * (0.5 + Math.random() * 0.5);
+        var windX = Math.cos(p.driftAngle) * 0.015;
+        var windY = Math.sin(p.driftAngle) * 0.015;
+
+        var dx = p.x - mouseX;
+        var dy = p.y - mouseY;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        var maxDist = 200;
+        if (dist < maxDist && dist > 5) {
+          var force = (1 - dist / maxDist) * 0.8;
+          p.vx += (dx / dist) * force * 0.08;
+          p.vy += (dy / dist) * force * 0.08;
+        }
+
+        p.vx += windX * 0.05;
+        p.vy += windY * 0.05;
+        p.vx *= 0.998;
+        p.vy *= 0.998;
+        var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (speed > 0.6) {
+          p.vx = (p.vx / speed) * 0.6;
+          p.vy = (p.vy / speed) * 0.6;
+        }
+
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < -p.radius) p.x = W + p.radius;
+        if (p.x > W + p.radius) p.x = -p.radius;
+        if (p.y < -p.radius) p.y = H + p.radius;
+        if (p.y > H + p.radius) p.y = -p.radius;
+
+        p.phase += p.phaseSpeed;
+        var pulse = 0.7 + 0.3 * Math.sin(p.phase);
+        var currentRadius = p.baseRadius * (0.6 + 0.4 * pulse);
+        var currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
+
+        drawSoftCircle(p.x, p.y, currentRadius, currentOpacity);
+      }
+
+      setTimeout(function() {
+        animationId = requestAnimationFrame(draw);
+      }, 33);
+    }
+
+    window.addEventListener('resize', function() { resize(); }, { passive: true });
+    document.addEventListener('mousemove', function(e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    }, { passive: true });
+
+    resize();
+    draw();
+  })();
+
+  // ===== CUSTOM CURSOR =====
+  if (window.matchMedia('(hover: hover)').matches) {
+    var cursor = document.getElementById('custom-cursor');
+    var cx=0, cy=0, tx=0, ty=0;
+    function updateCursor() {
+      tx += (cx - tx) * 0.12;
+      ty += (cy - ty) * 0.12;
+      cursor.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+      requestAnimationFrame(updateCursor);
+    }
+    document.addEventListener('mousemove', function(e) { cx = e.clientX; cy = e.clientY; }, { passive: true });
+    document.addEventListener('mouseenter', function() { cursor.classList.add('visible'); }, { passive: true });
+    document.addEventListener('mouseleave', function() { cursor.classList.remove('visible'); }, { passive: true });
+    document.querySelectorAll('a, button, [role="button"]').forEach(function(el) {
+      el.addEventListener('mouseenter', function() { cursor.classList.add('hovering'); }, { passive: true });
+      el.addEventListener('mouseleave', function() { cursor.classList.remove('hovering'); }, { passive: true });
+    });
+    document.addEventListener('mousedown', function() { cursor.classList.add('clicking'); }, { passive: true });
+    document.addEventListener('mouseup', function() { cursor.classList.remove('clicking'); }, { passive: true });
+    updateCursor();
+  }
+
+  // ===== SCROLL PROGRESS =====
+  var progressBar = document.getElementById('scroll-progress');
+  window.addEventListener('scroll', function() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
+  }, { passive: true });
+
+  // ===== BACK TO TOP =====
+  var backBtn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', function() {
+    backBtn.classList.toggle('visible', window.scrollY > 600);
+  }, { passive: true });
+  backBtn.addEventListener('click', function() { window.scrollTo({ top:0, behavior:'smooth' }); });
+
+  // ===== ROADMAP EXPAND =====
+  document.querySelectorAll('.roadmap-item').forEach(function(item) {
+    var stage = item.querySelector('.roadmap-stage');
+    stage.addEventListener('click', function() {
+      item.classList.toggle('expanded');
+    });
+  });
+
+  // ===== HAMBURGER MENU =====
+  var hamburger = document.getElementById('hamburger');
+  var mobileNav = document.getElementById('mobile-nav');
+  hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('open');
+    mobileNav.classList.toggle('open');
+    document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+  });
+  mobileNav.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // ===== ACTIVE NAV LINK =====
+  var sections = document.querySelectorAll('section[id]');
+  var navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
+  var observer = new IntersectionObserver(function(entries) {
+    var current = '';
+    entries.forEach(function(e) {
+      if (e.isIntersecting) current = e.target.id;
+    });
+    navLinks.forEach(function(link) {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(function(s) { observer.observe(s); });
+
+  // ===== SECTION PROGRESS =====
+  var progressEl = document.getElementById('section-progress');
+  var chapterNum = progressEl.querySelector('.chapter-num');
+  var chapterLabel = document.getElementById('chapter-label');
+  var totalSections = document.querySelectorAll('.section').length;
+  chapterLabel.textContent = 'of ' + totalSections;
+  var progressObserver = new IntersectionObserver(function(entries) {
+    var index = 0;
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        var all = document.querySelectorAll('.section');
+        index = Array.from(all).indexOf(e.target) + 1;
+      }
+    });
+    if (index > 0) {
+      chapterNum.textContent = index;
+      progressEl.classList.add('visible');
+    }
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.section').forEach(function(s) { progressObserver.observe(s); });
+
+  // ===== WAITLIST FORM – GetLaunchList with referral link display =====
+  var waitlistForm = document.querySelector('.launchlist-form');
+  var statusEl = document.getElementById('waitlist-status');
+  var referralDiv = document.getElementById('launchlist-referral-link');
+  var referralText = document.getElementById('referral-link-text');
+
+  if (waitlistForm) {
+    waitlistForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var input = waitlistForm.querySelector('input[type="email"]');
+      var email = input.value.trim();
+
+      if (!email) {
+        statusEl.textContent = '❌ Please enter a valid email address.';
+        statusEl.style.color = '#c9a84c';
+        return;
+      }
+
+      fetch('https://getlaunchlist.com/s/coI7Ny', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(response) {
+        if (response.ok) {
+          statusEl.textContent = '✅ You\'re on the list! We\'ll notify you when the world opens.';
+          statusEl.style.color = '#c9a84c';
+          input.value = '';
+
+          setTimeout(function() {
+            var cookieMatch = document.cookie.match(/launchlist_ref=([^;]+)/);
+            if (cookieMatch) {
+              var refCode = cookieMatch[1];
+              var link = window.location.origin + window.location.pathname + '?ref=' + refCode;
+              referralText.textContent = link;
+              referralDiv.style.display = 'block';
+            } else {
+              referralText.textContent = window.location.origin + window.location.pathname + '?ref=YOUR_CODE';
+              referralDiv.style.display = 'block';
+            }
+          }, 800);
+        } else {
+          statusEl.textContent = '❌ Something went wrong. Please try again.';
+          statusEl.style.color = '#c9a84c';
+        }
+      })
+      .catch(function() {
+        statusEl.textContent = '❌ Network error. Please check your connection.';
+        statusEl.style.color = '#c9a84c';
+      });
+    });
+  }
+</script>
 <!DOCTYPE html>
 <html lang="en">
 <head>
