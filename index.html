@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Project Oath — The first MMO where the world is truly alive</title>
   <meta name="description" content="Project Oath by Overture Dynamics: AI-driven NPCs that think, remember, and evolve. Real-time action combat in a living fantasy MMO world that never runs out of story." />
   <meta name="robots" content="index, follow" />
@@ -119,11 +119,15 @@
 
     /* ===== GLOBAL CANVAS ===== */
     #global-canvas {
-      position:fixed;
-      inset:0;
-      width:100%; height:100%;
-      z-index:0;
-      pointer-events:none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
     }
 
     /* ===== UTILITIES ===== */
@@ -1854,6 +1858,7 @@
   <script>
     'use strict';
 
+    // ===== PRELOADER =====
     function hidePreloader() {
       var preloader = document.getElementById('preloader');
       if (preloader) { preloader.classList.add('hidden'); }
@@ -1864,7 +1869,7 @@
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
 
-    // Typing effect
+    // ===== TYPING EFFECT =====
     (function() {
       var text = "The first MMO where the world is truly alive.";
       var container = document.getElementById('typing-text');
@@ -1882,7 +1887,7 @@
       setTimeout(type, 2800);
     })();
 
-    // Nav scroll
+    // ===== NAV SCROLL =====
     var nav = document.getElementById('nav');
     var ticking = false;
     window.addEventListener('scroll', function() {
@@ -1895,7 +1900,7 @@
       }
     }, { passive: true });
 
-    // Scroll reveal
+    // ===== SCROLL REVEAL =====
     var revealEls = document.querySelectorAll('.reveal');
     var revealObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
@@ -1907,7 +1912,7 @@
     }, { threshold: 0.1 });
     revealEls.forEach(function(el) { revealObserver.observe(el); });
 
-    // 3D Tilt
+    // ===== 3D TILT =====
     if (window.matchMedia('(hover: hover)').matches) {
       document.querySelectorAll('.tilt-card').forEach(function(card) {
         var rafId = null;
@@ -1954,32 +1959,50 @@
       });
     }
 
-    // Smoke canvas
+    // ===== RESPONSIVE SMOKE CANVAS =====
     (function() {
       var canvas = document.getElementById('global-canvas');
       if (!canvas) return;
       var ctx = canvas.getContext('2d');
-      var W, H, particles = [], mouseX = -1000, mouseY = -1000, animationId = null, isTabVisible = true;
-      document.addEventListener('visibilitychange', function() { isTabVisible = !document.hidden; });
+      var dpr = window.devicePixelRatio || 1;
+      var W, H, particles = [];
+      var mouseX = -1000, mouseY = -1000;
+      var animationId = null;
+      var isTabVisible = true;
+
+      document.addEventListener('visibilitychange', function() {
+        isTabVisible = !document.hidden;
+      });
 
       function resize() {
-        W = canvas.width = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+        var rect = canvas.getBoundingClientRect();
+        W = rect.width;
+        H = rect.height;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        ctx.scale(dpr, dpr);
         buildSmoke();
       }
 
       function buildSmoke() {
-        var count = Math.max(30, Math.floor((W * H) / 20000));
+        var area = W * H;
+        var count = Math.max(20, Math.min(120, Math.floor(area / 18000)));
         particles = [];
+        var scale = Math.min(W, H) / 1000;
         for (var i = 0; i < count; i++) {
+          var baseR = (40 + Math.random() * 160) * scale;
           particles.push({
-            x: Math.random() * W, y: Math.random() * H,
-            radius: 40 + Math.random() * 160, baseRadius: 40 + Math.random() * 160,
-            vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12 - 0.04,
+            x: Math.random() * W,
+            y: Math.random() * H,
+            radius: baseR,
+            baseRadius: baseR,
+            vx: (Math.random() - 0.5) * 0.12,
+            vy: (Math.random() - 0.5) * 0.12 - 0.04,
             opacity: 0.02 + Math.random() * 0.08,
-            phase: Math.random() * Math.PI * 2, phaseSpeed: 0.002 + Math.random() * 0.006,
-            driftAngle: Math.random() * Math.PI * 2, driftSpeed: 0.002 + Math.random() * 0.004,
-            life: 0.5 + Math.random() * 0.5
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: 0.002 + Math.random() * 0.006,
+            driftAngle: Math.random() * Math.PI * 2,
+            driftSpeed: 0.002 + Math.random() * 0.004
           });
         }
       }
@@ -1996,44 +2019,79 @@
       }
 
       function draw() {
-        if (!isTabVisible) { animationId = requestAnimationFrame(draw); return; }
+        if (!isTabVisible) {
+          animationId = requestAnimationFrame(draw);
+          return;
+        }
         ctx.clearRect(0, 0, W, H);
+
         for (var i = 0; i < particles.length; i++) {
           var p = particles[i];
+
           p.driftAngle += p.driftSpeed * (0.5 + Math.random() * 0.5);
           var windX = Math.cos(p.driftAngle) * 0.015;
           var windY = Math.sin(p.driftAngle) * 0.015;
-          var dx = p.x - mouseX, dy = p.y - mouseY, dist = Math.sqrt(dx*dx + dy*dy);
+
+          var dx = p.x - mouseX;
+          var dy = p.y - mouseY;
+          var dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 200 && dist > 5) {
             var force = (1 - dist / 200) * 0.8;
             p.vx += (dx / dist) * force * 0.08;
             p.vy += (dy / dist) * force * 0.08;
           }
-          p.vx += windX * 0.05; p.vy += windY * 0.05;
-          p.vx *= 0.998; p.vy *= 0.998;
-          var speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
-          if (speed > 0.6) { p.vx = (p.vx/speed)*0.6; p.vy = (p.vy/speed)*0.6; }
-          p.x += p.vx; p.y += p.vy;
+
+          p.vx += windX * 0.05;
+          p.vy += windY * 0.05;
+          p.vx *= 0.998;
+          p.vy *= 0.998;
+          var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > 0.6) {
+            p.vx = (p.vx / speed) * 0.6;
+            p.vy = (p.vy / speed) * 0.6;
+          }
+
+          p.x += p.vx;
+          p.y += p.vy;
+
           if (p.x < -p.radius) p.x = W + p.radius;
           if (p.x > W + p.radius) p.x = -p.radius;
           if (p.y < -p.radius) p.y = H + p.radius;
           if (p.y > H + p.radius) p.y = -p.radius;
+
           p.phase += p.phaseSpeed;
           var pulse = 0.7 + 0.3 * Math.sin(p.phase);
           var currentRadius = p.baseRadius * (0.6 + 0.4 * pulse);
           var currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
+
           drawSoftCircle(p.x, p.y, currentRadius, currentOpacity);
         }
-        setTimeout(function() { animationId = requestAnimationFrame(draw); }, 33);
+
+        setTimeout(function() {
+          animationId = requestAnimationFrame(draw);
+        }, 33);
       }
 
-      window.addEventListener('resize', function() { resize(); }, { passive: true });
-      document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+      // ===== RESIZE HANDLING =====
+      var resizeObserver = new ResizeObserver(function() {
+        resize();
+      });
+      resizeObserver.observe(canvas);
+
+      window.addEventListener('resize', function() {
+        resize();
+      }, { passive: true });
+
+      document.addEventListener('mousemove', function(e) {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
       resize();
       draw();
     })();
 
-    // Custom cursor
+    // ===== CUSTOM CURSOR =====
     if (window.matchMedia('(hover: hover)').matches) {
       var cursor = document.getElementById('custom-cursor');
       var cx=0, cy=0, tx=0, ty=0;
@@ -2055,7 +2113,7 @@
       updateCursor();
     }
 
-    // Scroll progress
+    // ===== SCROLL PROGRESS =====
     var progressBar = document.getElementById('scroll-progress');
     window.addEventListener('scroll', function() {
       var scrollTop = window.scrollY;
@@ -2063,20 +2121,20 @@
       progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
     }, { passive: true });
 
-    // Back to top
+    // ===== BACK TO TOP =====
     var backBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', function() {
       backBtn.classList.toggle('visible', window.scrollY > 600);
     }, { passive: true });
     backBtn.addEventListener('click', function() { window.scrollTo({ top:0, behavior:'smooth' }); });
 
-    // Roadmap expand
+    // ===== ROADMAP EXPAND =====
     document.querySelectorAll('.roadmap-item').forEach(function(item) {
       var stage = item.querySelector('.roadmap-stage');
       stage.addEventListener('click', function() { item.classList.toggle('expanded'); });
     });
 
-    // Hamburger
+    // ===== HAMBURGER =====
     var hamburger = document.getElementById('hamburger');
     var mobileNav = document.getElementById('mobile-nav');
     hamburger.addEventListener('click', function() {
@@ -2092,7 +2150,7 @@
       });
     });
 
-    // Active nav link
+    // ===== ACTIVE NAV LINK =====
     var sections = document.querySelectorAll('section[id]');
     var navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
     var observer = new IntersectionObserver(function(entries) {
@@ -2104,7 +2162,7 @@
     }, { threshold: 0.3 });
     sections.forEach(function(s) { observer.observe(s); });
 
-    // Section progress
+    // ===== SECTION PROGRESS =====
     var progressEl = document.getElementById('section-progress');
     var chapterNum = progressEl.querySelector('.chapter-num');
     var chapterLabel = document.getElementById('chapter-label');
@@ -2122,7 +2180,7 @@
     }, { threshold: 0.4 });
     document.querySelectorAll('.section').forEach(function(s) { progressObserver.observe(s); });
 
-    // Waitlist form
+    // ===== WAITLIST =====
     var waitlistForm = document.querySelector('.launchlist-form');
     var statusEl = document.getElementById('waitlist-status');
     var referralDiv = document.getElementById('launchlist-referral-link');
