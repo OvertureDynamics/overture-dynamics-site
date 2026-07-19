@@ -21,72 +21,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
-  <!-- FAQ Schema (SEO) -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "When is the closed alpha?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Closed alpha begins in 2029–2030. Founder's Pass holders get exclusive access during Phase 3."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is ERC-8004?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "ERC-8004 is a new on-chain standard developed by Overture Dynamics for persistent, memory-driven NPC agents that own assets and remember player interactions."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Is there a subscription fee?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Yes. The game costs $39.99 to own, and a $14.99/month subscription is required to play. The Founder's Pass grants a permanent subscription with no monthly fee."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What makes Project Oath different from other MMOs?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Project Oath combines classless real-time action combat with a multi-agent AI world simulation — economy, weather, ecology, geology, and narrative — that runs continuously without developer scripting."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Will there be DLC or expansion packs?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "No. Because the world generates its own content through AI agents, there is no content gap to fill. Project Oath has no DLC, ever."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "What is the Founder's Pass?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "The Founder's Pass costs $299, is capped at 10,000, and grants closed alpha access, a permanent lifetime subscription, and in-world recognition as a founding member of the world's history."
-        }
-      },
-      {
-        "@type": "Question",
-        "name": "Who is developing Project Oath?",
-        "acceptedAnswer": {
-          "@type": "Answer",
-          "text": "Project Oath is developed by Overture Dynamics, an AI-first game studio based in New York, NY, founded in 2026."
-        }
-      }
-    ]
-  }
-  </script>
-
   <style>
     /* ===== PRELOADER ===== */
     #preloader {
@@ -183,7 +117,7 @@
       background-size:256px 256px;
     }
 
-    /* ===== GLOBAL CANVAS (smoke background) ===== */
+    /* ===== GLOBAL CANVAS ===== */
     #global-canvas {
       position:fixed;
       inset:0;
@@ -230,13 +164,11 @@
     .delay-3 { transition-delay:.3s; }
     .delay-4 { transition-delay:.45s; }
 
-    /* ===== PERFORMANCE: content-visibility on sections ===== */
     .section, #stats, #waitlist {
       content-visibility: auto;
       contain-intrinsic-size: 0 500px;
     }
 
-    /* ===== TILT & MAGNETIC – disabled on touch ===== */
     @media (hover: hover) {
       .tilt-card {
         transition:transform .15s ease-out,box-shadow .3s;
@@ -413,7 +345,6 @@
       max-width:900px;
     }
 
-    /* ===== ANIMATED HERO LOGO ===== */
     .hero-emblem {
       display:flex;
       justify-content:center;
@@ -1194,7 +1125,7 @@
       .roadmap-item { padding:.8rem .8rem 2.5rem; margin:0 -.8rem; }
     }
 
-    /* ===== WAITLIST SECTION ===== */
+    /* ===== WAITLIST ===== */
     #waitlist {
       background:var(--bg-deep);
       border-top:1px solid var(--border);
@@ -1260,7 +1191,6 @@
       letter-spacing:.04em;
     }
 
-    /* ===== REFERRAL LINK DISPLAY (hidden by default) ===== */
     #launchlist-referral-link {
       margin-top: 1.5rem;
       padding: 1rem 1.5rem;
@@ -1428,7 +1358,6 @@
       background:rgba(201,168,76,.05);
     }
 
-    /* ===== HAMBURGER ===== */
     .nav-hamburger {
       display:none;
       flex-direction:column;
@@ -1453,7 +1382,6 @@
     .nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
     @media (max-width:640px) { .nav-hamburger { display:flex; } }
 
-    /* ===== MOBILE NAV ===== */
     .mobile-nav {
       position:fixed;
       inset:0;
@@ -1496,7 +1424,6 @@
       background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),transparent);
     }
 
-    /* ===== CURSOR GLOW ===== */
     #cursor-glow {
       position:fixed;
       top:-150px; left:-150px;
@@ -1615,15 +1542,9 @@
     <div class="hero-scanline" aria-hidden="true"></div>
     <div class="hero-bottom-fade" aria-hidden="true"></div>
     <div class="hero-content">
-      <!-- ANIMATED HERO LOGO -->
       <div class="hero-emblem" id="hero-logo-animated" aria-hidden="true">
         <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="hero-logo-bg" cx="50%" cy="42%" r="48%">
-              <stop offset="0%" stop-color="#c9a84c" stop-opacity="1"/>
-              <stop offset="100%" stop-color="#06060d" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
+          <defs><radialGradient id="hero-logo-bg" cx="50%" cy="42%" r="48%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="1"/><stop offset="100%" stop-color="#06060d" stop-opacity="0"/></radialGradient></defs>
           <circle class="glow" cx="100" cy="100" r="100" fill="url(#hero-logo-bg)" opacity="0"/>
           <circle class="outer-ring" cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width=".8"/>
           <line class="tick t1" x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
@@ -1657,30 +1578,15 @@
           <circle class="center-node" cx="100" cy="100" r="5" fill="#c9a84c"/>
         </svg>
       </div>
-
       <div class="hero-meta">
-        <div class="hero-meta-item">
-          <span class="hero-meta-label">Studio</span>
-          <span class="hero-meta-value">Overture Dynamics</span>
-        </div>
+        <div class="hero-meta-item"><span class="hero-meta-label">Studio</span><span class="hero-meta-value">Overture Dynamics</span></div>
         <span class="hero-meta-sep">·</span>
-        <div class="hero-meta-item">
-          <span class="hero-meta-label">Genre</span>
-          <span class="hero-meta-value">High-Fantasy MMO</span>
-        </div>
+        <div class="hero-meta-item"><span class="hero-meta-label">Genre</span><span class="hero-meta-value">High-Fantasy MMO</span></div>
       </div>
-      <h1 class="hero-title">
-        <span class="t-project">Project</span>
-        <span class="t-oath">Oath</span>
-      </h1>
-      <p class="hero-tagline" id="tagline">
-        <span id="typing-text"></span><span class="typing-cursor" id="typing-cursor"></span>
-      </p>
+      <h1 class="hero-title"><span class="t-project">Project</span><span class="t-oath">Oath</span></h1>
+      <p class="hero-tagline" id="tagline"><span id="typing-text"></span><span class="typing-cursor" id="typing-cursor"></span></p>
       <div class="hero-ctas">
-        <a href="#founders" class="btn-primary magnetic-btn">
-          Founder's Pass
-          <span class="btn-sub">$299 · Lifetime Access · Coming Soon</span>
-        </a>
+        <a href="#founders" class="btn-primary magnetic-btn">Founder's Pass<span class="btn-sub">$299 · Lifetime Access · Coming Soon</span></a>
         <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-secondary magnetic-btn" title="Opens in new tab">Join Discord</a>
       </div>
     </div>
@@ -1703,6 +1609,7 @@
     </div>
   </section>
 
+  <!-- ===== PROBLEM ===== -->
   <section id="problem" class="section" aria-label="The Problem">
     <div class="container">
       <div class="section-head center reveal">
@@ -1721,6 +1628,7 @@
     </div>
   </section>
 
+  <!-- ===== PILLARS ===== -->
   <section id="pillars" class="section" aria-label="Game pillars">
     <div class="container">
       <div class="section-head center reveal">
@@ -1747,6 +1655,7 @@
     </div>
   </section>
 
+  <!-- ===== WORLD ===== -->
   <section id="world" class="section" aria-label="The living world">
     <div class="container">
       <div class="section-head reveal">
@@ -1766,6 +1675,7 @@
     </div>
   </section>
 
+  <!-- ===== COMBAT ===== -->
   <section id="combat" class="section" aria-label="Combat and crafting">
     <div class="container">
       <div class="section-head reveal">
@@ -1806,6 +1716,7 @@
     </div>
   </section>
 
+  <!-- ===== ROADMAP ===== -->
   <section id="roadmap" class="section" aria-label="Development roadmap">
     <div class="container">
       <div class="section-head reveal">
@@ -1818,71 +1729,37 @@
           <p class="roadmap-year">2026–2027 · Years 1–2</p>
           <div class="roadmap-stage">Foundation · Pre-Seed &amp; Seed <span class="roadmap-expand-icon">▾</span></div>
           <p class="roadmap-desc">5–15 people · $5M–$18M (Pre-Seed + Seed)<br>Incorporate, GDD complete, ERC-8004 NPC prototype, combat vertical slice on UE5, Discord 1,000+, pre-seed close. Seed raise $3M, NPC demo public, first external playtests.</p>
-          <div class="roadmap-details">
-            <div class="roadmap-details-inner">
-              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">5–15</span></div>
-              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div>
-              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate · GDD · ERC-8004 prototype</span></div>
-              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat slice · Discord 1,000+ · Seed raise</span></div>
-            </div>
-          </div>
+          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">5–15</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate · GDD · ERC-8004 prototype</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat slice · Discord 1,000+ · Seed raise</span></div></div></div>
         </div>
         <div class="roadmap-item reveal delay-1" data-phase="2">
           <p class="roadmap-year">2028 · Year 3</p>
           <div class="roadmap-stage">Pre-Alpha · Series A <span class="roadmap-expand-icon">▾</span></div>
           <p class="roadmap-desc">12–25 people · $15M (Series A)<br>All simulation agents integrated, weapon crafting complete, marketplace v1, Series A raise.</p>
-          <div class="roadmap-details">
-            <div class="roadmap-details-inner">
-              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">12–25</span></div>
-              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M</span></div>
-              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All agents integrated · Crafting complete</span></div>
-              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Marketplace v1 · Series A raise</span></div>
-            </div>
-          </div>
+          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">12–25</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All agents integrated · Crafting complete</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Marketplace v1 · Series A raise</span></div></div></div>
         </div>
         <div class="roadmap-item reveal delay-2" data-phase="3">
           <p class="roadmap-year">2029–2030 · Years 4–5</p>
           <div class="roadmap-stage">Closed Alpha <span class="roadmap-expand-icon">▾</span></div>
           <p class="roadmap-desc">20–35 people · $15M–$40M (Series A / B)<br>Founder pass holders access the world. 1K-player closed alpha, full world simulation live, Series B preparation.</p>
-          <div class="roadmap-details">
-            <div class="roadmap-details-inner">
-              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">20–35</span></div>
-              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M</span></div>
-              <div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass access · Full world live</span></div>
-              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player alpha · Series B prep</span></div>
-            </div>
-          </div>
+          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">20–35</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass access · Full world live</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player alpha · Series B prep</span></div></div></div>
         </div>
         <div class="roadmap-item reveal delay-3" data-phase="4">
           <p class="roadmap-year">2031–2032 · Years 6–7</p>
           <div class="roadmap-stage">Open Beta · Full Subscription Launch <span class="roadmap-expand-icon">▾</span></div>
           <p class="roadmap-desc">35–45 people · $40M–$80M (Series B / C)<br>5K–20K players, full subscription launch, economy tuning, press &amp; influencer push.</p>
-          <div class="roadmap-details">
-            <div class="roadmap-details-inner">
-              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">35–45</span></div>
-              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div>
-              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div>
-              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Subscription launch · Economy tuning</span></div>
-            </div>
-          </div>
+          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">35–45</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div><div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Subscription launch · Economy tuning</span></div></div></div>
         </div>
         <div class="roadmap-item reveal delay-4" data-phase="5">
           <p class="roadmap-year">2033–2034 · Years 8–9</p>
           <div class="roadmap-stage">Release · The Living World <span class="roadmap-expand-icon">▾</span></div>
           <p class="roadmap-desc">50 people (cap) · $40M–$80M (Series B / C)<br>Public launch, 200K–500K player target, on-chain ownership layer activates.</p>
-          <div class="roadmap-details">
-            <div class="roadmap-details-inner">
-              <div class="roadmap-detail-item"><span class="label">Team</span><span class="value">50 (cap)</span></div>
-              <div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div>
-              <div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div>
-              <div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch · On-chain ownership</span></div>
-            </div>
-          </div>
+          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">50 (cap)</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div><div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch · On-chain ownership</span></div></div></div>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===== ABOUT ===== -->
   <section id="about" class="section" aria-label="About the studio">
     <div class="container">
       <div class="about-grid">
@@ -1904,6 +1781,7 @@
     </div>
   </section>
 
+  <!-- ===== FOUNDER'S PASS ===== -->
   <section id="founders" class="section" aria-label="Founder's Pass">
     <div class="container">
       <div class="founders-wrap">
@@ -1928,21 +1806,18 @@
     </div>
   </section>
 
-  <!-- ===== WAITLIST (GetLaunchList) ===== -->
+  <!-- ===== WAITLIST ===== -->
   <section id="waitlist" aria-label="Join the waitlist">
     <div class="container">
       <div class="waitlist-wrap reveal">
         <span class="eyebrow">Stay in the loop</span>
         <h2>Join the <span class="gold">world waitlist</span></h2>
         <p class="section-desc">Be the first to know when the Founder's Pass goes live, when new dev logs drop, and when the closed alpha opens.</p>
-
         <form class="waitlist-form launchlist-form" action="https://getlaunchlist.com/s/coI7Ny" method="POST">
           <input type="email" name="email" placeholder="Enter your email address" required aria-label="Email address" />
           <button type="submit" class="btn-waitlist">Notify Me</button>
         </form>
-
         <p class="waitlist-note" id="waitlist-status">No spam · Unsubscribe anytime · We respect your inbox.</p>
-
         <div id="launchlist-referral-link">
           <p class="ref-label">🎯 Your unique referral link</p>
           <p class="ref-link" id="referral-link-text">https://overturedynamics.com/?ref=YOUR_CODE</p>
@@ -1974,27 +1849,22 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
   </button>
 
-  <!-- ===== GETLAUNCHLIST REFERRAL TRACKING ===== -->
   <script src="https://getlaunchlist.com/js/widget-diy.js" defer></script>
 
   <script>
     'use strict';
 
-    // ===== PRELOADER – WITH TIMEOUT FALLBACK =====
     function hidePreloader() {
       var preloader = document.getElementById('preloader');
-      if (preloader) {
-        preloader.classList.add('hidden');
-      }
+      if (preloader) { preloader.classList.add('hidden'); }
     }
-
     window.addEventListener('load', hidePreloader);
     setTimeout(hidePreloader, 3000);
 
     var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
 
-    // ===== TYPING EFFECT =====
+    // Typing effect
     (function() {
       var text = "The first MMO where the world is truly alive.";
       var container = document.getElementById('typing-text');
@@ -2012,7 +1882,7 @@
       setTimeout(type, 2800);
     })();
 
-    // ===== NAV SCROLL =====
+    // Nav scroll
     var nav = document.getElementById('nav');
     var ticking = false;
     window.addEventListener('scroll', function() {
@@ -2025,7 +1895,7 @@
       }
     }, { passive: true });
 
-    // ===== SCROLL REVEAL =====
+    // Scroll reveal
     var revealEls = document.querySelectorAll('.reveal');
     var revealObserver = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
@@ -2037,7 +1907,7 @@
     }, { threshold: 0.1 });
     revealEls.forEach(function(el) { revealObserver.observe(el); });
 
-    // ===== 3D TILT – only on hover-capable devices =====
+    // 3D Tilt
     if (window.matchMedia('(hover: hover)').matches) {
       document.querySelectorAll('.tilt-card').forEach(function(card) {
         var rafId = null;
@@ -2084,21 +1954,13 @@
       });
     }
 
-    // ===== GLOBAL CANVAS – SMOKE / MIST EFFECT =====
+    // Smoke canvas
     (function() {
       var canvas = document.getElementById('global-canvas');
       if (!canvas) return;
       var ctx = canvas.getContext('2d');
-
-      var W, H;
-      var particles = [];
-      var mouseX = -1000, mouseY = -1000;
-      var animationId = null;
-      var isTabVisible = true;
-
-      document.addEventListener('visibilitychange', function() {
-        isTabVisible = !document.hidden;
-      });
+      var W, H, particles = [], mouseX = -1000, mouseY = -1000, animationId = null, isTabVisible = true;
+      document.addEventListener('visibilitychange', function() { isTabVisible = !document.hidden; });
 
       function resize() {
         W = canvas.width = window.innerWidth;
@@ -2111,18 +1973,13 @@
         particles = [];
         for (var i = 0; i < count; i++) {
           particles.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            radius: 40 + Math.random() * 160,
-            baseRadius: 40 + Math.random() * 160,
-            vx: (Math.random() - 0.5) * 0.12,
-            vy: (Math.random() - 0.5) * 0.12 - 0.04,
+            x: Math.random() * W, y: Math.random() * H,
+            radius: 40 + Math.random() * 160, baseRadius: 40 + Math.random() * 160,
+            vx: (Math.random() - 0.5) * 0.12, vy: (Math.random() - 0.5) * 0.12 - 0.04,
             opacity: 0.02 + Math.random() * 0.08,
-            phase: Math.random() * Math.PI * 2,
-            phaseSpeed: 0.002 + Math.random() * 0.006,
-            driftAngle: Math.random() * Math.PI * 2,
-            driftSpeed: 0.002 + Math.random() * 0.004,
-            life: 0.5 + Math.random() * 0.5,
+            phase: Math.random() * Math.PI * 2, phaseSpeed: 0.002 + Math.random() * 0.006,
+            driftAngle: Math.random() * Math.PI * 2, driftSpeed: 0.002 + Math.random() * 0.004,
+            life: 0.5 + Math.random() * 0.5
           });
         }
       }
@@ -2139,72 +1996,44 @@
       }
 
       function draw() {
-        if (!isTabVisible) {
-          animationId = requestAnimationFrame(draw);
-          return;
-        }
-
+        if (!isTabVisible) { animationId = requestAnimationFrame(draw); return; }
         ctx.clearRect(0, 0, W, H);
-
         for (var i = 0; i < particles.length; i++) {
           var p = particles[i];
-
           p.driftAngle += p.driftSpeed * (0.5 + Math.random() * 0.5);
           var windX = Math.cos(p.driftAngle) * 0.015;
           var windY = Math.sin(p.driftAngle) * 0.015;
-
-          var dx = p.x - mouseX;
-          var dy = p.y - mouseY;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          var maxDist = 200;
-          if (dist < maxDist && dist > 5) {
-            var force = (1 - dist / maxDist) * 0.8;
+          var dx = p.x - mouseX, dy = p.y - mouseY, dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 200 && dist > 5) {
+            var force = (1 - dist / 200) * 0.8;
             p.vx += (dx / dist) * force * 0.08;
             p.vy += (dy / dist) * force * 0.08;
           }
-
-          p.vx += windX * 0.05;
-          p.vy += windY * 0.05;
-          p.vx *= 0.998;
-          p.vy *= 0.998;
-          var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          if (speed > 0.6) {
-            p.vx = (p.vx / speed) * 0.6;
-            p.vy = (p.vy / speed) * 0.6;
-          }
-
-          p.x += p.vx;
-          p.y += p.vy;
-
+          p.vx += windX * 0.05; p.vy += windY * 0.05;
+          p.vx *= 0.998; p.vy *= 0.998;
+          var speed = Math.sqrt(p.vx*p.vx + p.vy*p.vy);
+          if (speed > 0.6) { p.vx = (p.vx/speed)*0.6; p.vy = (p.vy/speed)*0.6; }
+          p.x += p.vx; p.y += p.vy;
           if (p.x < -p.radius) p.x = W + p.radius;
           if (p.x > W + p.radius) p.x = -p.radius;
           if (p.y < -p.radius) p.y = H + p.radius;
           if (p.y > H + p.radius) p.y = -p.radius;
-
           p.phase += p.phaseSpeed;
           var pulse = 0.7 + 0.3 * Math.sin(p.phase);
           var currentRadius = p.baseRadius * (0.6 + 0.4 * pulse);
           var currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
-
           drawSoftCircle(p.x, p.y, currentRadius, currentOpacity);
         }
-
-        setTimeout(function() {
-          animationId = requestAnimationFrame(draw);
-        }, 33);
+        setTimeout(function() { animationId = requestAnimationFrame(draw); }, 33);
       }
 
       window.addEventListener('resize', function() { resize(); }, { passive: true });
-      document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      }, { passive: true });
-
+      document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
       resize();
       draw();
     })();
 
-    // ===== CUSTOM CURSOR =====
+    // Custom cursor
     if (window.matchMedia('(hover: hover)').matches) {
       var cursor = document.getElementById('custom-cursor');
       var cx=0, cy=0, tx=0, ty=0;
@@ -2226,7 +2055,7 @@
       updateCursor();
     }
 
-    // ===== SCROLL PROGRESS =====
+    // Scroll progress
     var progressBar = document.getElementById('scroll-progress');
     window.addEventListener('scroll', function() {
       var scrollTop = window.scrollY;
@@ -2234,22 +2063,20 @@
       progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
     }, { passive: true });
 
-    // ===== BACK TO TOP =====
+    // Back to top
     var backBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', function() {
       backBtn.classList.toggle('visible', window.scrollY > 600);
     }, { passive: true });
     backBtn.addEventListener('click', function() { window.scrollTo({ top:0, behavior:'smooth' }); });
 
-    // ===== ROADMAP EXPAND =====
+    // Roadmap expand
     document.querySelectorAll('.roadmap-item').forEach(function(item) {
       var stage = item.querySelector('.roadmap-stage');
-      stage.addEventListener('click', function() {
-        item.classList.toggle('expanded');
-      });
+      stage.addEventListener('click', function() { item.classList.toggle('expanded'); });
     });
 
-    // ===== HAMBURGER MENU =====
+    // Hamburger
     var hamburger = document.getElementById('hamburger');
     var mobileNav = document.getElementById('mobile-nav');
     hamburger.addEventListener('click', function() {
@@ -2265,21 +2092,19 @@
       });
     });
 
-    // ===== ACTIVE NAV LINK =====
+    // Active nav link
     var sections = document.querySelectorAll('section[id]');
     var navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
     var observer = new IntersectionObserver(function(entries) {
       var current = '';
-      entries.forEach(function(e) {
-        if (e.isIntersecting) current = e.target.id;
-      });
+      entries.forEach(function(e) { if (e.isIntersecting) current = e.target.id; });
       navLinks.forEach(function(link) {
         link.classList.toggle('active', link.getAttribute('href') === '#' + current);
       });
     }, { threshold: 0.3 });
     sections.forEach(function(s) { observer.observe(s); });
 
-    // ===== SECTION PROGRESS =====
+    // Section progress
     var progressEl = document.getElementById('section-progress');
     var chapterNum = progressEl.querySelector('.chapter-num');
     var chapterLabel = document.getElementById('chapter-label');
@@ -2293,14 +2118,11 @@
           index = Array.from(all).indexOf(e.target) + 1;
         }
       });
-      if (index > 0) {
-        chapterNum.textContent = index;
-        progressEl.classList.add('visible');
-      }
+      if (index > 0) { chapterNum.textContent = index; progressEl.classList.add('visible'); }
     }, { threshold: 0.4 });
     document.querySelectorAll('.section').forEach(function(s) { progressObserver.observe(s); });
 
-    // ===== WAITLIST FORM – GetLaunchList with referral link display =====
+    // Waitlist form
     var waitlistForm = document.querySelector('.launchlist-form');
     var statusEl = document.getElementById('waitlist-status');
     var referralDiv = document.getElementById('launchlist-referral-link');
@@ -2311,13 +2133,11 @@
         e.preventDefault();
         var input = waitlistForm.querySelector('input[type="email"]');
         var email = input.value.trim();
-
         if (!email) {
           statusEl.textContent = '❌ Please enter a valid email address.';
           statusEl.style.color = '#c9a84c';
           return;
         }
-
         fetch('https://getlaunchlist.com/s/coI7Ny', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -2328,18 +2148,15 @@
             statusEl.textContent = '✅ You\'re on the list! We\'ll notify you when the world opens.';
             statusEl.style.color = '#c9a84c';
             input.value = '';
-
             setTimeout(function() {
               var cookieMatch = document.cookie.match(/launchlist_ref=([^;]+)/);
               if (cookieMatch) {
                 var refCode = cookieMatch[1];
-                var link = window.location.origin + window.location.pathname + '?ref=' + refCode;
-                referralText.textContent = link;
-                referralDiv.style.display = 'block';
+                referralText.textContent = window.location.origin + window.location.pathname + '?ref=' + refCode;
               } else {
                 referralText.textContent = window.location.origin + window.location.pathname + '?ref=YOUR_CODE';
-                referralDiv.style.display = 'block';
               }
+              referralDiv.style.display = 'block';
             }, 800);
           } else {
             statusEl.textContent = '❌ Something went wrong. Please try again.';
