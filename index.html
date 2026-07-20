@@ -1959,7 +1959,7 @@
       });
     }
 
-    // ===== RESPONSIVE SMOKE CANVAS =====
+    // ===== INTERACTIVE RESPONSIVE SMOKE CANVAS =====
     (function() {
       var canvas = document.getElementById('global-canvas');
       if (!canvas) return;
@@ -1990,31 +1990,56 @@
         particles = [];
         var scale = Math.min(W, H) / 1000;
         for (var i = 0; i < count; i++) {
-          var baseR = (40 + Math.random() * 160) * scale;
+          var baseR = (40 + Math.random() * 180) * scale;
           particles.push({
             x: Math.random() * W,
             y: Math.random() * H,
             radius: baseR,
             baseRadius: baseR,
-            vx: (Math.random() - 0.5) * 0.12,
-            vy: (Math.random() - 0.5) * 0.12 - 0.04,
-            opacity: 0.02 + Math.random() * 0.08,
+            vx: (Math.random() - 0.5) * 0.08,
+            vy: (Math.random() - 0.5) * 0.08 - 0.03,
+            opacity: 0.02 + Math.random() * 0.07,
             phase: Math.random() * Math.PI * 2,
             phaseSpeed: 0.002 + Math.random() * 0.006,
             driftAngle: Math.random() * Math.PI * 2,
-            driftSpeed: 0.002 + Math.random() * 0.004
+            driftSpeed: 0.002 + Math.random() * 0.004,
+            // Track last position for trail effects
+            trail: []
           });
         }
       }
 
-      function drawSoftCircle(x, y, radius, opacity) {
+      function drawSoftCircle(x, y, radius, opacity, isNearMouse) {
+        // Enhanced glow near mouse
         var grd = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        grd.addColorStop(0, 'rgba(220, 215, 205, ' + (opacity * 0.9) + ')');
-        grd.addColorStop(0.4, 'rgba(180, 175, 165, ' + (opacity * 0.6) + ')');
-        grd.addColorStop(1, 'rgba(140, 135, 125, 0)');
+        if (isNearMouse) {
+          // Warmer, golden glow near cursor
+          grd.addColorStop(0, 'rgba(230, 215, 180, ' + (opacity * 0.95) + ')');
+          grd.addColorStop(0.3, 'rgba(210, 195, 160, ' + (opacity * 0.75) + ')');
+          grd.addColorStop(0.7, 'rgba(180, 170, 150, ' + (opacity * 0.5) + ')');
+          grd.addColorStop(1, 'rgba(140, 135, 125, 0)');
+        } else {
+          // Standard cool mist
+          grd.addColorStop(0, 'rgba(220, 215, 205, ' + (opacity * 0.9) + ')');
+          grd.addColorStop(0.4, 'rgba(180, 175, 165, ' + (opacity * 0.6) + ')');
+          grd.addColorStop(1, 'rgba(140, 135, 125, 0)');
+        }
         ctx.fillStyle = grd;
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Draw a subtle mouse glow on the canvas (golden haze)
+      function drawMouseGlow() {
+        if (mouseX < 0 || mouseY < 0) return;
+        var grd = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 250);
+        grd.addColorStop(0, 'rgba(201, 168, 76, 0.05)');
+        grd.addColorStop(0.5, 'rgba(201, 168, 76, 0.025)');
+        grd.addColorStop(1, 'rgba(201, 168, 76, 0)');
+        ctx.fillStyle = grd;
+        ctx.beginPath();
+        ctx.arc(mouseX, mouseY, 250, 0, Math.PI * 2);
         ctx.fill();
       }
 
@@ -2023,50 +2048,97 @@
           animationId = requestAnimationFrame(draw);
           return;
         }
+
         ctx.clearRect(0, 0, W, H);
+
+        // Mouse glow layer
+        drawMouseGlow();
+
+        var influenceRadius = Math.min(W, H) * 0.35;
+        var maxForce = 2.0;
 
         for (var i = 0; i < particles.length; i++) {
           var p = particles[i];
 
+          // Drift (gentle wind)
           p.driftAngle += p.driftSpeed * (0.5 + Math.random() * 0.5);
-          var windX = Math.cos(p.driftAngle) * 0.015;
-          var windY = Math.sin(p.driftAngle) * 0.015;
+          var windX = Math.cos(p.driftAngle) * 0.02;
+          var windY = Math.sin(p.driftAngle) * 0.02;
 
+          // Mouse interaction - strong repulsion with swirling
           var dx = p.x - mouseX;
           var dy = p.y - mouseY;
           var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 200 && dist > 5) {
-            var force = (1 - dist / 200) * 0.8;
-            p.vx += (dx / dist) * force * 0.08;
-            p.vy += (dy / dist) * force * 0.08;
+
+          if (dist < influenceRadius && dist > 1) {
+            var strength = (1 - dist / influenceRadius);
+            var force = strength * maxForce;
+
+            // Push away from mouse
+            var angle = Math.atan2(dy, dx);
+            p.vx += Math.cos(angle) * force * 0.15;
+            p.vy += Math.sin(angle) * force * 0.15;
+
+            // Add a subtle swirling effect (perpendicular force)
+            var swirlStrength = strength * 0.4;
+            p.vx += -Math.sin(angle) * swirlStrength * 0.08;
+            p.vy += Math.cos(angle) * swirlStrength * 0.08;
+
+            // Speed up particles near mouse slightly
+            var speedBoost = 1 + strength * 0.3;
+            p.vx *= speedBoost;
+            p.vy *= speedBoost;
           }
 
-          p.vx += windX * 0.05;
-          p.vy += windY * 0.05;
-          p.vx *= 0.998;
-          p.vy *= 0.998;
+          // Apply velocity with damping
+          p.vx += windX * 0.08;
+          p.vy += windY * 0.08;
+          p.vx *= 0.995;
+          p.vy *= 0.995;
+
+          // Clamp max speed
           var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          if (speed > 0.6) {
-            p.vx = (p.vx / speed) * 0.6;
-            p.vy = (p.vy / speed) * 0.6;
+          var maxSpeed = 0.8 + (p.baseRadius / 400);
+          if (speed > maxSpeed) {
+            p.vx = (p.vx / speed) * maxSpeed;
+            p.vy = (p.vy / speed) * maxSpeed;
           }
 
           p.x += p.vx;
           p.y += p.vy;
 
-          if (p.x < -p.radius) p.x = W + p.radius;
-          if (p.x > W + p.radius) p.x = -p.radius;
-          if (p.y < -p.radius) p.y = H + p.radius;
-          if (p.y > H + p.radius) p.y = -p.radius;
+          // Wrap around edges with padding
+          var padding = p.radius * 2;
+          if (p.x < -padding) p.x = W + padding;
+          if (p.x > W + padding) p.x = -padding;
+          if (p.y < -padding) p.y = H + padding;
+          if (p.y > H + padding) p.y = -padding;
 
+          // Phase / breathing
           p.phase += p.phaseSpeed;
           var pulse = 0.7 + 0.3 * Math.sin(p.phase);
-          var currentRadius = p.baseRadius * (0.6 + 0.4 * pulse);
+          var currentRadius = p.baseRadius * (0.55 + 0.45 * pulse);
           var currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
 
-          drawSoftCircle(p.x, p.y, currentRadius, currentOpacity);
+          // Check if particle is near mouse (for glow effect)
+          var nearMouse = dist < influenceRadius * 0.5;
+
+          // Draw the smoke particle with enhanced glow near mouse
+          drawSoftCircle(p.x, p.y, currentRadius, currentOpacity, nearMouse);
+
+          // Draw a subtle inner glow for particles very close to mouse
+          if (nearMouse) {
+            var innerGlow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentRadius * 0.4);
+            innerGlow.addColorStop(0, 'rgba(230, 215, 180, ' + (currentOpacity * 0.3) + ')');
+            innerGlow.addColorStop(1, 'rgba(230, 215, 180, 0)');
+            ctx.fillStyle = innerGlow;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, currentRadius * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
 
+        // Use setTimeout for consistent 30fps
         setTimeout(function() {
           animationId = requestAnimationFrame(draw);
         }, 33);
@@ -2085,6 +2157,12 @@
       document.addEventListener('mousemove', function(e) {
         mouseX = e.clientX;
         mouseY = e.clientY;
+      }, { passive: true });
+
+      // Also track mouse leaving the window
+      document.addEventListener('mouseleave', function() {
+        mouseX = -1000;
+        mouseY = -1000;
       }, { passive: true });
 
       resize();
