@@ -1068,16 +1068,22 @@
       opacity:.8;
       letter-spacing:.1em;
     }
+
+    /* ===== INCREASED ARROW SIZE ===== */
     .roadmap-expand-icon {
       display:inline-block;
-      font-size:.7rem;
+      font-size:1.4rem;        /* was .7rem – much larger */
       color:var(--gold-dim);
       transition:transform .3s,color .3s;
       margin-left:auto;
       opacity:.6;
+      padding:0.2rem 0.5rem;   /* bigger click target */
+      cursor:pointer;
+      line-height:1;
     }
     .roadmap-item:hover .roadmap-expand-icon { opacity:1; color:var(--gold); }
     .roadmap-item.expanded .roadmap-expand-icon { transform:rotate(180deg); color:var(--gold); opacity:1; }
+
     .roadmap-desc {
       font-size:.92rem;
       color:var(--text-muted);
@@ -2004,16 +2010,12 @@
             phaseSpeed: 0.002 + Math.random() * 0.008,
             driftAngle: Math.random() * Math.PI * 2,
             driftSpeed: 0.001 + Math.random() * 0.004,
-            trail: []
           });
         }
       }
 
-      // Draw a golden glow around the mouse – much more visible
       function drawMouseGlow() {
         if (mouseX < 0 || mouseY < 0) return;
-
-        // Large ambient glow
         var grd1 = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 280);
         grd1.addColorStop(0, 'rgba(201, 168, 76, 0.12)');
         grd1.addColorStop(0.3, 'rgba(201, 168, 76, 0.06)');
@@ -2023,7 +2025,6 @@
         ctx.arc(mouseX, mouseY, 280, 0, Math.PI * 2);
         ctx.fill();
 
-        // Bright inner core
         var grd2 = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 80);
         grd2.addColorStop(0, 'rgba(230, 215, 180, 0.08)');
         grd2.addColorStop(1, 'rgba(230, 215, 180, 0)');
@@ -2037,14 +2038,10 @@
         var pulse = 0.7 + 0.3 * Math.sin(p.phase);
         var currentRadius = p.baseRadius * (0.55 + 0.45 * pulse);
         var currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
-
-        // Enhanced glow near mouse – particles become warmer and brighter
         var isNear = nearMouse && dist < 200;
-
         var grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentRadius);
 
         if (isNear) {
-          // Warm golden glow near cursor
           var glowFactor = 1 - (dist / 200);
           var bright = 0.7 + glowFactor * 0.3;
           grd.addColorStop(0, 'rgba(240, 220, 190, ' + (currentOpacity * bright * 1.2) + ')');
@@ -2052,7 +2049,6 @@
           grd.addColorStop(0.7, 'rgba(190, 175, 155, ' + (currentOpacity * bright * 0.6) + ')');
           grd.addColorStop(1, 'rgba(150, 140, 130, 0)');
         } else {
-          // Cool mist – slightly more visible than before
           grd.addColorStop(0, 'rgba(230, 225, 215, ' + (currentOpacity * 0.95) + ')');
           grd.addColorStop(0.4, 'rgba(200, 195, 185, ' + (currentOpacity * 0.7) + ')');
           grd.addColorStop(0.8, 'rgba(170, 165, 155, ' + (currentOpacity * 0.4) + ')');
@@ -2064,7 +2060,6 @@
         ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Inner bright core for particles near mouse
         if (isNear) {
           var coreGrd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentRadius * 0.25);
           coreGrd.addColorStop(0, 'rgba(255, 240, 210, ' + (currentOpacity * 0.35) + ')');
@@ -2084,8 +2079,6 @@
 
         time += 0.016;
         ctx.clearRect(0, 0, W, H);
-
-        // Draw ambient mouse glow
         drawMouseGlow();
 
         var influenceRadius = Math.min(W, H) * 0.45;
@@ -2094,12 +2087,10 @@
         for (var i = 0; i < particles.length; i++) {
           var p = particles[i];
 
-          // Drift with subtle wind variation over time
           p.driftAngle += p.driftSpeed * (0.5 + 0.3 * Math.sin(time * 0.0005 + i));
           var windX = Math.cos(p.driftAngle) * (0.025 + 0.01 * Math.sin(time * 0.0003 + i * 0.1));
           var windY = Math.sin(p.driftAngle) * (0.025 + 0.01 * Math.cos(time * 0.0003 + i * 0.1));
 
-          // Mouse interaction – strong repulsion with visible swirling
           var dx = p.x - mouseX;
           var dy = p.y - mouseY;
           var dist = Math.sqrt(dx * dx + dy * dy);
@@ -2107,30 +2098,22 @@
           if (dist < influenceRadius && dist > 1) {
             var strength = (1 - dist / influenceRadius);
             var force = strength * maxForce;
-
-            // Push away from mouse
             var angle = Math.atan2(dy, dx);
             p.vx += Math.cos(angle) * force * 0.2;
             p.vy += Math.sin(angle) * force * 0.2;
-
-            // Strong swirling effect (makes it look like vortex)
             var swirlStrength = strength * 0.6;
             p.vx += -Math.sin(angle) * swirlStrength * 0.12;
             p.vy += Math.cos(angle) * swirlStrength * 0.12;
-
-            // Speed boost near mouse
             var speedBoost = 1 + strength * 0.5;
             p.vx *= speedBoost;
             p.vy *= speedBoost;
           }
 
-          // Apply velocity with damping
           p.vx += windX * 0.1;
           p.vy += windY * 0.1;
           p.vx *= 0.993;
           p.vy *= 0.993;
 
-          // Clamp speed
           var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
           var maxSpeed = 1.0 + (p.baseRadius / 300);
           if (speed > maxSpeed) {
@@ -2141,7 +2124,6 @@
           p.x += p.vx;
           p.y += p.vy;
 
-          // Wrap
           var padding = p.radius * 2;
           if (p.x < -padding) p.x = W + padding;
           if (p.x > W + padding) p.x = -padding;
@@ -2149,22 +2131,15 @@
           if (p.y > H + padding) p.y = -padding;
 
           p.phase += p.phaseSpeed;
-
-          // Determine if near mouse for glow
           var nearMouse = dist < influenceRadius * 0.4;
-
-          // Draw particle with enhanced visibility
           drawParticle(p, nearMouse, dist);
         }
-
-        // Draw a subtle particle trail effect using motion blur – skip for performance
 
         setTimeout(function() {
           animationId = requestAnimationFrame(draw);
         }, 33);
       }
 
-      // ===== RESIZE HANDLING =====
       var resizeObserver = new ResizeObserver(function() {
         resize();
       });
