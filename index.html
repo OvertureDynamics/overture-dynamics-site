@@ -1,2304 +1,1153 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Project Oath — The first MMO where the world is truly alive</title>
-  <meta name="description" content="Project Oath by Overture Dynamics: AI-driven NPCs that think, remember, and evolve. Real-time action combat in a living fantasy MMO world that never runs out of story." />
-  <meta name="robots" content="index, follow" />
-  <meta name="keywords" content="MMO, AI, living world, Project Oath, Overture Dynamics, RPG, game, NPC, ERC-8004, action combat, classless, fantasy, gaming, simulation, economy, weather, ecology, geology" />
-  <link rel="canonical" href="https://overturedynamics.com" />
-  <meta property="og:title" content="Project Oath — The first MMO where the world is truly alive" />
-  <meta property="og:description" content="AI-driven NPCs that think, remember, and evolve. Real-time action combat in a fantasy MMO that never runs out of story." />
-  <meta property="og:url" content="https://overturedynamics.com" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Project Oath — The first MMO where the world is truly alive" />
-  <meta name="twitter:description" content="AI-driven NPCs that think, remember, and evolve. Real-time action combat in a world that never runs out of story." />
-  <meta name="theme-color" content="#06060d" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='44' fill='none' stroke='%23c9a84c' stroke-width='1.2'/%3E%3Cpolygon points='50,5 95,50 50,95 5,50' fill='none' stroke='%23c9a84c' stroke-width='1.4'/%3E%3Ccircle cx='50' cy='50' r='3' fill='%23c9a84c'/%3E%3C/svg%3E" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Project Oath — The World Is Truly Alive</title>
+<meta name="description" content="Project Oath by Overture Dynamics: a high-fantasy action-MMO with classless weapon combat and a five-agent AI world simulation that never runs out of story." />
+<meta name="theme-color" content="#06060d" />
+<link rel="icon" type="image/webp" href="logo.webp" />
+<meta property="og:title" content="Project Oath — The World Is Truly Alive" />
+<meta property="og:image" content="logo.webp" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 
-  <style>
-    /* ===== PRELOADER ===== */
-    #preloader {
-      position: fixed;
-      inset: 0;
-      z-index: 99999;
-      background: #06060d;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transition: opacity .8s ease, visibility .8s ease;
-      gap: 1.5rem;
-    }
-    #preloader.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    #preloader svg {
-      width: 72px;
-      height: 72px;
-      animation: spin 1.2s cubic-bezier(.4,0,.2,1) infinite;
-    }
-    #preloader p {
-      font: 600 .7rem/1 var(--ff-head);
-      letter-spacing: .35em;
-      text-transform: uppercase;
-      color: var(--gold-dim);
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
 
-    /* ===== DESIGN TOKENS ===== */
-    :root {
-      --bg-deep: rgba(6,6,13,0.65);
-      --bg-mid: rgba(11,11,24,0.72);
-      --bg-card: rgba(15,15,30,0.68);
-      --border: rgba(201,168,76,0.12);
-      --border-hover: rgba(201,168,76,0.4);
-      --gold: #c9a84c;
-      --gold-dim: #8a6d28;
-      --gold-glow: rgba(201,168,76,0.2);
-      --text: #ede8df;
-      --text-muted: #9a9080;
-      --text-dim: #4e4740;
-      --ff-head: 'Cinzel', Georgia, serif;
-      --ff-body: 'Inter', system-ui, sans-serif;
-      --max-w: 1160px;
-    }
+<style>
+:root{
+  --ink:#06060d;
+  --panel:rgba(10,10,22,.74);
+  --panel-solid:#0b0b18;
+  --gold:#c9a84c;
+  --gold-hi:#f1d98a;
+  --gold-dim:#8a6d28;
+  --line:rgba(201,168,76,.28);
+  --line-soft:rgba(201,168,76,.14);
+  --text:#ede8df;
+  --muted:#a59c8a;
+  --accent:#c9a84c;
+  --ff-head:'Cinzel',Georgia,serif;
+  --ff-body:'Inter',system-ui,sans-serif;
+  --maxw:1180px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--ink) radial-gradient(ellipse at 50% 30%,#2b2f55 0%,#0b0b18 60%,#06060d 100%) fixed;
+  color:var(--text);font-family:var(--ff-body);line-height:1.65;overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
 
-    /* ===== RESET & BASE ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: #06060d;
-      color: var(--text);
-      font: 400 1rem/1.7 var(--ff-body);
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    ul { list-style: none; }
+#bg{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.55) 100%),
+             linear-gradient(to bottom,rgba(0,0,0,.35),transparent 18%,transparent 80%,rgba(0,0,0,.4))}
 
-    /* ===== CUSTOM CURSOR ===== */
-    @media (hover: hover) { html, body, * { cursor: none !important; } }
-    #custom-cursor {
-      position: fixed;
-      top:0; left:0;
-      width:20px; height:20px;
-      margin:-10px 0 0 -10px;
-      pointer-events:none;
-      z-index:99999;
-      opacity:0;
-      transition:opacity .3s;
-    }
-    @media (hover: hover) { #custom-cursor.visible { opacity:1; } }
-    @media (hover: none) { #custom-cursor { display:none !important; } }
-    #custom-cursor svg {
-      display:block;
-      transition:transform .18s cubic-bezier(.34,1.56,.64,1), filter .18s;
-    }
-    #custom-cursor.hovering svg { transform:scale(1.55); filter:drop-shadow(0 0 4px rgba(201,168,76,.9)); }
-    #custom-cursor.clicking svg { transform:scale(.8); filter:drop-shadow(0 0 2px rgba(201,168,76,.5)); }
+/* ---------- loader ---------- */
+#loader{position:fixed;inset:0;z-index:100;background:var(--ink);display:grid;place-items:center;text-align:center;transition:opacity 1s ease,visibility 1s}
+#loader.done{opacity:0;visibility:hidden}
+#loader .ring{width:120px;height:120px;margin:0 auto 1.5rem;border-radius:50%;overflow:hidden;animation:spin 14s linear infinite;filter:drop-shadow(0 0 18px rgba(201,168,76,.45))}
+#loader .ring img{width:100%;height:100%;object-fit:cover;transform:scale(1.4);display:block}
+#loader p{font-family:var(--ff-head);letter-spacing:.35em;font-size:.8rem;color:var(--gold-dim);text-transform:uppercase}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-    /* ===== NOISE OVERLAY ===== */
-    #noise-overlay {
-      position:fixed;
-      inset:0;
-      z-index:9998;
-      pointer-events:none;
-      opacity:.04;
-      mix-blend-mode:overlay;
-      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      background-repeat:repeat;
-      background-size:256px 256px;
-    }
+/* ---------- header ---------- */
+header.top{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem clamp(1rem,3vw,2.5rem);background:linear-gradient(to bottom,rgba(6,6,13,.85),rgba(6,6,13,0));transition:background .3s}
+header.top.scrolled{background:rgba(6,6,13,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
+.brand{font-family:var(--ff-head);font-weight:800;letter-spacing:.28em;text-decoration:none;font-size:.95rem;display:flex;align-items:center;gap:.7rem}
+.brand .mark{width:38px;height:38px;border-radius:50%;overflow:hidden;flex:none;box-shadow:0 0 14px rgba(201,168,76,.35)}
+.brand .mark img{width:100%;height:100%;object-fit:cover;transform:scale(1.4);display:block;transition:transform 1.2s}
+.brand:hover .mark img{transform:scale(1.4) rotate(90deg)}
+.hero-logo{position:absolute;left:50%;top:50%;width:min(125vh,125vw,1100px);aspect-ratio:1;transform:translate(-50%,-50%);pointer-events:none;z-index:-1;
+  opacity:.2;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 38%,transparent 70%);mask-image:radial-gradient(circle,#000 38%,transparent 70%);animation:slowspin 240s linear infinite}
+.hero-logo img{width:100%;height:100%;display:block}
+@keyframes slowspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.foot-logo{width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;overflow:hidden;opacity:.85}
+.foot-logo img{width:100%;height:100%;object-fit:cover;transform:scale(1.4);display:block}
+.brand span{color:var(--gold-hi)}
+nav.main{display:flex;gap:clamp(.8rem,2vw,2rem)}
+nav.main a{font-family:var(--ff-head);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;color:var(--muted);position:relative;padding:.3rem 0;transition:color .2s}
+nav.main a::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .25s}
+nav.main a:hover,nav.main a.on{color:var(--gold-hi)}
+nav.main a:hover::after,nav.main a.on::after{transform:scaleX(1)}
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold-dim),var(--gold-hi));z-index:60;box-shadow:0 0 10px var(--gold)}
 
-    /* ===== GLOBAL CANVAS ===== */
-    #global-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      z-index: 0;
-      pointer-events: none;
-      display: block;
-    }
+/* ---------- buttons ---------- */
+.btn{
+  --c:var(--gold);
+  display:inline-block;font-family:var(--ff-head);font-weight:600;letter-spacing:.2em;text-transform:uppercase;font-size:.78rem;
+  padding:.95rem 2rem;text-decoration:none;border:0;position:relative;color:#1a1304;
+  background:linear-gradient(180deg,var(--gold-hi),var(--gold) 55%,var(--gold-dim));
+  clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,12px 100%,0 50%);
+  transition:filter .2s,transform .2s;
+}
+.btn:hover{filter:brightness(1.15);transform:translateY(-2px)}
+.btn.ghost{background:rgba(201,168,76,.12);color:var(--gold-hi);box-shadow:inset 0 0 0 1px var(--gold)}
+.btn.small{padding:.6rem 1.3rem;font-size:.68rem}
 
-    /* ===== UTILITIES ===== */
-    .container {
-      width:100%;
-      max-width:var(--max-w);
-      margin-inline:auto;
-      padding-inline:clamp(1.25rem,5vw,2.5rem);
-      position:relative;
-      z-index:1;
-    }
-    .eyebrow {
-      display:inline-block;
-      font:700 1.05rem/1 var(--ff-head);
-      letter-spacing:.3em;
-      text-transform:uppercase;
-      color:var(--gold);
-      margin-bottom:1rem;
-      padding-bottom:.5rem;
-      position:relative;
-    }
-    .eyebrow::after {
-      content:'';
-      position:absolute;
-      bottom:0; left:0;
-      width:100%; height:1px;
-      background:linear-gradient(90deg,var(--gold),rgba(201,168,76,.2));
-      box-shadow:0 0 6px rgba(201,168,76,.4);
-    }
-    .reveal {
-      opacity:0;
-      transform:translateY(30px);
-      transition:opacity .85s ease,transform .85s ease;
-    }
-    .reveal.visible { opacity:1; transform:translateY(0); }
-    .delay-1 { transition-delay:.1s; }
-    .delay-2 { transition-delay:.2s; }
-    .delay-3 { transition-delay:.3s; }
-    .delay-4 { transition-delay:.45s; }
+/* ---------- waypoints ---------- */
+.waypoints{position:fixed;right:clamp(.6rem,1.6vw,1.6rem);top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:1rem}
+.waypoints a{position:relative;width:14px;height:14px;display:block;transform:rotate(45deg);border:1px solid var(--gold-dim);background:rgba(6,6,13,.7);transition:.25s}
+.waypoints a:hover,.waypoints a.on{background:var(--gold);border-color:var(--gold-hi);box-shadow:0 0 14px var(--gold)}
+.waypoints a span{position:absolute;right:26px;top:50%;transform:rotate(-45deg) translate(0,-50%);transform-origin:right center;white-space:nowrap;
+  font-family:var(--ff-head);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-hi);opacity:0;pointer-events:none;transition:opacity .2s,right .2s;
+  background:rgba(6,6,13,.85);padding:.25rem .6rem;border:1px solid var(--line)}
+.waypoints a:hover span,.waypoints a.on span{opacity:1}
 
-    .section, #stats, #waitlist {
-      content-visibility: auto;
-      contain-intrinsic-size: 0 500px;
-    }
+.scroll-hint{position:fixed;left:50%;bottom:1.6rem;transform:translateX(-50%);z-index:40;text-align:center;font-family:var(--ff-head);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-hi);transition:opacity .5s;pointer-events:none}
+.scroll-hint i{display:block;width:18px;height:30px;margin:.6rem auto 0;border:1px solid var(--gold);border-radius:10px;position:relative}
+.scroll-hint i::after{content:"";position:absolute;left:50%;top:6px;width:3px;height:6px;margin-left:-1.5px;background:var(--gold-hi);border-radius:2px;animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(12px)}}
+.scroll-hint.gone{opacity:0}
 
-    @media (hover: hover) {
-      .tilt-card {
-        transition:transform .15s ease-out,box-shadow .3s;
-        transform-style:preserve-3d;
-        perspective:800px;
-        will-change:transform;
-      }
-      .tilt-card:hover {
-        transform:perspective(800px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));
-        box-shadow:0 20px 60px rgba(0,0,0,.4);
-      }
-      .magnetic-btn {
-        transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s;
-        will-change:transform;
-        position:relative;
-        z-index:2;
-      }
-    }
-    @media (hover: none) {
-      .tilt-card, .magnetic-btn { transition: none; }
-    }
+/* ---------- layout ---------- */
+main{position:relative;z-index:10}
+section{min-height:100vh;display:flex;align-items:center;padding:7rem clamp(1rem,5vw,4rem) 6rem;position:relative}
+.wrap{max-width:var(--maxw);width:100%;margin:0 auto}
+.wrap.right{display:flex;justify-content:flex-end}
+.wrap.left{display:flex;justify-content:flex-start}
+.eyebrow{display:block;font-family:var(--ff-head);font-size:.74rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem}
+h2{font-family:var(--ff-head);font-weight:800;font-size:clamp(1.8rem,4vw,3rem);line-height:1.15;letter-spacing:.04em;margin-bottom:1rem}
+h2 em,h1 em{font-style:normal;background:linear-gradient(180deg,var(--gold-hi),var(--gold-dim));-webkit-background-clip:text;background-clip:text;color:transparent}
+h3{font-family:var(--ff-head);font-weight:600;letter-spacing:.06em;font-size:1.2rem;margin-bottom:.5rem}
+p.lead{color:var(--muted);font-size:1.02rem;max-width:62ch}
 
-    /* ===== SECTION PROGRESS ===== */
-    #section-progress {
-      position:fixed;
-      bottom:2rem;
-      left:2rem;
-      z-index:150;
-      font:.6rem/1 var(--ff-head);
-      letter-spacing:.15em;
-      color:var(--text-dim);
-      background:rgba(6,6,13,.7);
-      backdrop-filter:blur(8px);
-      padding:.6rem 1rem;
-      border:1px solid var(--border);
-      border-radius:2px;
-      pointer-events:none;
-      opacity:0;
-      transition:opacity .5s;
-    }
-    #section-progress.visible { opacity:1; }
-    #section-progress .chapter-num { color:var(--gold); font-weight:700; }
-    @media (max-width:768px) { #section-progress { left:1rem; bottom:1.2rem; font-size:.5rem; padding:.4rem .8rem; } }
+.panel{
+  background:var(--panel);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border:1px solid var(--line);padding:clamp(1.4rem,3vw,2.6rem);position:relative;
+  box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 0 0 5px rgba(0,0,0,.35),inset 0 0 0 6px var(--line-soft);
+}
+.panel::before,.panel::after{content:"";position:absolute;width:26px;height:26px;border:2px solid var(--gold);pointer-events:none}
+.panel::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.panel::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.panel.narrow{max-width:560px}
+.panel.mid{max-width:760px}
 
-    /* ===== TYPING CURSOR ===== */
-    .typing-cursor {
-      display:inline-block;
-      width:2px;
-      height:1.2em;
-      background:var(--gold);
-      margin-left:2px;
-      vertical-align:text-bottom;
-      animation:blink .8s step-end infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s ease}
+.reveal.in{opacity:1;transform:none}
+.d1{transition-delay:.12s}.d2{transition-delay:.24s}.d3{transition-delay:.36s}
 
-    /* ===== NAVIGATION ===== */
-    #nav {
-      position:fixed;
-      inset:0 0 auto;
-      z-index:200;
-      padding:1.5rem 0;
-      transition:background .5s,padding .4s,border-color .5s;
-      border-bottom:1px solid transparent;
-    }
-    #nav.scrolled {
-      background:rgba(6,6,13,.75);
-      backdrop-filter:blur(20px);
-      padding:1rem 0;
-      border-color:var(--border);
-    }
-    .nav-inner {
-      display:grid;
-      grid-template-columns:1fr auto 1fr;
-      align-items:center;
-      gap:1rem;
-    }
-    .nav-logo {
-      display:flex;
-      align-items:center;
-      gap:.75rem;
-      flex:1;
-    }
-    .nav-right {
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:flex-end;
-      gap:.75rem;
-    }
-    .nav-logo-text {
-      font:700 .78rem/1 var(--ff-head);
-      letter-spacing:.22em;
-      text-transform:uppercase;
-    }
+/* ---------- hero ---------- */
+#hero{text-align:center;justify-content:center}
+#hero .wrap{display:flex;flex-direction:column;align-items:center}
+.presents{font-family:var(--ff-head);letter-spacing:.5em;font-size:.72rem;color:var(--gold-hi);text-transform:uppercase;margin-bottom:1.4rem;text-shadow:0 2px 12px #000}
+h1{font-family:var(--ff-head);font-weight:800;font-size:clamp(3rem,11vw,8.5rem);line-height:.95;letter-spacing:.08em;text-shadow:0 4px 40px rgba(0,0,0,.7)}
+h1 small{display:block;font-size:.3em;letter-spacing:.7em;margin-bottom:.4em;color:var(--text);font-weight:400}
+.divider{display:flex;align-items:center;gap:1rem;margin:1.6rem 0;color:var(--gold)}
+.divider::before,.divider::after{content:"";width:clamp(60px,12vw,140px);height:1px;background:linear-gradient(90deg,transparent,var(--gold))}
+.divider::after{transform:scaleX(-1)}
+.divider b{width:9px;height:9px;transform:rotate(45deg);background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.tagline{font-family:var(--ff-head);font-size:clamp(1rem,2.2vw,1.5rem);letter-spacing:.12em;text-shadow:0 2px 20px #000;max-width:30ch}
+.cta-row{display:flex;gap:1.1rem;flex-wrap:wrap;justify-content:center;margin-top:2.4rem}
+.facts{display:flex;gap:clamp(1rem,4vw,3.5rem);justify-content:center;margin-top:3.2rem;flex-wrap:wrap;text-shadow:0 2px 12px #000}
+.facts div{text-align:center}
+.facts strong{display:block;font-family:var(--ff-head);font-size:clamp(1.4rem,3vw,2.1rem);color:var(--gold-hi)}
+.facts span{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text)}
 
-    .nav-links {
-      display:flex;
-      align-items:center;
-      gap:.45rem;
-      justify-content:center;
-      flex-wrap:nowrap;
-    }
-    .nav-links a {
-      font:600 .62rem/1 var(--ff-head);
-      letter-spacing:.2em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      border:1px solid rgba(201,168,76,.15);
-      padding:.35rem .7rem;
-      transition:color .25s,border-color .25s,background .25s;
-      white-space:nowrap;
-      flex-shrink:0;
-    }
-    .nav-links a:hover,
-    .nav-links a:focus-visible {
-      color:var(--text);
-      border-color:rgba(201,168,76,.4);
-      background:rgba(201,168,76,.05);
-    }
-    .btn-nav {
-      font:700 .6rem/1 var(--ff-head);
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color:#1a1a1a;
-      background:var(--gold);
-      padding:.6rem 1.3rem;
-      border:none;
-      transition:background .25s,box-shadow .25s;
-      box-shadow:0 2px 8px rgba(201,168,76,.15);
-    }
-    .btn-nav:hover,
-    .btn-nav:focus-visible {
-      background:#deb95a;
-      box-shadow:0 4px 20px rgba(201,168,76,.35);
-    }
-    @media (max-width:640px) { .nav-links { display:none; } }
+/* ---------- pillars ---------- */
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.6rem;margin-top:2.2rem}
+.pillars .panel{transition:transform .3s,border-color .3s}
+.pillars .panel:hover{transform:translateY(-6px);border-color:var(--gold)}
+.pillars .no{font-family:var(--ff-head);font-size:.68rem;letter-spacing:.3em;color:var(--gold);text-transform:uppercase;margin-bottom:.5rem}
+.pillars ul{list-style:none;margin-top:1rem}
+.pillars li{padding-left:1.4rem;position:relative;color:var(--muted);font-size:.93rem;margin-bottom:.5rem}
+.pillars li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;transform:rotate(45deg);background:var(--gold)}
+.pillars p{color:var(--text);opacity:.88;font-size:.97rem}
 
-    /* ===== HERO ===== */
-    #hero {
-      position:relative;
-      min-height:100svh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      overflow:hidden;
-      background:transparent;
-    }
-    .hero-vignette {
-      position:absolute;
-      inset:0;
-      background:radial-gradient(ellipse 75% 70% at center, transparent 20%, rgba(6,6,13,.5) 65%, rgba(6,6,13,.8) 95%);
-      z-index:1;
-    }
-    .hero-bottom-fade {
-      position:absolute;
-      bottom:0; left:0; right:0;
-      height:260px;
-      background:linear-gradient(to bottom,transparent,var(--bg-deep));
-      z-index:1;
-    }
-    .hero-scanline {
-      position:absolute;
-      inset:0;
-      background:repeating-linear-gradient(to bottom,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px);
-      z-index:1;
-      pointer-events:none;
-    }
-    .hero-content {
-      position:relative;
-      z-index:2;
-      padding:9rem 1.5rem 6rem;
-      max-width:900px;
-    }
+/* ---------- agents ---------- */
+.agents{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:1.6rem;margin-top:1.6rem}
+.agent-list{display:flex;flex-direction:column;gap:.6rem}
+.agent-btn{
+  display:flex;align-items:center;gap:.9rem;text-align:left;background:rgba(0,0,0,.35);border:1px solid var(--line-soft);padding:.8rem 1rem;position:relative;transition:.25s;
+}
+.agent-btn:hover{border-color:var(--c);transform:translateX(4px)}
+.agent-btn.on{border-color:var(--c);background:linear-gradient(90deg,color-mix(in srgb,var(--c) 22%,transparent),rgba(0,0,0,.35));box-shadow:0 0 22px color-mix(in srgb,var(--c) 30%,transparent)}
+.agent-btn svg{width:26px;height:26px;stroke:var(--c);fill:none;stroke-width:1.5;flex:none}
+.agent-btn b{font-family:var(--ff-head);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;display:block}
+.agent-btn small{color:var(--muted);font-size:.72rem}
+.agent-detail{min-height:300px;display:flex;flex-direction:column}
+.agent-detail h3{color:var(--c)}
+.agent-detail p{color:var(--text);opacity:.9}
+.hint{font-size:.78rem;color:var(--gold-hi);letter-spacing:.14em;text-transform:uppercase;font-family:var(--ff-head);margin-bottom:.8rem;display:flex;align-items:center;gap:.6rem}
+.hint::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--gold-hi);animation:pulse 1.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(241,217,138,.7)}100%{box-shadow:0 0 0 12px rgba(241,217,138,0)}}
+.feed-head{display:flex;justify-content:space-between;margin:1.4rem 0 .5rem;font-family:var(--ff-head);font-size:.66rem;letter-spacing:.25em;color:var(--gold-dim);text-transform:uppercase}
+#feed{list-style:none;border-top:1px solid var(--line-soft);flex:1}
+#feed li{padding:.55rem 0;border-bottom:1px solid var(--line-soft);font-size:.86rem;color:var(--muted);display:flex;gap:.8rem;animation:slide .5s ease}
+#feed li i{font-style:normal;flex:none;width:8px;height:8px;margin-top:.5em;transform:rotate(45deg);background:var(--c)}
+#feed li:first-child{color:var(--text)}
+@keyframes slide{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
 
-    .hero-emblem {
-      display:flex;
-      justify-content:center;
-      margin-bottom:2.5rem;
-      opacity:0;
-      animation:fadeSlideDown 1.1s 0.15s cubic-bezier(.22,1,.36,1) forwards;
-    }
-    #hero-logo-animated .outer-ring   { stroke-dasharray:553; stroke-dashoffset:553; animation:logo-draw 1.4s .2s cubic-bezier(.4,0,.2,1) both; }
-    #hero-logo-animated .tick         { animation:logo-fadeIn .3s ease both; }
-    #hero-logo-animated .t1 { animation-delay:1.5s; }
-    #hero-logo-animated .t2 { animation-delay:1.58s; }
-    #hero-logo-animated .t3 { animation-delay:1.66s; }
-    #hero-logo-animated .t4 { animation-delay:1.74s; }
-    #hero-logo-animated .t5 { animation-delay:1.82s; }
-    #hero-logo-animated .t6 { animation-delay:1.9s; }
-    #hero-logo-animated .t7 { animation-delay:1.98s; }
-    #hero-logo-animated .t8 { animation-delay:2.06s; }
-    #hero-logo-animated .diamond-frame { stroke-dasharray:515; stroke-dashoffset:515; animation:logo-draw 1.1s 1.8s ease both; }
-    #hero-logo-animated .acc,
-    #hero-logo-animated .mid,
-    #hero-logo-animated .crossguard,
-    #hero-logo-animated .pommel,
-    #hero-logo-animated .node-dot,
-    #hero-logo-animated .center-node  { transform-box:fill-box; transform-origin:center; }
-    #hero-logo-animated .acc          { animation:logo-popIn .25s cubic-bezier(.34,1.56,.64,1) both; }
-    #hero-logo-animated .acc-n { animation-delay:2.8s; }
-    #hero-logo-animated .acc-e { animation-delay:2.9s; }
-    #hero-logo-animated .acc-s { animation-delay:3s;   }
-    #hero-logo-animated .acc-w { animation-delay:3.1s; }
-    #hero-logo-animated .mid           { animation:logo-popIn .2s ease both; }
-    #hero-logo-animated .mid-ne { animation-delay:3.05s; }
-    #hero-logo-animated .mid-se { animation-delay:3.1s;  }
-    #hero-logo-animated .mid-sw { animation-delay:3.15s; }
-    #hero-logo-animated .mid-nw { animation-delay:3.2s;  }
-    #hero-logo-animated .inner-ring    { stroke-dasharray:346; stroke-dashoffset:346; animation:logo-draw .9s 3s ease both; }
-    #hero-logo-animated .blade-fill    { animation:logo-fadeIn .5s 3.7s ease both; opacity:0; }
-    #hero-logo-animated .blade-stroke  { stroke-dasharray:198; stroke-dashoffset:198; animation:logo-draw .7s 3.5s ease both; }
-    #hero-logo-animated .crossguard    { animation:logo-popIn .3s 4s cubic-bezier(.34,1.56,.64,1) both; }
-    #hero-logo-animated .pommel        { animation:logo-popIn .2s 4.2s ease both; }
-    #hero-logo-animated .node-dot      { animation:logo-popIn .25s cubic-bezier(.34,1.56,.64,1) both, logo-pulse 3s ease-in-out infinite; }
-    #hero-logo-animated .node-n { animation-delay:4.3s,6.5s; }
-    #hero-logo-animated .node-e { animation-delay:4.4s,6.7s; }
-    #hero-logo-animated .node-s { animation-delay:4.5s,6.9s; }
-    #hero-logo-animated .node-w { animation-delay:4.6s,7.1s; }
-    #hero-logo-animated .center-node   { animation:logo-popIn .3s 4.9s cubic-bezier(.34,1.56,.64,1) both, logo-pulse 3s 6.3s ease-in-out infinite; }
-    #hero-logo-animated .ew-e  { stroke-dasharray:46; stroke-dashoffset:46; animation:logo-draw .35s 4.75s ease both; }
-    #hero-logo-animated .ew-w  { stroke-dasharray:46; stroke-dashoffset:46; animation:logo-draw .35s 4.8s ease both; }
-    #hero-logo-animated .glow  { animation:logo-glowIn 2s .3s ease both, logo-breathe 5s 7s ease-in-out infinite; }
+/* ---------- combat ---------- */
+.mechanics{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-top:1.4rem}
+.mech{border:1px solid var(--line-soft);padding:1rem;background:rgba(0,0,0,.3);transition:.25s}
+.mech:hover{border-color:var(--gold);background:rgba(201,168,76,.07)}
+.mech svg{width:24px;height:24px;stroke:var(--gold);fill:none;stroke-width:1.5;margin-bottom:.5rem}
+.mech b{font-family:var(--ff-head);font-size:.82rem;letter-spacing:.1em;display:block;margin-bottom:.25rem}
+.mech p{font-size:.84rem;color:var(--muted);line-height:1.5}
 
-    @keyframes logo-draw    { to { stroke-dashoffset:0; } }
-    @keyframes logo-fadeIn  { from { opacity:0; } to { opacity:1; } }
-    @keyframes logo-glowIn  { from { opacity:0; } to { opacity:.18; } }
-    @keyframes logo-popIn   { from { opacity:0; transform:scale(0); } to { opacity:1; transform:scale(1); } }
-    @keyframes logo-pulse   { 0%,100% { opacity:1; } 50% { opacity:.4; } }
-    @keyframes logo-breathe { 0%,100% { opacity:.18; } 50% { opacity:.28; } }
+/* ---------- armory ---------- */
+.armory{display:grid;grid-template-columns:1.1fr 1fr;gap:1.6rem;align-items:stretch;margin-top:1.4rem}
+.viewer{position:relative;min-height:420px;border:1px solid var(--line-soft);background:radial-gradient(circle at 50% 55%,color-mix(in srgb,var(--accent) 24%,#0b0b18) 0%,#07070f 70%);cursor:grab;touch-action:pan-y;overflow:hidden}
+.viewer:active{cursor:grabbing}
+.viewer canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.viewer .tip{position:absolute;bottom:.7rem;left:0;right:0;text-align:center;font-family:var(--ff-head);font-size:.62rem;letter-spacing:.3em;color:var(--gold-dim);text-transform:uppercase;pointer-events:none}
+.weapon-info{display:flex;flex-direction:column}
+.weapon-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:1.3rem}
+.wtab{padding:.7rem .3rem;background:rgba(0,0,0,.35);border:1px solid var(--line-soft);font-family:var(--ff-head);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;transition:.2s}
+.wtab:hover{border-color:var(--gold)}
+.wtab.on{border-color:var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--accent) 28%,transparent)}
+.weapon-info h3{font-size:1.6rem;color:var(--accent);margin-bottom:.4rem}
+.weapon-info p{color:var(--text);opacity:.9}
+.tags{display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.tags span{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--accent);color:var(--accent);padding:.25rem .7rem;font-family:var(--ff-head)}
+.craft{margin-top:auto;border-top:1px solid var(--line-soft);padding-top:1rem;font-size:.84rem;color:var(--muted)}
+.craft b{font-family:var(--ff-head);color:var(--gold-hi);letter-spacing:.1em;font-size:.8rem;display:block;margin-bottom:.3rem}
 
-    .hero-meta {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:1.8rem;
-      margin-bottom:2rem;
-      opacity:0;
-      animation:fadeSlideDown 1s .4s cubic-bezier(.22,1,.36,1) forwards;
-    }
-    .hero-meta-item {
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:.3rem;
-    }
-    .hero-meta-label {
-      font:600 .62rem/1 var(--ff-head);
-      letter-spacing:.3em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      border-bottom:1px solid var(--border-hover);
-      padding-bottom:.3rem;
-      width:100%;
-      text-align:center;
-    }
-    .hero-meta-value {
-      font:700 clamp(.65rem,1.5vw,.82rem)/1 var(--ff-head);
-      letter-spacing:.25em;
-      text-transform:uppercase;
-      color:var(--gold);
-    }
-    .hero-meta-sep { color:var(--border-hover); font-size:.9rem; margin-top:.6rem; }
-    .hero-title {
-      font:700 clamp(2.8rem,12vw,9.5rem)/.95 var(--ff-head);
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      color:var(--text);
-      margin-bottom:1.5rem;
-      opacity:0;
-      animation:fadeSlideUp 1.1s .6s cubic-bezier(.22,1,.36,1) forwards;
-    }
-    @media (max-width:480px) {
-      .hero-title { font-size: clamp(2.2rem, 15vw, 3.5rem); letter-spacing: .02em; }
-    }
-    .hero-title .t-project {
-      display:block;
-      font-size:.38em;
-      letter-spacing:.55em;
-      color:var(--text-muted);
-      margin-bottom:.4rem;
-    }
-    .hero-title .t-oath {
-      color:var(--gold);
-      text-shadow:0 0 40px rgba(201,168,76,.5),0 0 100px rgba(201,168,76,.25),0 0 200px rgba(201,168,76,.1);
-    }
-    .hero-tagline {
-      font:400 clamp(.85rem,2.2vw,1.15rem)/1.7 var(--ff-head);
-      font-style:italic;
-      letter-spacing:.03em;
-      color:var(--text-muted);
-      margin-bottom:3rem;
-      min-height:2.8rem;
-    }
-    .hero-tagline em { font-style:normal; color:var(--text); }
-    .hero-ctas {
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:1rem;
-      flex-wrap:wrap;
-      opacity:0;
-      animation:fadeSlideUp 1s 1.05s cubic-bezier(.22,1,.36,1) forwards;
-    }
-    .btn-primary {
-      display:inline-flex;
-      flex-direction:column;
-      align-items:center;
-      font:700 .7rem/1.4 var(--ff-head);
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      color:#1a1a1a;
-      background:var(--gold);
-      padding:1.05rem 2.4rem;
-      border:none;
-      transition:background .25s,box-shadow .3s,transform .25s cubic-bezier(.34,1.56,.64,1);
-      text-shadow:0 1px 2px rgba(255,255,255,.2);
-      box-shadow:0 4px 20px rgba(201,168,76,.2);
-      cursor:pointer;
-    }
-    .btn-primary:hover,
-    .btn-primary:focus-visible {
-      background:#deb95a;
-      box-shadow:0 8px 40px rgba(201,168,76,.35);
-      transform:translateY(-2px) scale(1.01);
-    }
-    .btn-primary .btn-sub {
-      font-size:.52rem;
-      letter-spacing:.05em;
-      opacity:.6;
-      margin-top:.2rem;
-      color:#1a1a1a;
-      font-weight:600;
-    }
-    .btn-secondary {
-      display:inline-block;
-      font:700 .7rem/1 var(--ff-head);
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      color:var(--gold);
-      background:transparent;
-      padding:1.05rem 2.4rem;
-      border:1px solid var(--gold);
-      transition:border-color .25s,color .25s,box-shadow .25s,transform .25s cubic-bezier(.34,1.56,.64,1),background .25s;
-      cursor:pointer;
-    }
-    .btn-secondary:hover,
-    .btn-secondary:focus-visible {
-      border-color:#deb95a;
-      color:#deb95a;
-      box-shadow:0 0 30px rgba(201,168,76,.2), inset 0 0 30px rgba(201,168,76,.05);
-      background:rgba(201,168,76,.06);
-    }
-    .hero-scroll {
-      position:absolute;
-      bottom:2.5rem;
-      left:50%;
-      transform:translateX(-50%);
-      z-index:2;
-      opacity:0;
-      animation:fadeIn 1.5s 2s forwards;
-    }
-    .hero-scroll-line {
-      width:1px;
-      height:55px;
-      background:linear-gradient(to bottom,transparent,var(--gold));
-      margin-inline:auto;
-      animation:scrollPulse 2.2s ease-in-out infinite;
-    }
-    @keyframes fadeSlideDown { from{opacity:0;transform:translateY(-18px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeSlideUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes fadeIn { to{opacity:.45} }
-    @keyframes scrollPulse { 0%,100%{opacity:.25;transform:scaleY(.8);transform-origin:top} 50%{opacity:1;transform:scaleY(1);transform-origin:top} }
+/* ---------- shared world ---------- */
+.quote{font-family:var(--ff-head);font-size:clamp(1.3rem,3vw,2.1rem);line-height:1.4;margin:1rem 0 1.6rem;text-shadow:0 2px 24px #000}
+.quote em{font-style:normal;color:var(--gold-hi)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.8rem}
+.card{background:var(--panel);backdrop-filter:blur(8px);border:1px solid var(--line-soft);padding:1.3rem;position:relative;transition:.3s;overflow:hidden}
+.card::before{content:"";position:absolute;left:0;top:0;height:2px;width:0;background:var(--gold-hi);transition:width .4s}
+.card:hover{border-color:var(--gold);transform:translateY(-5px)}
+.card:hover::before{width:100%}
+.card small{font-family:var(--ff-head);letter-spacing:.22em;font-size:.62rem;color:var(--gold);text-transform:uppercase}
+.card h3{font-size:1rem;margin:.4rem 0}
+.card p{font-size:.84rem;color:var(--muted);line-height:1.55}
 
-    /* ===== STATS ===== */
-    #stats {
-      background:var(--bg-mid);
-      border-top:1px solid var(--border);
-      border-bottom:1px solid var(--border);
-      padding:2rem 0;
-    }
-    .stats-row {
-      display:flex;
-      align-items:center;
-      justify-content:space-around;
-      flex-wrap:wrap;
-      gap:1.5rem 1rem;
-    }
-    .stat { text-align:center; padding:.2rem 0; }
-    .stat-val {
-      display:block;
-      font:700 clamp(1.3rem,3vw,2rem)/1 var(--ff-head);
-      color:var(--gold);
-      letter-spacing:.05em;
-    }
-    .stat-lbl {
-      display:block;
-      font-size:.6rem;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      margin-top:.35rem;
-    }
-    .stat-sep { width:1px; height:2.2rem; background:var(--border); flex-shrink:0; }
-    @media (max-width:560px) { .stat-sep { display:none; } }
+/* ---------- roadmap ---------- */
+.road{position:relative;display:grid;grid-template-columns:repeat(5,1fr);margin:2.4rem 0 1.6rem}
+.road::before{content:"";position:absolute;left:10%;right:10%;top:15px;height:1px;background:linear-gradient(90deg,var(--gold-dim),var(--gold),var(--gold-dim))}
+.node{background:none;border:0;text-align:center;position:relative;padding:0 .3rem}
+.node i{display:block;width:30px;height:30px;margin:0 auto .8rem;transform:rotate(45deg);background:var(--panel-solid);border:1px solid var(--gold-dim);position:relative;transition:.3s}
+.node i::after{content:"";position:absolute;inset:8px;background:var(--gold-dim);transition:.3s}
+.node:hover i,.node.on i{border-color:var(--gold-hi);box-shadow:0 0 22px var(--gold)}
+.node.on i::after{background:var(--gold-hi)}
+.node b{display:block;font-family:var(--ff-head);font-size:.82rem;letter-spacing:.1em;color:var(--muted);transition:.3s}
+.node small{font-size:.72rem;color:var(--gold-dim)}
+.node.on b,.node:hover b{color:var(--gold-hi)}
+#phase{min-height:200px}
+#phase h3{font-size:1.5rem;color:var(--gold-hi)}
+#phase .yr{font-family:var(--ff-head);letter-spacing:.3em;font-size:.72rem;color:var(--gold);margin-bottom:.4rem;display:block}
+#phase ul{list-style:none;margin-top:1rem;display:flex;flex-wrap:wrap;gap:.5rem}
+#phase li{border:1px solid var(--line);padding:.3rem .8rem;font-size:.78rem;color:var(--text);background:rgba(201,168,76,.08)}
 
-    /* ===== SECTIONS ===== */
-    .section {
-      padding:clamp(4.5rem,11vw,9rem) 0;
-      position:relative;
-      z-index:1;
-      background:var(--bg-deep);
-    }
-    .section-head {
-      margin-bottom:clamp(2.5rem,6vw,5rem);
-    }
-    .section-head.center { text-align:center; }
-    .section-head.center .section-desc { margin-inline:auto; }
-    h2 {
-      font:700 clamp(1.4rem,3.2vw,2.2rem)/1.15 var(--ff-head);
-      letter-spacing:.04em;
-      color:var(--text);
-      margin-top:.4rem;
-    }
-    h2 .gold { color:var(--gold); }
-    .section-desc {
-      margin-top:1.1rem;
-      max-width:580px;
-      font-size:1rem;
-      color:var(--text-muted);
-      line-height:1.85;
-    }
+/* ---------- join ---------- */
+#join{justify-content:center;text-align:center}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin:2.2rem 0}
+.tier{background:var(--panel);backdrop-filter:blur(10px);border:1px solid var(--line);padding:1.8rem 1.2rem;position:relative;transition:.3s}
+.tier:hover{transform:translateY(-6px);border-color:var(--gold)}
+.tier.feature{border-color:var(--gold-hi);box-shadow:0 0 50px rgba(201,168,76,.25)}
+.tier.feature::before{content:"Limited · 10,000";position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#1a1304;font-family:var(--ff-head);font-size:.62rem;letter-spacing:.2em;padding:.15rem .8rem;text-transform:uppercase;white-space:nowrap}
+.tier h3{font-size:.9rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.price{font-family:var(--ff-head);font-weight:800;font-size:2.4rem;color:var(--gold-hi);margin:.4rem 0}
+.price small{font-size:.8rem;color:var(--muted);font-weight:400}
+.tier p{font-size:.84rem;color:var(--muted)}
+.signup{display:flex;gap:.7rem;max-width:520px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+.signup input{flex:1 1 240px;background:rgba(0,0,0,.5);border:1px solid var(--line);color:var(--text);padding:.9rem 1rem;font:inherit}
+.signup input:focus{outline:none;border-color:var(--gold-hi);box-shadow:0 0 16px rgba(201,168,76,.3)}
+.sworn{display:none;font-family:var(--ff-head);letter-spacing:.14em;color:var(--gold-hi);margin-top:1rem}
+.fineprint{font-size:.75rem;color:var(--muted);margin-top:1rem}
+footer{position:relative;z-index:10;text-align:center;padding:2rem 1rem 3rem;font-size:.75rem;color:var(--muted);background:linear-gradient(to top,rgba(0,0,0,.7),transparent)}
+footer b{font-family:var(--ff-head);letter-spacing:.3em;color:var(--gold-dim);display:block;margin-bottom:.4rem;font-weight:400}
 
-    /* ===== PILLARS ===== */
-    #pillars { background:var(--bg-mid); }
-    .pillars-grid {
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:1.5px;
-      background:var(--border);
-    }
-    @media (max-width:640px) { .pillars-grid { grid-template-columns:1fr; } }
-    .pillar {
-      position:relative;
-      background:var(--bg-mid);
-      padding:clamp(2rem,4.5vw,3.2rem);
-      overflow:hidden;
-      transition:background .35s;
-    }
-    .pillar::after {
-      content:'';
-      position:absolute;
-      top:0; left:0; right:0;
-      height:2px;
-      background:linear-gradient(90deg,transparent,var(--gold),transparent);
-      opacity:0;
-      transition:opacity .4s;
-    }
-    .pillar:hover { background:rgba(17,17,31,.85); }
-    .pillar:hover::after { opacity:1; }
-    .pillar-icon {
-      width:46px; height:46px;
-      border:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:1.8rem;
-      color:var(--gold);
-      transition:border-color .3s,box-shadow .35s;
-    }
-    .pillar:hover .pillar-icon {
-      border-color:var(--gold-dim);
-      box-shadow:0 0 22px var(--gold-glow);
-    }
-    .pillar-icon svg { width:20px; height:20px; stroke-width:1.4; }
-    .pillar-no {
-      font:700 .78rem/1 var(--ff-head);
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--gold);
-      margin-bottom:.6rem;
-    }
-    .pillar h3 {
-      font:700 1.25rem/1.2 var(--ff-head);
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:var(--text);
-      margin-bottom:.9rem;
-    }
-    .pillar-body {
-      font-size:.97rem;
-      color:#b8b0a4;
-      line-height:1.8;
-    }
-    .pillar-list {
-      margin-top:1.6rem;
-      padding-top:1.5rem;
-      border-top:1px solid var(--border);
-      display:flex;
-      flex-direction:column;
-      gap:.65rem;
-    }
-    .pillar-list-item {
-      font-size:.97rem;
-      color:#a09890;
-      display:flex;
-      gap:.7rem;
-    }
-    .pillar-list-item::before { content:'—'; color:var(--gold); flex-shrink:0; }
-
-    /* ===== PROBLEM ===== */
-    #problem { background:var(--bg-mid); }
-    .problem-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:1.5px;
-      background:var(--border);
-    }
-    .problem-card {
-      background:var(--bg-mid);
-      padding:2rem 2.2rem;
-      transition:background .3s;
-    }
-    .problem-card:hover { background:rgba(17,17,31,.85); }
-    .problem-number {
-      font:700 .92rem/1 var(--ff-head);
-      letter-spacing:.25em;
-      color:var(--gold-dim);
-      margin-bottom:.6rem;
-    }
-    .problem-title {
-      font:700 1.05rem/1.2 var(--ff-head);
-      letter-spacing:.06em;
-      color:var(--text);
-      margin-bottom:.5rem;
-    }
-    .problem-body {
-      font-size:.97rem;
-      color:var(--text-dim);
-      line-height:1.75;
-    }
-    .problem-solve {
-      margin-top:.75rem;
-      font-size:.97rem;
-      color:var(--gold-dim);
-      font-style:italic;
-      line-height:1.6;
-    }
-
-    /* ===== ABOUT ===== */
-    #about { background:var(--bg-deep); }
-    .about-grid {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:clamp(2.5rem,7vw,6rem);
-      align-items:start;
-    }
-    @media (max-width:800px) { .about-grid { grid-template-columns:1fr; } }
-    .about-headline {
-      font:600 clamp(1.5rem,3.5vw,2.3rem)/1.28 var(--ff-head);
-      letter-spacing:.04em;
-      color:var(--text);
-      margin:.5rem 0 1.5rem;
-    }
-    .about-headline .gold { color:var(--gold); }
-    .about-p {
-      font-size:.96rem;
-      color:var(--text-muted);
-      line-height:1.9;
-      margin-bottom:1rem;
-    }
-    .about-stats {
-      display:flex;
-      flex-direction:column;
-      gap:1.5px;
-      background:var(--border);
-    }
-    .about-stat-box {
-      background:var(--bg-card);
-      padding:1.6rem 2rem;
-      transition:background .3s;
-    }
-    .about-stat-box:hover { background:rgba(18,18,30,.85); }
-    .about-stat-value {
-      display:block;
-      font:700 1.7rem/1 var(--ff-head);
-      letter-spacing:.04em;
-      color:var(--gold);
-      margin-bottom:.4rem;
-    }
-    .about-stat-desc {
-      font-size:.82rem;
-      color:var(--text-muted);
-      line-height:1.6;
-    }
-
-    /* ===== FOUNDER'S PASS ===== */
-    #founders {
-      background:var(--bg-mid);
-      border-top:1px solid var(--border);
-      position:relative;
-      overflow:hidden;
-    }
-    #founders::before {
-      content:'';
-      position:absolute;
-      top:-120px; left:50%;
-      transform:translateX(-50%);
-      width:700px; height:400px;
-      background:radial-gradient(ellipse,rgba(201,168,76,.07),transparent 65%);
-      pointer-events:none;
-    }
-    .founders-wrap { text-align:center; max-width:680px; margin-inline:auto; }
-    .founders-price-block { margin:.8rem 0 2.2rem; }
-    .founders-price {
-      font:700 clamp(3.5rem,10vw,6.5rem)/1 var(--ff-head);
-      color:var(--gold);
-      letter-spacing:.06em;
-      text-shadow:0 0 80px rgba(201,168,76,.4),0 0 160px rgba(201,168,76,.15);
-    }
-    .founders-price-note {
-      display:block;
-      font:700 .62rem/1 var(--ff-head);
-      letter-spacing:.3em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      margin-top:.5rem;
-    }
-    .founders-body {
-      font-size:.97rem;
-      color:var(--text-muted);
-      line-height:1.9;
-      margin-bottom:2.2rem;
-    }
-    .founders-perks {
-      display:flex;
-      flex-direction:column;
-      align-items:flex-start;
-      gap:.7rem;
-      max-width:430px;
-      margin:0 auto 2.8rem;
-      text-align:left;
-    }
-    .perk {
-      display:flex;
-      gap:.85rem;
-      font-size:.88rem;
-      color:var(--text-muted);
-      line-height:1.55;
-    }
-    .perk-dot {
-      width:5px; height:5px;
-      border-radius:50%;
-      background:var(--gold);
-      flex-shrink:0;
-      margin-top:.5rem;
-    }
-    .founders-cap-note {
-      margin-top:1.2rem;
-      font:700 .75rem/1 var(--ff-head);
-      letter-spacing:.25em;
-      text-transform:uppercase;
-      color:#c9a84c;
-    }
-    .btn-notify {
-      display:inline-block;
-      font:700 .7rem/1 var(--ff-head);
-      letter-spacing:.05em;
-      text-transform:uppercase;
-      color:#1a1a1a;
-      background:var(--gold);
-      padding:1rem 2.4rem;
-      border:none;
-      transition:background .25s,box-shadow .3s,transform .25s;
-      box-shadow:0 4px 20px rgba(201,168,76,.2);
-      cursor:pointer;
-      margin-top:.5rem;
-    }
-    .btn-notify:hover {
-      background:#deb95a;
-      box-shadow:0 8px 40px rgba(201,168,76,.35);
-      transform:translateY(-2px);
-    }
-
-    /* ===== WORLD ===== */
-    #world { background:var(--bg-deep); }
-    .world-quote {
-      font:600 clamp(1.2rem,3vw,1.9rem)/1.45 var(--ff-head);
-      font-style:italic;
-      letter-spacing:.03em;
-      color:var(--text);
-      border-left:2px solid var(--gold);
-      padding-left:1.8rem;
-      margin-bottom:clamp(2.5rem,6vw,4.5rem);
-      max-width:720px;
-    }
-    .world-quote em { font-style:normal; color:var(--gold); }
-    .influence-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-      gap:1.5px;
-      background:var(--border);
-    }
-    .influence-card {
-      background:var(--bg-deep);
-      padding:2rem 2.2rem;
-      transition:background .3s;
-    }
-    .influence-card:hover { background:rgba(13,13,26,.85); }
-    .influence-no {
-      font:700 .92rem/1 var(--ff-head);
-      letter-spacing:.3em;
-      color:var(--gold-dim);
-      margin-bottom:.5rem;
-    }
-    .influence-title {
-      font:700 1.05rem/1.2 var(--ff-head);
-      letter-spacing:.08em;
-      color:var(--text);
-      margin-bottom:.7rem;
-    }
-    .influence-body {
-      font-size:.88rem;
-      color:var(--text-muted);
-      line-height:1.8;
-    }
-
-    /* ===== COMBAT ===== */
-    #combat { background:var(--bg-mid); }
-    .combat-layout {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:clamp(2rem,6vw,5rem);
-      align-items:start;
-    }
-    @media (max-width:860px) { .combat-layout { grid-template-columns:1fr; } }
-    .weapons-grid {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:1.5px;
-      background:var(--border);
-      margin-top:1.8rem;
-    }
-    .weapon-card {
-      background:var(--bg-mid);
-      padding:1.4rem 1.6rem;
-      transition:background .3s;
-      position:relative;
-    }
-    .weapon-card::before {
-      content:'';
-      position:absolute;
-      top:0; left:0; right:0;
-      height:1px;
-      background:linear-gradient(90deg,var(--gold),transparent);
-      opacity:0;
-      transition:opacity .3s;
-    }
-    .weapon-card:hover { background:rgba(17,17,31,.85); }
-    .weapon-card:hover::before { opacity:1; }
-    .weapon-name {
-      font:700 .95rem/1.2 var(--ff-head);
-      letter-spacing:.1em;
-      color:var(--text);
-      margin-bottom:.4rem;
-    }
-    .weapon-desc {
-      font-size:.88rem;
-      color:var(--text-muted);
-      line-height:1.65;
-    }
-    .mechanic-list {
-      display:flex;
-      flex-direction:column;
-      gap:1.2rem;
-      margin-top:1.8rem;
-    }
-    .mechanic {
-      display:flex;
-      gap:1.2rem;
-      align-items:flex-start;
-    }
-    .mechanic-icon {
-      width:36px; height:36px;
-      border:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:var(--gold);
-      flex-shrink:0;
-      margin-top:.1rem;
-    }
-    .mechanic-icon svg { width:16px; height:16px; stroke-width:1.5; }
-    .mechanic-title {
-      font:700 .8rem/1.2 var(--ff-head);
-      letter-spacing:.08em;
-      color:var(--text);
-      margin-bottom:.3rem;
-    }
-    .mechanic-body {
-      font-size:.83rem;
-      color:var(--text-muted);
-      line-height:1.7;
-    }
-    .crafting-block {
-      margin-top:2.5rem;
-      padding-top:2rem;
-      border-top:1px solid var(--border);
-    }
-    .crafting-block h3 {
-      font:700 1rem/1.2 var(--ff-head);
-      letter-spacing:.1em;
-      color:var(--text);
-      margin-bottom:.9rem;
-    }
-    .crafting-body {
-      font-size:.88rem;
-      color:var(--text-muted);
-      line-height:1.8;
-      margin-bottom:.8rem;
-    }
-
-    /* ===== ROADMAP ===== */
-    #roadmap { background:var(--bg-deep); }
-    .roadmap-timeline {
-      position:relative;
-      padding-left:2.5rem;
-    }
-    .roadmap-timeline::before {
-      content:'';
-      position:absolute;
-      left:0;
-      top:.6rem;
-      bottom:0;
-      width:1px;
-      background:linear-gradient(to bottom,var(--gold),rgba(201,168,76,.1));
-    }
-    .roadmap-item {
-      position:relative;
-      padding:1.2rem 1.2rem 3.5rem;
-      margin:0 -1.2rem;
-      border:1px solid transparent;
-      border-radius:4px;
-      transition:background .3s,border-color .3s;
-    }
-    .roadmap-item:last-child { padding-bottom:0; }
-    .roadmap-item:hover {
-      background:rgba(201,168,76,.04);
-      border-color:rgba(201,168,76,.15);
-    }
-    .roadmap-item::before {
-      content:'';
-      position:absolute;
-      left:-.5rem;
-      top:1.8rem;
-      width:9px; height:9px;
-      border-radius:50%;
-      background:var(--bg-deep);
-      border:1.5px solid var(--gold-dim);
-      transform:translateX(-4px);
-      transition:border-color .3s,box-shadow .3s,background .3s;
-    }
-    .roadmap-item.active::before {
-      background:var(--gold);
-      border-color:var(--gold);
-      box-shadow:0 0 14px rgba(201,168,76,.6);
-    }
-    .roadmap-item.active .roadmap-year { color:var(--gold); }
-    .roadmap-item.active .roadmap-stage { color:var(--text); }
-    .roadmap-year {
-      font:700 .65rem/1 var(--ff-head);
-      letter-spacing:.28em;
-      text-transform:uppercase;
-      color:var(--gold-dim);
-      margin-bottom:.2rem;
-      transition:color .3s;
-    }
-    .roadmap-stage {
-      font:700 1.1rem/1.2 var(--ff-head);
-      letter-spacing:.08em;
-      color:var(--text-muted);
-      margin-bottom:.3rem;
-      transition:color .3s;
-      display:flex;
-      align-items:center;
-      gap:.8rem;
-    }
-    .roadmap-item.active .roadmap-stage::after {
-      content:" ⚡ LIVE";
-      font-size:.6rem;
-      color:var(--gold);
-      opacity:.8;
-      letter-spacing:.1em;
-    }
-
-    /* ===== INCREASED ARROW SIZE ===== */
-    .roadmap-expand-icon {
-      display:inline-block;
-      font-size:1.4rem;        /* was .7rem – much larger */
-      color:var(--gold-dim);
-      transition:transform .3s,color .3s;
-      margin-left:auto;
-      opacity:.6;
-      padding:0.2rem 0.5rem;   /* bigger click target */
-      cursor:pointer;
-      line-height:1;
-    }
-    .roadmap-item:hover .roadmap-expand-icon { opacity:1; color:var(--gold); }
-    .roadmap-item.expanded .roadmap-expand-icon { transform:rotate(180deg); color:var(--gold); opacity:1; }
-
-    .roadmap-desc {
-      font-size:.92rem;
-      color:var(--text-muted);
-      line-height:1.8;
-      max-width:620px;
-      margin-bottom:1rem;
-    }
-    .roadmap-item:not(.active) .roadmap-desc { color:var(--text-dim); }
-    .roadmap-details {
-      max-height:0;
-      overflow:hidden;
-      transition:max-height .5s cubic-bezier(.22,1,.36,1),opacity .4s,margin .4s;
-      opacity:0;
-      margin-top:0;
-    }
-    .roadmap-item.expanded .roadmap-details {
-      max-height:400px;
-      opacity:1;
-      margin-top:.8rem;
-    }
-    .roadmap-details-inner {
-      background:rgba(15,15,30,.6);
-      border:1px solid var(--border);
-      padding:1.2rem 1.6rem;
-      border-radius:2px;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:.6rem 1.5rem;
-    }
-    .roadmap-detail-item {
-      font-size:.78rem;
-      color:var(--text-muted);
-      display:flex;
-      gap:.5rem;
-      align-items:baseline;
-    }
-    .roadmap-detail-item .label {
-      color:var(--text-dim);
-      font:700 .58rem/1 var(--ff-head);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      flex-shrink:0;
-    }
-    .roadmap-detail-item .value { color:var(--text); font-weight:500; }
-    .roadmap-detail-item .value.gold { color:var(--gold); }
-    @media (max-width:560px) {
-      .roadmap-details-inner { grid-template-columns:1fr; }
-      .roadmap-stage { flex-wrap:wrap; }
-      .roadmap-item { padding:.8rem .8rem 2.5rem; margin:0 -.8rem; }
-    }
-
-    /* ===== WAITLIST ===== */
-    #waitlist {
-      background:var(--bg-deep);
-      border-top:1px solid var(--border);
-      border-bottom:1px solid var(--border);
-      padding:clamp(3.5rem,8vw,6rem) 0;
-    }
-    .waitlist-wrap {
-      max-width:600px;
-      margin:0 auto;
-      text-align:center;
-    }
-    .waitlist-wrap h2 { margin-bottom:.5rem; }
-    .waitlist-wrap .section-desc { margin:0 auto 2rem; }
-    .waitlist-form {
-      display:flex;
-      gap:.5rem;
-      flex-wrap:wrap;
-      justify-content:center;
-    }
-    .waitlist-form input[type="email"] {
-      flex:1;
-      min-width:220px;
-      background:var(--bg-mid);
-      border:1px solid var(--border);
-      padding:.9rem 1.2rem;
-      color:var(--text);
-      font:400 .95rem/1 var(--ff-body);
-      border-radius:2px;
-      transition:border-color .3s,box-shadow .3s;
-    }
-    .waitlist-form input[type="email"]:focus {
-      outline:none;
-      border-color:var(--gold);
-      box-shadow:0 0 24px rgba(201,168,76,.08);
-    }
-    .waitlist-form input[type="email"]::placeholder {
-      color:var(--text-dim);
-      font-style:italic;
-    }
-    .btn-waitlist {
-      font:700 .7rem/1 var(--ff-head);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:#1a1a1a;
-      background:var(--gold);
-      padding:.9rem 2rem;
-      border:none;
-      border-radius:2px;
-      transition:background .25s,box-shadow .3s,transform .25s;
-      box-shadow:0 4px 20px rgba(201,168,76,.15);
-      cursor:pointer;
-      white-space:nowrap;
-    }
-    .btn-waitlist:hover {
-      background:#deb95a;
-      box-shadow:0 8px 40px rgba(201,168,76,.3);
-      transform:translateY(-2px);
-    }
-    .waitlist-note {
-      margin-top:1rem;
-      font-size:.75rem;
-      color:var(--text-dim);
-      letter-spacing:.04em;
-    }
-
-    #launchlist-referral-link {
-      margin-top: 1.5rem;
-      padding: 1rem 1.5rem;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      display: none;
-      background: var(--bg-mid);
-    }
-    #launchlist-referral-link .ref-label {
-      font-family: var(--ff-head);
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gold-dim);
-      margin-bottom: 0.3rem;
-    }
-    #launchlist-referral-link .ref-link {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      word-break: break-all;
-      font-weight: 500;
-    }
-    #launchlist-referral-link .ref-hint {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      margin-top: 0.5rem;
-    }
-    #launchlist-referral-link .ref-hint a {
-      color: var(--gold);
-      text-decoration: underline;
-    }
-    #launchlist-referral-link .ref-hint a:hover {
-      color: #deb95a;
-    }
-
-    /* ===== FOOTER ===== */
-    footer {
-      background:var(--bg-deep);
-      border-top:1px solid var(--border);
-      padding:3.5rem 0 2rem;
-    }
-    .footer-main {
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      gap:2rem;
-      margin-bottom:3rem;
-    }
-    .footer-brand {
-      font:700 .82rem/1 var(--ff-head);
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-    }
-    .footer-brand-sub {
-      display:block;
-      font-size:.56rem;
-      letter-spacing:.3em;
-      color:var(--gold-dim);
-      margin-top:.3rem;
-    }
-    .footer-nav {
-      display:flex;
-      flex-direction:column;
-      gap:.7rem;
-    }
-    .footer-nav-head {
-      font:700 .58rem/1 var(--ff-head);
-      letter-spacing:.28em;
-      text-transform:uppercase;
-      color:var(--gold-dim);
-      margin-bottom:.2rem;
-    }
-    .footer-nav a {
-      font-size:.82rem;
-      color:var(--text-dim);
-      transition:color .2s;
-    }
-    .footer-nav a:hover { color:var(--text-muted); }
-    .footer-socials {
-      display:flex;
-      flex-direction:column;
-      gap:.7rem;
-    }
-    .footer-socials-head {
-      font:700 .58rem/1 var(--ff-head);
-      letter-spacing:.28em;
-      text-transform:uppercase;
-      color:var(--gold-dim);
-      margin-bottom:.2rem;
-    }
-    .social-links {
-      display:flex;
-      gap:1.1rem;
-    }
-    .social-links a {
-      color:var(--text-dim);
-      transition:color .22s;
-    }
-    .social-links a:hover { color:var(--gold); }
-    .social-links svg { width:17px; height:17px; }
-    .footer-bottom {
-      border-top:1px solid var(--border);
-      padding-top:1.5rem;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      flex-wrap:wrap;
-      gap:.8rem;
-    }
-    .footer-copy {
-      font-size:.7rem;
-      color:var(--text-dim);
-    }
-    .footer-wordmark {
-      font:700 .62rem/1 var(--ff-head);
-      letter-spacing:.25em;
-      text-transform:uppercase;
-      color:var(--gold-dim);
-    }
-
-    /* ===== MISC ===== */
-    .gold-divider {
-      width:60px; height:1px;
-      background:linear-gradient(90deg,transparent,var(--gold),transparent);
-      margin:2rem auto;
-    }
-    #back-to-top {
-      position:fixed;
-      bottom:2rem; right:2rem;
-      z-index:100;
-      width:44px; height:44px;
-      background:rgba(201,168,76,.12);
-      border:1px solid var(--border);
-      color:var(--gold);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      opacity:0;
-      transform:translateY(20px);
-      transition:opacity .3s,transform .3s,background .3s;
-      pointer-events:none;
-    }
-    #back-to-top.visible { opacity:1; transform:translateY(0); pointer-events:all; }
-    #back-to-top:hover,
-    #back-to-top:focus-visible {
-      background:rgba(201,168,76,.25);
-      border-color:var(--border-hover);
-    }
-    #back-to-top svg { width:18px; height:18px; }
-    #scroll-progress {
-      position:fixed;
-      top:0; left:0;
-      height:2px;
-      width:0%;
-      background:linear-gradient(90deg,var(--gold-dim),var(--gold));
-      z-index:500;
-      pointer-events:none;
-      transition:width .08s linear;
-    }
-    .nav-links a.active {
-      color:var(--gold);
-      border-color:rgba(201,168,76,.4);
-      background:rgba(201,168,76,.05);
-    }
-
-    .nav-hamburger {
-      display:none;
-      flex-direction:column;
-      justify-content:center;
-      gap:5px;
-      width:28px; height:28px;
-      background:none;
-      border:none;
-      padding:12px;
-      margin:-8px;
-      flex-shrink:0;
-    }
-    .nav-hamburger span {
-      display:block;
-      width:22px; height:1.5px;
-      background:var(--gold);
-      transition:transform .3s,opacity .3s;
-      transform-origin:center;
-    }
-    .nav-hamburger.open span:nth-child(1) { transform:translateY(6.5px) rotate(45deg); }
-    .nav-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
-    .nav-hamburger.open span:nth-child(3) { transform:translateY(-6.5px) rotate(-45deg); }
-    @media (max-width:640px) { .nav-hamburger { display:flex; } }
-
-    .mobile-nav {
-      position:fixed;
-      inset:0;
-      z-index:195;
-      background:rgba(6,6,13,.92);
-      backdrop-filter:blur(24px);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      gap:2rem;
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      transition:opacity .35s,visibility .35s;
-    }
-    .mobile-nav.open {
-      opacity:1;
-      visibility:visible;
-      pointer-events:all;
-    }
-    .mobile-nav a {
-      font:700 1.1rem/1 var(--ff-head);
-      letter-spacing:.25em;
-      text-transform:uppercase;
-      color:var(--text-muted);
-      transition:color .25s;
-      padding:.4rem .8rem;
-    }
-    .mobile-nav a:hover,
-    .mobile-nav a:focus-visible,
-    .mobile-nav a.active { color:var(--gold); }
-    .mobile-nav .btn-nav {
-      font-size:.8rem;
-      padding:1rem 2.6rem;
-      margin-top:.8rem;
-    }
-    .mobile-nav-sep {
-      width:60px; height:1px;
-      background:linear-gradient(90deg,transparent,rgba(201,168,76,.3),transparent);
-    }
-
-    #cursor-glow {
-      position:fixed;
-      top:-150px; left:-150px;
-      width:300px; height:300px;
-      border-radius:50%;
-      background:radial-gradient(circle,rgba(201,168,76,.06),rgba(201,168,76,.02) 45%,transparent 70%);
-      pointer-events:none;
-      z-index:9;
-      will-change:transform;
-      mix-blend-mode:screen;
-    }
-    .hero-content { will-change:transform,opacity; }
-  </style>
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  nav.main{display:none}
+  .agents,.armory{grid-template-columns:1fr}
+  .cards{grid-template-columns:repeat(2,1fr)}
+  .tiers{grid-template-columns:1fr}
+  .waypoints{gap:.7rem}
+  .waypoints a span{display:none}
+}
+@media (max-width:640px){
+  section{padding:6rem 1rem 4rem}
+  .mechanics,.cards{grid-template-columns:1fr}
+  .road{grid-template-columns:1fr;gap:.3rem;margin-left:1rem}
+  .road::before{left:15px;right:auto;top:15px;bottom:15px;width:1px;height:auto}
+  .node{display:flex;align-items:center;gap:1rem;text-align:left;padding:.4rem 0}
+  .node i{margin:0;flex:none}
+  .waypoints{display:none}
+  .viewer{min-height:320px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+html.no-webgl #bg{display:none}
+</style>
 </head>
 <body>
 
-  <!-- ===== PRELOADER ===== -->
-  <div id="preloader" role="status" aria-label="Loading">
-    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
-      <polygon points="100,9 191,100 100,191 9,100" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
-      <circle cx="100" cy="100" r="5" fill="#c9a84c"/>
-    </svg>
-    <p>Loading the living world…</p>
-  </div>
+<div id="loader"><div><div class="ring"><img src="logo.webp" alt="" /></div><p>Gathering the realm</p></div></div>
+<div id="progress"></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="vignette"></div>
 
-  <div id="noise-overlay" aria-hidden="true"></div>
-  <canvas id="global-canvas" aria-hidden="true" tabindex="-1"></canvas>
-  <div id="scroll-progress"></div>
-  <div id="cursor-glow"></div>
-  <div id="section-progress"><span class="chapter-num">0</span> <span id="chapter-label">of 7</span></div>
-
-  <div id="custom-cursor" aria-hidden="true">
-    <svg width="20" height="20" viewBox="0 0 20 20">
-      <line x1="10" y1="1" x2="10" y2="4.5" stroke="#c9a84c" stroke-width="1.2"/>
-      <line x1="19" y1="10" x2="15.5" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
-      <line x1="10" y1="19" x2="10" y2="15.5" stroke="#c9a84c" stroke-width="1.2"/>
-      <line x1="1" y1="10" x2="4.5" y2="10" stroke="#c9a84c" stroke-width="1.2"/>
-      <polygon points="10,5 15,10 10,15 5,10" fill="none" stroke="#c9a84c" stroke-width="1"/>
-      <circle cx="10" cy="10" r="1.8" fill="#c9a84c"/>
-    </svg>
-  </div>
-
-  <nav id="nav" role="navigation" aria-label="Main navigation">
-    <div class="container">
-      <div class="nav-inner">
-        <a href="#" class="nav-logo" aria-label="Overture Dynamics home">
-          <svg class="nav-logo-mark" width="38" height="38" viewBox="0 0 200 200" aria-hidden="true">
-            <circle cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width="1.2"/>
-            <line x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="162" y1="38" x2="167" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="188" y1="100" x2="194" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="162" y1="162" x2="167" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="100" y1="188" x2="100" y2="194" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="38" y1="162" x2="33" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="12" y1="100" x2="6" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
-            <line x1="38" y1="38" x2="33" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
-            <polygon points="100,9 191,100 100,191 9,100" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
-            <polygon points="100,3 106,9 100,15 94,9" fill="#c9a84c"/>
-            <polygon points="185,100 191,94 197,100 191,106" fill="#c9a84c"/>
-            <polygon points="100,185 106,191 100,197 94,191" fill="#c9a84c"/>
-            <polygon points="3,100 9,94 15,100 9,106" fill="#c9a84c"/>
-            <circle cx="146" cy="55" r="4" fill="#c9a84c"/>
-            <circle cx="146" cy="146" r="4" fill="#c9a84c"/>
-            <circle cx="55" cy="146" r="4" fill="#c9a84c"/>
-            <circle cx="55" cy="55" r="4" fill="#c9a84c"/>
-            <circle cx="100" cy="100" r="55" fill="none" stroke="#c9a84c" stroke-width=".9"/>
-            <polygon points="100,44 107,86 100,142 93,86" fill="rgba(201,168,76,.25)" stroke="#c9a84c" stroke-width="1.1"/>
-            <rect x="77" y="83" width="46" height="5" rx="1" fill="#c9a84c"/>
-            <polygon points="100,142 104,148 100,155 96,148" fill="#c9a84c"/>
-            <circle cx="100" cy="45" r="6" fill="#c9a84c"/>
-            <circle cx="155" cy="100" r="6" fill="#c9a84c"/>
-            <circle cx="100" cy="155" r="6" fill="#c9a84c"/>
-            <circle cx="45" cy="100" r="6" fill="#c9a84c"/>
-            <line x1="104" y1="100" x2="149" y2="100" stroke="#c9a84c" stroke-width=".6"/>
-            <line x1="96" y1="100" x2="51" y2="100" stroke="#c9a84c" stroke-width=".6"/>
-            <circle cx="100" cy="100" r="5" fill="#c9a84c"/>
-          </svg>
-          <span class="nav-logo-text">Overture Dynamics</span>
-        </a>
-        <ul class="nav-links">
-          <li><a href="#problem">The Problem</a></li>
-          <li><a href="#pillars">The Game</a></li>
-          <li><a href="#world">The World</a></li>
-          <li><a href="#combat">Combat</a></li>
-          <li><a href="#roadmap">Roadmap</a></li>
-          <li><a href="#about">Studio</a></li>
-          <li><a href="#founders">Founder's Pass</a></li>
-          <li><a href="https://careers.overturedynamics.com">Careers</a></li>
-        </ul>
-        <div class="nav-right">
-          <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-nav" title="Opens in new tab">Join Discord</a>
-          <button class="nav-hamburger" id="hamburger" aria-label="Toggle navigation">
-            <span></span><span></span><span></span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <div class="mobile-nav" id="mobile-nav" role="navigation" aria-label="Mobile navigation">
-    <a href="#problem">The Problem</a>
-    <a href="#pillars">The Game</a>
-    <a href="#world">The World</a>
+<header class="top" id="top">
+  <a class="brand" href="#hero" aria-label="Project Oath — top">
+    <span class="mark"><img src="logo.webp" alt="" /></span>
+    PROJECT <span>OATH</span>
+  </a>
+  <nav class="main" aria-label="Primary">
+    <a href="#pillars">The World</a>
+    <a href="#agents">Living Agents</a>
     <a href="#combat">Combat</a>
+    <a href="#weapons">Armory</a>
     <a href="#roadmap">Roadmap</a>
-    <a href="#about">Studio</a>
-    <a href="#founders">Founder's Pass</a>
-    <a href="https://careers.overturedynamics.com">Careers</a>
-    <div class="mobile-nav-sep"></div>
-    <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-nav" title="Opens in new tab">Join Discord</a>
-  </div>
+  </nav>
+  <a class="btn small" href="#join">Swear the Oath</a>
+</header>
 
-  <section id="hero" aria-label="Hero">
-    <div class="hero-vignette" aria-hidden="true"></div>
-    <div class="hero-scanline" aria-hidden="true"></div>
-    <div class="hero-bottom-fade" aria-hidden="true"></div>
-    <div class="hero-content">
-      <div class="hero-emblem" id="hero-logo-animated" aria-hidden="true">
-        <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <defs><radialGradient id="hero-logo-bg" cx="50%" cy="42%" r="48%"><stop offset="0%" stop-color="#c9a84c" stop-opacity="1"/><stop offset="100%" stop-color="#06060d" stop-opacity="0"/></radialGradient></defs>
-          <circle class="glow" cx="100" cy="100" r="100" fill="url(#hero-logo-bg)" opacity="0"/>
-          <circle class="outer-ring" cx="100" cy="100" r="88" fill="none" stroke="#c9a84c" stroke-width=".8"/>
-          <line class="tick t1" x1="100" y1="12" x2="100" y2="6" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t2" x1="162" y1="38" x2="167" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t3" x1="188" y1="100" x2="194" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t4" x1="162" y1="162" x2="167" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t5" x1="100" y1="188" x2="100" y2="194" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t6" x1="38" y1="162" x2="33" y2="167" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t7" x1="12" y1="100" x2="6" y2="100" stroke="#c9a84c" stroke-width="1.5"/>
-          <line class="tick t8" x1="38" y1="38" x2="33" y2="33" stroke="#c9a84c" stroke-width="1.5"/>
-          <polygon class="diamond-frame" points="100,9 191,100 100,191 9,100" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
-          <polygon class="acc acc-n" points="100,3 106,9 100,15 94,9" fill="#c9a84c"/>
-          <polygon class="acc acc-e" points="185,100 191,94 197,100 191,106" fill="#c9a84c"/>
-          <polygon class="acc acc-s" points="100,185 106,191 100,197 94,191" fill="#c9a84c"/>
-          <polygon class="acc acc-w" points="3,100 9,94 15,100 9,106" fill="#c9a84c"/>
-          <circle class="mid mid-ne" cx="146" cy="55" r="4" fill="#c9a84c"/>
-          <circle class="mid mid-se" cx="146" cy="146" r="4" fill="#c9a84c"/>
-          <circle class="mid mid-sw" cx="55" cy="146" r="4" fill="#c9a84c"/>
-          <circle class="mid mid-nw" cx="55" cy="55" r="4" fill="#c9a84c"/>
-          <circle class="inner-ring" cx="100" cy="100" r="55" fill="none" stroke="#c9a84c" stroke-width=".9"/>
-          <polygon class="blade-fill" points="100,44 107,86 100,142 93,86" fill="rgba(201,168,76,.25)"/>
-          <polygon class="blade-stroke" points="100,44 107,86 100,142 93,86" fill="none" stroke="#c9a84c" stroke-width="1.1"/>
-          <rect class="crossguard" x="77" y="83" width="46" height="5" rx="1" fill="#c9a84c"/>
-          <polygon class="pommel" points="100,142 104,148 100,155 96,148" fill="#c9a84c"/>
-          <circle class="node-dot node-n" cx="100" cy="45" r="6" fill="#c9a84c"/>
-          <circle class="node-dot node-e" cx="155" cy="100" r="6" fill="#c9a84c"/>
-          <circle class="node-dot node-s" cx="100" cy="155" r="6" fill="#c9a84c"/>
-          <circle class="node-dot node-w" cx="45" cy="100" r="6" fill="#c9a84c"/>
-          <line class="ew-e" x1="104" y1="100" x2="150" y2="100" stroke="#c9a84c" stroke-width=".6"/>
-          <line class="ew-w" x1="96" y1="100" x2="50" y2="100" stroke="#c9a84c" stroke-width=".6"/>
-          <circle class="center-node" cx="100" cy="100" r="5" fill="#c9a84c"/>
-        </svg>
-      </div>
-      <div class="hero-meta">
-        <div class="hero-meta-item"><span class="hero-meta-label">Studio</span><span class="hero-meta-value">Overture Dynamics</span></div>
-        <span class="hero-meta-sep">·</span>
-        <div class="hero-meta-item"><span class="hero-meta-label">Genre</span><span class="hero-meta-value">High-Fantasy MMO</span></div>
-      </div>
-      <h1 class="hero-title"><span class="t-project">Project</span><span class="t-oath">Oath</span></h1>
-      <p class="hero-tagline" id="tagline"><span id="typing-text"></span><span class="typing-cursor" id="typing-cursor"></span></p>
-      <div class="hero-ctas">
-        <a href="#founders" class="btn-primary magnetic-btn">Founder's Pass<span class="btn-sub">$299 · Lifetime Access · Coming Soon</span></a>
-        <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" class="btn-secondary magnetic-btn" title="Opens in new tab">Join Discord</a>
-      </div>
-    </div>
-    <div class="hero-scroll" aria-hidden="true"><div class="hero-scroll-line"></div></div>
-  </section>
+<nav class="waypoints" id="waypoints" aria-label="Journey waypoints"></nav>
+<div class="scroll-hint" id="hint">Scroll to journey<i></i></div>
 
-  <section id="stats" aria-label="Key statistics">
-    <div class="container">
-      <div class="stats-row">
-        <div class="stat reveal"><span class="stat-val" data-target="6">6</span><span class="stat-lbl">Weapon Archetypes</span></div>
-        <div class="stat-sep"></div>
-        <div class="stat reveal delay-1"><span class="stat-val">$25B</span><span class="stat-lbl">MMO Market</span></div>
-        <div class="stat-sep"></div>
-        <div class="stat reveal delay-2"><span class="stat-val" data-target="5">5</span><span class="stat-lbl">AI World Agents</span></div>
-        <div class="stat-sep"></div>
-        <div class="stat reveal delay-3"><span class="stat-val" data-target="2029" data-from="2020">2029</span><span class="stat-lbl">Closed Alpha</span></div>
-        <div class="stat-sep"></div>
-        <div class="stat reveal delay-4"><span class="stat-val" data-target="10000" data-comma="true">10,000</span><span class="stat-lbl">Founders Cap</span></div>
+<main>
+  <!-- HERO -->
+  <section id="hero" data-label="The Gate">
+    <div class="hero-logo" aria-hidden="true"><img src="logo.webp" alt="" /></div>
+    <div class="wrap">
+      <p class="presents">Overture Dynamics presents</p>
+      <h1><small>—</small>PROJECT <em>OATH</em></h1>
+      <div class="divider"><b></b></div>
+      <p class="tagline">The first MMO where the world is truly alive.</p>
+      <div class="cta-row">
+        <a class="btn" href="#pillars">Begin the Journey</a>
+        <a class="btn ghost" href="#join">Join the Waitlist</a>
+      </div>
+      <div class="facts">
+        <div><strong>6</strong><span>Weapon Archetypes</span></div>
+        <div><strong>5</strong><span>World-Running AI Agents</span></div>
+        <div><strong>0</strong><span>Scripted Quest Lines</span></div>
       </div>
     </div>
   </section>
 
-  <!-- ===== PROBLEM ===== -->
-  <section id="problem" class="section" aria-label="The Problem">
-    <div class="container">
-      <div class="section-head center reveal">
-        <span class="eyebrow">The Problem</span>
-        <h2>Every major MMO suffers <span class="gold">the same six failures.</span></h2>
-        <p class="section-desc">Project Oath was designed to solve all six simultaneously — creating an entirely uncontested category: no existing MMO combines action-combat depth with a living AI world.</p>
-      </div>
-      <div class="problem-grid">
-        <div class="problem-card reveal tilt-card"><p class="problem-number">Failure 01</p><h4 class="problem-title">Linear Quest Design</h4><p class="problem-body">Quests are hand-authored story paths. Once players exhaust them, the world goes silent until a developer writes more.</p><p class="problem-solve">Project Oath: Five AI agents generate events, crises, and history continuously — no developer input required after launch.</p></div>
-        <div class="problem-card reveal delay-1 tilt-card"><p class="problem-number">Failure 02</p><h4 class="problem-title">Hollow NPCs</h4><p class="problem-body">Reactive scripts that wait for player input, remember nothing, and own nothing. Every conversation resets.</p><p class="problem-solve">Project Oath: Every NPC is an ERC-8004 agent — persistent memory, LLM-driven reasoning, genuine asset ownership.</p></div>
-        <div class="problem-card reveal delay-2 tilt-card"><p class="problem-number">Failure 03</p><h4 class="problem-title">Static Economies</h4><p class="problem-body">Developer-tuned prices that don't reflect real supply and demand. Exploits are inevitable. Markets feel fake.</p><p class="problem-solve">Project Oath: The Economy Agent tracks every transaction in real time. Prices and scarcity emerge from behavior — never set by a developer.</p></div>
-        <div class="problem-card reveal tilt-card"><p class="problem-number">Failure 04</p><h4 class="problem-title">Content Treadmills</h4><p class="problem-body">Publishers spend hundreds of millions on expansion packs just to keep worlds alive between developer releases.</p><p class="problem-solve">Project Oath: A world governed by AI agents never goes static. There is no content gap to fill. No DLC. Ever.</p></div>
-        <div class="problem-card reveal delay-1 tilt-card"><p class="problem-number">Failure 05</p><h4 class="problem-title">No World Memory</h4><p class="problem-body">Player actions rarely leave lasting consequences. History doesn't stick. The same dungeon resets. The same NPC forgets.</p><p class="problem-solve">Project Oath: The world accumulates a permanent geological, political, and social record. Nothing resets. History is real.</p></div>
-        <div class="problem-card reveal delay-2 tilt-card"><p class="problem-number">Failure 06</p><h4 class="problem-title">No Living Factions</h4><p class="problem-body">Guilds and factions are scripted states with fixed power — not emergent outcomes of actual player and NPC behavior.</p><p class="problem-solve">Project Oath: Faction power is an emergent outcome. The Events Agent monitors behavior and triggers lore-consistent political shifts — without scripting.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== PILLARS ===== -->
-  <section id="pillars" class="section" aria-label="Game pillars">
-    <div class="container">
-      <div class="section-head center reveal">
-        <span class="eyebrow">The Game</span>
-        <h2>Two pillars. <span class="gold">One living world.</span></h2>
-        <p class="section-desc">Project Oath is built on two inseparable systems — a multi-agent AI that governs the world continuously, and living NPCs that think, remember, and act autonomously. Neither exists without the other.</p>
-      </div>
-      <div class="pillars-grid">
-        <div class="pillar reveal tilt-card">
-          <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><path d="M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/></svg></div>
-          <p class="pillar-no">Pillar I &nbsp;·&nbsp; World Simulation</p>
+  <!-- PILLARS -->
+  <section id="pillars" data-label="Two Pillars">
+    <div class="wrap">
+      <span class="eyebrow reveal">The Game</span>
+      <h2 class="reveal d1">Two pillars. <em>One living world.</em></h2>
+      <p class="lead reveal d2">A high-fantasy action-MMO with no scripted story to exhaust. A simulation governs the realm, and every inhabitant of it remembers you.</p>
+      <div class="pillars">
+        <article class="panel reveal d1">
+          <p class="no">Pillar I · World Simulation</p>
           <h3>A World That Lives</h3>
-          <p class="pillar-body">Five specialized AI agents — Economy, Weather, Ecology, Geology, and Narrative — run the world continuously. No developer scripts the content after launch. The world generates its own history, lore, and crises in real time.</p>
-          <ul class="pillar-list"><li class="pillar-list-item">Economy driven by real supply and demand — prices emerge from player behavior</li><li class="pillar-list-item">Ecological over-harvesting depletes biomes permanently until recovery</li><li class="pillar-list-item">Geological events reshape geography — the world accumulates a living record</li><li class="pillar-list-item">AI Narrative Engine generates emergent lore NPCs reference in conversation</li></ul>
-        </div>
-        <div class="pillar reveal delay-2 tilt-card">
-          <div class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="11" width="18" height="11" rx="1"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/><circle cx="12" cy="16" r="1.2" fill="currentColor" stroke="none"/></svg></div>
-          <p class="pillar-no">Pillar II &nbsp;·&nbsp; ERC-8004</p>
+          <p>Five specialized AI agents — Economy, Weather, Ecology, Geology and Narrative — run the world continuously. No developer scripts the content. The world writes its own history.</p>
+          <ul>
+            <li>Prices emerge from real supply and demand</li>
+            <li>Over-harvested biomes stay depleted until they recover</li>
+            <li>Geological events reshape the map for good</li>
+            <li>Emergent lore that NPCs speak about</li>
+          </ul>
+        </article>
+        <article class="panel reveal d2">
+          <p class="no">Pillar II · ERC-8004</p>
           <h3>NPCs That Remember You</h3>
-          <p class="pillar-body">Every NPC in Project Oath runs as an ERC-8004 agent — a persistent, on-chain entity with genuine memory of player interactions, faction loyalty, and autonomous ownership of in-world assets. Every subscriber is remembered.</p>
-          <ul class="pillar-list"><li class="pillar-list-item">NPCs remember you permanently — relationships, grudges, and loyalty persist forever</li><li class="pillar-list-item">Relationships, history, and reputation compound over time — no resets</li><li class="pillar-list-item">Your offline player agent stays active in the world when you log off</li><li class="pillar-list-item">World historian system logs major events — players live through history</li></ul>
+          <p>Every NPC is a persistent entity with its own memory, LLM-driven dialogue, on-chain state and genuine ownership of in-world assets. Every subscriber is remembered.</p>
+          <ul>
+            <li>Relationships, grudges and loyalty persist — no resets</li>
+            <li>Reputation travels through the NPC network</li>
+            <li>Your offline agent stays active when you log off</li>
+            <li>A world historian records the moments that matter</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- AGENTS -->
+  <section id="agents" data-label="The Five Agents">
+    <div class="wrap">
+      <span class="eyebrow reveal">The Simulation</span>
+      <h2 class="reveal d1">Five minds <em>run the realm.</em></h2>
+      <div class="agents reveal d2">
+        <div class="agent-list" id="agentList"></div>
+        <div class="panel agent-detail" id="agentDetail">
+          <p class="hint">Choose an agent — watch the world react</p>
+          <h3 id="agName">The Five Agents</h3>
+          <p id="agText">Each agent watches the world and acts on it. Select one on the left and the realm behind this page will respond.</p>
+          <div class="feed-head"><span>World Feed</span><span>Simulated preview</span></div>
+          <ul id="feed"></ul>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== WORLD ===== -->
-  <section id="world" class="section" aria-label="The living world">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Massively Multiplayer</span>
-        <h2>One server. <span class="gold">One shared history.</span></h2>
-      </div>
-      <p class="world-quote reveal delay-1">"You don't play in the world —<br><em>you shape it.</em>"</p>
-      <p class="about-p reveal delay-1" style="max-width:680px; margin-bottom:clamp(2rem,5vw,3.5rem);">Project Oath runs on a single shard per region. Every player inhabits the same world, shares the same economy, and lives through the same history. There is no critical path. A player can spend their first month trading ore, building faction alliances, following an NPC merchant's fortunes, or fighting in PvP arenas. All of it is the game — simultaneously. Every player's experience is genuinely non-linear and unrepeatable.</p>
-      <div class="influence-grid">
-        <div class="influence-card reveal tilt-card"><p class="influence-no">Economic Power</p><h4 class="influence-title">Control the Markets</h4><p class="influence-body">Players control supply chains, corner rare materials, and move markets. A single guild that monopolises a region's ore production can dictate prices across multiple empires. Every other player — and every NPC — feels the consequence.</p></div>
-        <div class="influence-card reveal delay-1 tilt-card"><p class="influence-no">Reputation &amp; Relationships</p><h4 class="influence-title">Build Your Legacy With NPCs</h4><p class="influence-body">NPCs remember every interaction permanently. Help a merchant survive a drought and they become a lasting ally. Betray a faction leader and that reputation propagates across the NPC network. Who you are is built through action, not character selection.</p></div>
-        <div class="influence-card reveal delay-2 tilt-card"><p class="influence-no">Political Influence</p><h4 class="influence-title">Govern Territories</h4><p class="influence-body">Players hold faction titles, govern territories, and run for political office. The political map is an emergent outcome of player behaviour — alliances form, wars start, and territorial borders shift based on what players actually do.</p></div>
-        <div class="influence-card reveal tilt-card"><p class="influence-no">Permanent World Legacy</p><h4 class="influence-title">Leave a Mark That Lasts</h4><p class="influence-body">Player actions leave marks that outlast each session. A destroyed biome, a collapsed trade route, a historically significant battle — all logged permanently by the world historian. Players become part of the world's recorded history.</p></div>
-        <div class="influence-card reveal delay-1 tilt-card"><p class="influence-no">Combat &amp; Faction Warfare</p><h4 class="influence-title">Fight for the World</h4><p class="influence-body">Ranked arenas, open-world PvP, and instanced raids all feed into faction standing and territorial control. A victory in open-world combat can shift a region's political balance. Combat is meaningful because the world it takes place in is genuinely alive.</p></div>
-        <div class="influence-card reveal delay-2 tilt-card"><p class="influence-no">Offline Presence</p><h4 class="influence-title">The World Never Pauses</h4><p class="influence-body">Player characters run as ERC-8004 agents when logged off — gathering resources, trading on standing instructions, and patrolling territory. A player's influence on the world continues even when they are not actively playing.</p></div>
+  <!-- COMBAT -->
+  <section id="combat" data-label="The Art of War">
+    <div class="wrap right">
+      <div class="panel mid reveal">
+        <span class="eyebrow">Combat</span>
+        <h2>No class. <em>No limits.</em></h2>
+        <p class="lead">There is no class selection. The weapon in your hand defines your identity, your abilities and your role — swap weapons, swap who you are. No tab-targeting, no cooldown rotation: skill is positioning, timing and mastery.</p>
+        <div class="mechanics">
+          <div class="mech"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><b>Dodge-Cancel</b><p>Any animation can be cancelled into a dodge roll — a deep movement layer that separates novice from expert.</p></div>
+          <div class="mech"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 7v5l3 3"/></svg><b>Interrupt Windows</b><p>Most abilities, NPC and player, have readable windows. Spotting and punishing them is the heart of high-level play.</p></div>
+          <div class="mech"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg><b>Positional Play</b><p>Attack cones, backstab multipliers and AoE shapes reward spatial awareness. Every fight is geometry.</p></div>
+          <div class="mech"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5.3-8-11a4.6 4.6 0 0 1 8-3 4.6 4.6 0 0 1 8 3c0 5.700-8 11-8 11z"/></svg><b>Stamina Pressure</b><p>Dodges and defensive skills drain stamina. Managing it under pressure is a combat skill, not a background stat.</p></div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== COMBAT ===== -->
-  <section id="combat" class="section" aria-label="Combat and crafting">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Combat &amp; Crafting</span>
-        <h2>No class. <span class="gold">No limits.</span></h2>
-        <p class="section-desc">There is no class selection at character creation. The weapon you equip defines your identity, your abilities, and your role. Swap weapons — swap who you are.</p>
-      </div>
-      <div class="combat-layout">
-        <div>
-          <span class="eyebrow reveal" style="margin-bottom:.3rem;">Six Weapon Archetypes</span>
-          <p class="about-p reveal delay-1" style="margin-top:.3rem;">No class selection. Your equipped weapon defines your identity, your abilities, and your role. Six archetypes at launch — each with a distinct mechanical identity and advanced techniques discovered through play.</p>
-          <div class="weapons-grid reveal delay-1">
-            <div class="weapon-card tilt-card"><p class="weapon-name">Greatsword</p><p class="weapon-desc">Heavy melee — wide sweeps, stagger and zone control.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Dual Blades</p><p class="weapon-desc">High-speed combos — relentless pressure and interrupt chains.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Staff</p><p class="weapon-desc">Elemental spells — AoE burst and sustained field control.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Bow</p><p class="weapon-desc">Precision ranged — movement-based kiting and charged shots.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Spear</p><p class="weapon-desc">Reach &amp; precision — thrusting combos, poke pressure and execute range.</p></div>
-            <div class="weapon-card tilt-card"><p class="weapon-name">Bracers</p><p class="weapon-desc">Close-range brawler — rapid strikes, armor break and counter-attack windows.</p></div>
+  <!-- ARMORY -->
+  <section id="weapons" data-label="The Armory">
+    <div class="wrap">
+      <span class="eyebrow reveal">Six Weapon Archetypes</span>
+      <h2 class="reveal d1">Choose your <em>identity.</em></h2>
+      <div class="panel reveal d2">
+        <div class="armory">
+          <div class="viewer" id="viewer">
+            <canvas id="wcanvas"></canvas>
+            <div class="tip">Drag to inspect</div>
+          </div>
+          <div class="weapon-info">
+            <div class="weapon-tabs" id="wtabs" role="tablist"></div>
+            <h3 id="wName">Greatsword</h3>
+            <p id="wDesc"></p>
+            <div class="tags" id="wTags"></div>
+            <div class="craft">
+              <b>Signature Weapon Crafting</b>
+              Crafted signature weapons are modular. Swap components to change ability sets, damage types and passive traits — no two are identical, and they drive the player-to-player marketplace.
+            </div>
           </div>
         </div>
-        <div>
-          <span class="eyebrow reveal" style="margin-bottom:.3rem;">Core Mechanics</span>
-          <p class="about-p reveal delay-1" style="margin-top:.3rem;">No tab-targeting. No cooldown rotation. Skill is expressed through positioning, timing, and weapon mastery.</p>
-          <div class="mechanic-list">
-            <div class="mechanic reveal delay-1"><div class="mechanic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><div><p class="mechanic-title">Dodge-Cancel System</p><p class="mechanic-body">Any animation can be cancelled into a dodge roll, creating a deep movement layer that separates novice from expert play.</p></div></div>
-            <div class="mechanic reveal delay-1"><div class="mechanic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div><div><p class="mechanic-title">Interrupt Windows</p><p class="mechanic-body">Most abilities — NPC and player — have readable interrupt windows. Recognising and exploiting them is core to high-level play.</p></div></div>
-            <div class="mechanic reveal delay-2"><div class="mechanic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div><p class="mechanic-title">Positional Play</p><p class="mechanic-body">Attack cones, backstab multipliers, and AoE shapes reward spatial awareness. Every fight is a question of geometry as much as timing.</p></div></div>
-            <div class="mechanic reveal delay-2"><div class="mechanic-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><div><p class="mechanic-title">Stamina Management</p><p class="mechanic-body">Dodge rolls and defensive skills consume stamina. Managing resources under pressure is a combat skill in itself — not a background stat.</p></div></div>
-          </div>
-          <div class="crafting-block reveal delay-3">
-            <h3>Signature Weapon Crafting</h3>
-            <p class="crafting-body">Crafted signature weapons are modular. Components can be exchanged to modify ability sets, damage types, and passive traits — permanently defining your individual play identity. No two signature weapons are identical.</p>
-            <p class="crafting-body">Signature weapons are the primary driver of player-to-player marketplace activity. The economy feels the weight of every crafting decision.</p>
-            <p class="crafting-body">One weapon system serves all content modes — ranked PvP arenas, open-world faction conflict, and instanced raids. No split meta. A weapon mastered in PvP is the same weapon used in raid content.</p>
-          </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHARED WORLD -->
+  <section id="world" data-label="The Shared World">
+    <div class="wrap left">
+      <div style="max-width:980px">
+        <span class="eyebrow reveal">Massively Multiplayer</span>
+        <h2 class="reveal d1">One server. <em>One shared history.</em></h2>
+        <p class="quote reveal d2">“You don't play in the world —<br><em>you shape it.</em>”</p>
+        <p class="lead reveal d2">There is no critical path. Trade ore, build alliances, follow a merchant's fortunes or fight in the arenas — all of it is the game, at once.</p>
+        <div class="cards">
+          <div class="card reveal"><small>Economic Power</small><h3>Control the Markets</h3><p>Corner a region's ore and move prices across empires. Everyone, player and NPC, feels it.</p></div>
+          <div class="card reveal d1"><small>Reputation</small><h3>Build Your Legacy</h3><p>Help a merchant through a drought and gain an ally for life. Betray a faction leader and the news travels.</p></div>
+          <div class="card reveal d2"><small>Politics</small><h3>Govern Territories</h3><p>Hold titles, run for office, start wars. Borders shift based on what players actually do.</p></div>
+          <div class="card reveal"><small>World Legacy</small><h3>Leave a Mark</h3><p>A razed biome or a pivotal battle is logged forever by the world historian.</p></div>
+          <div class="card reveal d1"><small>Warfare</small><h3>Fight for the World</h3><p>Arenas, open-world PvP and raids all feed faction standing and territorial control.</p></div>
+          <div class="card reveal d2"><small>Offline Presence</small><h3>The World Never Pauses</h3><p>Your character acts as an agent when you log off — gathering, trading and patrolling.</p></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== ROADMAP ===== -->
-  <section id="roadmap" class="section" aria-label="Development roadmap">
-    <div class="container">
-      <div class="section-head reveal">
-        <span class="eyebrow">Development Roadmap</span>
-        <h2>The path to a <span class="gold">living world.</span></h2>
-        <p class="section-desc">A 9-year, 5-phase build — each phase unlocking the next layer of the world simulation. <strong style="color:var(--gold-dim);">Click any phase to expand details.</strong></p>
-      </div>
-      <div class="roadmap-timeline">
-        <div class="roadmap-item active reveal" data-phase="1">
-          <p class="roadmap-year">2026–2027 · Years 1–2</p>
-          <div class="roadmap-stage">Foundation · Pre-Seed &amp; Seed <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">5–15 people · $5M–$18M (Pre-Seed + Seed)<br>Incorporate, GDD complete, ERC-8004 NPC prototype, combat vertical slice on UE5, Discord 1,000+, pre-seed close. Seed raise $3M, NPC demo public, first external playtests.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">5–15</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$5M–$18M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Incorporate · GDD · ERC-8004 prototype</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Combat slice · Discord 1,000+ · Seed raise</span></div></div></div>
-        </div>
-        <div class="roadmap-item reveal delay-1" data-phase="2">
-          <p class="roadmap-year">2028 · Year 3</p>
-          <div class="roadmap-stage">Pre-Alpha · Series A <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">12–25 people · $15M (Series A)<br>All simulation agents integrated, weapon crafting complete, marketplace v1, Series A raise.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">12–25</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">All agents integrated · Crafting complete</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Marketplace v1 · Series A raise</span></div></div></div>
-        </div>
-        <div class="roadmap-item reveal delay-2" data-phase="3">
-          <p class="roadmap-year">2029–2030 · Years 4–5</p>
-          <div class="roadmap-stage">Closed Alpha <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">20–35 people · $15M–$40M (Series A / B)<br>Founder pass holders access the world. 1K-player closed alpha, full world simulation live, Series B preparation.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">20–35</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$15M–$40M</span></div><div class="roadmap-detail-item"><span class="label">Milestones</span><span class="value">Founder's Pass access · Full world live</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">1K-player alpha · Series B prep</span></div></div></div>
-        </div>
-        <div class="roadmap-item reveal delay-3" data-phase="4">
-          <p class="roadmap-year">2031–2032 · Years 6–7</p>
-          <div class="roadmap-stage">Open Beta · Full Subscription Launch <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">35–45 people · $40M–$80M (Series B / C)<br>5K–20K players, full subscription launch, economy tuning, press &amp; influencer push.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">35–45</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div><div class="roadmap-detail-item"><span class="label">Players</span><span class="value">5K–20K</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Subscription launch · Economy tuning</span></div></div></div>
-        </div>
-        <div class="roadmap-item reveal delay-4" data-phase="5">
-          <p class="roadmap-year">2033–2034 · Years 8–9</p>
-          <div class="roadmap-stage">Release · The Living World <span class="roadmap-expand-icon">▾</span></div>
-          <p class="roadmap-desc">50 people (cap) · $40M–$80M (Series B / C)<br>Public launch, 200K–500K player target, on-chain ownership layer activates.</p>
-          <div class="roadmap-details"><div class="roadmap-details-inner"><div class="roadmap-detail-item"><span class="label">Team</span><span class="value">50 (cap)</span></div><div class="roadmap-detail-item"><span class="label">Funding</span><span class="value gold">$40M–$80M</span></div><div class="roadmap-detail-item"><span class="label">Players</span><span class="value">200K–500K target</span></div><div class="roadmap-detail-item"><span class="label">Deliverables</span><span class="value">Public launch · On-chain ownership</span></div></div></div>
-        </div>
-      </div>
+  <!-- ROADMAP -->
+  <section id="roadmap" data-label="The Road Ahead">
+    <div class="wrap">
+      <span class="eyebrow reveal">Development Roadmap</span>
+      <h2 class="reveal d1">The path to a <em>living world.</em></h2>
+      <p class="lead reveal d2">Five phases over nine years, each unlocking the next layer of the simulation. Select a milestone.</p>
+      <div class="road reveal d2" id="road" role="tablist"></div>
+      <div class="panel reveal d3" id="phase" aria-live="polite"></div>
     </div>
   </section>
 
-  <!-- ===== ABOUT ===== -->
-  <section id="about" class="section" aria-label="About the studio">
-    <div class="container">
-      <div class="about-grid">
-        <div>
-          <span class="eyebrow reveal">Overture Dynamics</span>
-          <h2 class="about-headline reveal delay-1">An <span class="gold">AI-first</span> studio building the world's most immersive online world.</h2>
-          <p class="about-p reveal delay-2">Overture Dynamics was built on a single conviction: the MMO genre has stagnated because its worlds are scripted. Every dungeon, every NPC, every weather event — authored by a developer, replayed in a loop. Players don't inhabit a world. They perform inside one.</p>
-          <p class="about-p reveal delay-2">We're building a world governed entirely by AI agents. The economy finds its own equilibrium. Biomes deplete and recover. Geological events reshape geography. NPCs build genuine relationships with players across years of play — because they actually remember.</p>
-          <p class="about-p reveal delay-3">Project Oath is our flagship title. It is also our proof-of-concept for the ERC-8004 standard — the foundational architecture for truly autonomous, on-chain NPC entities. We believe that standard will outlast any single game. The world doesn't need scripting when it runs itself.</p>
-          <p class="about-p reveal delay-3" style="font-family:var(--ff-head);font-size:.8rem;letter-spacing:.12em;color:var(--gold-dim);margin-top:1.5rem;">Play. Own. Evolve.</p>
-        </div>
-        <div class="about-stats reveal delay-2">
-          <div class="about-stat-box tilt-card"><span class="about-stat-value">Unreal Engine 5</span><span class="about-stat-desc">AAA visual fidelity from day one. Built for scale on the world's leading real-time 3D engine.</span></div>
-          <div class="about-stat-box tilt-card"><span class="about-stat-value">ERC-8004</span><span class="about-stat-desc">A new on-chain standard for persistent, memory-driven NPC agents — developed internally by Overture Dynamics.</span></div>
-          <div class="about-stat-box tilt-card"><span class="about-stat-value">5 World Agents</span><span class="about-stat-desc">Economy · Weather · Ecology · Geology · Narrative — coordinated by the central Main Engine Agent. No developer scripting post-launch.</span></div>
-          <div class="about-stat-box tilt-card"><span class="about-stat-value">No DLC. Ever.</span><span class="about-stat-desc">A world that generates its own content never runs out of story. Traditional expansions exist to fill the silence. Project Oath doesn't go silent.</span></div>
-        </div>
+  <!-- JOIN -->
+  <section id="join" data-label="Swear the Oath">
+    <div class="wrap">
+      <span class="eyebrow reveal">Answer the call</span>
+      <h2 class="reveal d1">Swear the <em>Oath.</em></h2>
+      <p class="lead reveal d2" style="margin:0 auto">An active subscription is required to play — there is no free tier. Early believers get in first.</p>
+      <div class="tiers">
+        <div class="tier reveal"><h3>Buy the Game</h3><div class="price">$39.99<small> once</small></div><p>The one-time purchase that unlocks your place in the world.</p></div>
+        <div class="tier feature reveal d1"><h3>Founder's Pass</h3><div class="price">$299</div><p>Closed alpha access plus a permanent subscription, for the first 10,000 believers.</p></div>
+        <div class="tier reveal d2"><h3>Subscription</h3><div class="price">$14.99<small> /mo</small></div><p>Full access to combat, marketplace, faction politics and permanent NPC memory.</p></div>
       </div>
+      <form class="signup launchlist-form reveal" id="signup" action="https://getlaunchlist.com/s/YOUR_FORM_KEY" method="POST">
+        <input type="email" name="email" required placeholder="Your email — we'll send the summons" aria-label="Email address" />
+        <button class="btn" type="submit">Join the Waitlist</button>
+      </form>
+      <p class="sworn" id="sworn">The Oath is sworn. We will find you.</p>
+      <p class="fineprint">Marketplace trades carry a 1–5% tiered fee. Play. Own. Evolve.</p>
     </div>
   </section>
+</main>
 
-  <!-- ===== FOUNDER'S PASS ===== -->
-  <section id="founders" class="section" aria-label="Founder's Pass">
-    <div class="container">
-      <div class="founders-wrap">
-        <span class="eyebrow reveal">Founder's Lifetime Pass</span>
-        <div class="founders-price-block reveal delay-1">
-          <div class="founders-price">$299</div>
-          <span class="founders-price-note" style="font-weight:bold;font-size:.75rem;color:#c9a84c;">One-Time &nbsp;·&nbsp; Lifetime Subscription Access &nbsp;·&nbsp; No Monthly Fee</span>
-          <span class="founders-price-note" style="margin-top:.75rem;color:#c9a84c;font-weight:bold;font-size:.75rem;">Standard: $39.99 to own &nbsp;+&nbsp; $14.99/mo subscription</span>
-        </div>
-        <div class="gold-divider reveal delay-1"></div>
-        <p class="founders-body reveal delay-2">Available pre-launch only, capped at 10,000. The Founder's Pass grants three things: closed alpha access — the only way to play during Phase 3 (2029–2030); a permanent subscription with no monthly fee, ever; and in-world recognition as a founding member of the world's history. You don't just play the world. <em style="color:var(--text);">You are part of it.</em></p>
-        <div class="founders-perks reveal delay-2">
-          <div class="perk"><span class="perk-dot"></span><span>Closed alpha access (2029–2030) — the only way to play before public launch</span></div>
-          <div class="perk"><span class="perk-dot"></span><span>Lifetime subscription — no $14.99/mo fee, ever. Pay once, play forever</span></div>
-          <div class="perk"><span class="perk-dot"></span><span>NPCs remember you permanently — relationships, history, and reputation persist across every session</span></div>
-          <div class="perk"><span class="perk-dot"></span><span>Offline player agent — your character gathers, trades, and acts in the world while you sleep</span></div>
-          <div class="perk"><span class="perk-dot"></span><span>NPCs reference your founding status as permanent in-world historical fact</span></div>
-        </div>
-        <a href="#waitlist" class="btn-notify reveal delay-3">Notify Me When Available</a>
-        <p class="founders-cap-note reveal delay-4" style="margin-top:1.5rem;">Capped at 10,000 passes worldwide. Pre-launch only. Never offered again.</p>
-      </div>
-    </div>
-  </section>
+<footer>
+  <div class="foot-logo"><img src="logo.webp" alt="Project Oath emblem" /></div>
+  <b>OVERTURE DYNAMICS</b>
+  © 2026 Overture Dynamics Inc. · New York, NY · Project Oath is in development; all content is subject to change.
+</footer>
 
-  <!-- ===== WAITLIST ===== -->
-  <section id="waitlist" aria-label="Join the waitlist">
-    <div class="container">
-      <div class="waitlist-wrap reveal">
-        <span class="eyebrow">Stay in the loop</span>
-        <h2>Join the <span class="gold">world waitlist</span></h2>
-        <p class="section-desc">Be the first to know when the Founder's Pass goes live, when new dev logs drop, and when the closed alpha opens.</p>
-        <form class="waitlist-form launchlist-form" action="https://getlaunchlist.com/s/coI7Ny" method="POST">
-          <input type="email" name="email" placeholder="Enter your email address" required aria-label="Email address" />
-          <button type="submit" class="btn-waitlist">Notify Me</button>
-        </form>
-        <p class="waitlist-note" id="waitlist-status">No spam · Unsubscribe anytime · We respect your inbox.</p>
-        <div id="launchlist-referral-link">
-          <p class="ref-label">🎯 Your unique referral link</p>
-          <p class="ref-link" id="referral-link-text">https://overturedynamics.com/?ref=YOUR_CODE</p>
-          <p class="ref-hint">Share this link with friends — they get early access, you get rewards! <a href="https://getlaunchlist.com" target="_blank">Learn more</a></p>
-        </div>
-      </div>
-    </div>
-  </section>
+<script src="https://getlaunchlist.com/js/widget-diy.js" defer></script>
+<script type="module">
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-  <footer>
-    <div class="container">
-      <div class="footer-main">
-        <div><div class="footer-brand">Overture Dynamics<span class="footer-brand-sub">New York, NY &nbsp;·&nbsp; Est. 2026</span></div></div>
-        <div class="footer-nav"><p class="footer-nav-head">Navigate</p><a href="#pillars">The Game</a><a href="#world">The World</a><a href="#combat">Combat</a><a href="#roadmap">Roadmap</a><a href="#about">Studio</a><a href="#founders">Founder's Pass</a><a href="https://careers.overturedynamics.com">Careers</a><a href="mailto:chris.inserra@overturedynamics.com">Contact</a></div>
-        <div class="footer-socials"><p class="footer-socials-head">Community</p><div class="social-links">
-          <a href="https://x.com/OvertureMMO" target="_blank" rel="noopener" aria-label="Twitter/X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-          <a href="https://discord.gg/Xd9R6keXvC" target="_blank" rel="noopener" aria-label="Discord"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg></a>
-          <a href="https://tiktok.com/@OvertureMMO" target="_blank" rel="noopener" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z"/></svg></a>
-          <a href="https://youtube.com/@OvertureMMO" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
-          <a href="https://instagram.com/OvertureMMO" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
-          <a href="https://linkedin.com/company/overture-dynamics" target="_blank" rel="noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
-        </div></div>
-      </div>
-      <div class="footer-bottom"><p class="footer-copy">© 2026 Overture Dynamics. All rights reserved. All game designs, combat systems, and mechanics are original to Overture Dynamics.</p><p class="footer-wordmark">Play. Own. Evolve.</p></div>
-    </div>
-  </footer>
+/* ============================================================
+   helpers
+   ============================================================ */
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t)};
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile=matchMedia('(max-width:760px)').matches;
 
-  <button id="back-to-top" aria-label="Back to top">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
-  </button>
+function hash(x,y){const n=Math.sin(x*127.1+y*311.7)*43758.5453;return n-Math.floor(n)}
+function vnoise(x,y){
+  const xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);
+  return lerp(lerp(hash(xi,yi),hash(xi+1,yi),u),lerp(hash(xi,yi+1),hash(xi+1,yi+1),u),v);
+}
+function fbm(x,y){let a=.5,f=1,s=0;for(let i=0;i<5;i++){s+=a*vnoise(x*f,y*f);f*=2;a*=.5}return s}
+function glowTexture(inner='rgba(255,255,255,1)',mid='rgba(255,255,255,.35)'){
+  const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');
+  const gr=g.createRadialGradient(64,64,0,64,64,64);gr.addColorStop(0,inner);gr.addColorStop(.25,mid);gr.addColorStop(1,'rgba(255,255,255,0)');
+  g.fillStyle=gr;g.fillRect(0,0,128,128);return new THREE.CanvasTexture(c);
+}
 
-  <script src="https://getlaunchlist.com/js/widget-diy.js" defer></script>
+/* ============================================================
+   page UI (works even without WebGL)
+   ============================================================ */
+const sections=$$('main section');
+const wp=$('#waypoints');
+sections.forEach(s=>{
+  const a=document.createElement('a');a.href='#'+s.id;a.setAttribute('aria-label',s.dataset.label);
+  a.innerHTML=`<span>${s.dataset.label}</span>`;wp.appendChild(a);
+});
+const wpLinks=$$('a',wp), navLinks=$$('nav.main a');
+const secObs=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const i=sections.indexOf?.call(sections,e.target)??sections.findIndex(s=>s===e.target);
+  wpLinks.forEach((l,j)=>l.classList.toggle('on',i===j));
+  navLinks.forEach(l=>l.classList.toggle('on',l.getAttribute('href')==='#'+e.target.id));
+}),{rootMargin:'-45% 0px -45% 0px'});
+sections.forEach(s=>secObs.observe(s));
 
-  <script>
-    'use strict';
+const revObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');revObs.unobserve(e.target)}}),{threshold:.12});
+$$('.reveal').forEach(el=>revObs.observe(el));
+requestAnimationFrame(()=>$$('#hero .reveal').forEach(e=>e.classList.add('in')));
 
-    // ===== PRELOADER =====
-    function hidePreloader() {
-      var preloader = document.getElementById('preloader');
-      if (preloader) { preloader.classList.add('hidden'); }
+const header=$('#top'),prog=$('#progress'),hint=$('#hint');
+function onScroll(){
+  const max=document.documentElement.scrollHeight-innerHeight;
+  const p=max>0?scrollY/max:0;
+  prog.style.width=(p*100)+'%';
+  header.classList.toggle('scrolled',scrollY>40);
+  hint.classList.toggle('gone',scrollY>80);
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* ---- roadmap ---- */
+const phases=[
+  {n:'Foundation',y:'2026–27',t:'Foundation',d:'Incorporate, complete the GDD, and prove the two pillars: an ERC-8004 NPC prototype and a combat vertical slice on Unreal Engine 5.',c:['GDD complete','ERC-8004 NPC prototype','Combat vertical slice','Discord 1,000+','First external playtests']},
+  {n:'Pre-Alpha',y:'2028',t:'Pre-Alpha',d:'Every simulation agent comes online together, weapon crafting is finished, and the first marketplace opens.',c:['All five agents integrated','Weapon crafting complete','Marketplace v1']},
+  {n:'Closed Alpha',y:'2029–30',t:'Closed Alpha',d:"Founder's Pass holders step into the world for the first time, with the full simulation running.",c:["Founder's Pass access",'1,000-player alpha','Full world simulation live']},
+  {n:'Open Beta',y:'2031–32',t:'Open Beta',d:'The doors widen. Full subscription launch, economy tuning and the first public push.',c:['5K–20K players','Subscription launch','Economy tuning']},
+  {n:'Release',y:'2033–34',t:'Release · The Living World',d:'Public launch of the living world, with the on-chain ownership layer switching on.',c:['Public launch','200K–500K player target','On-chain ownership live']}
+];
+const road=$('#road'),phase=$('#phase');
+phases.forEach((p,i)=>{
+  const b=document.createElement('button');b.className='node';b.setAttribute('role','tab');
+  b.innerHTML=`<i></i><div><b>${p.n}</b><small>${p.y}</small></div>`;
+  b.onclick=()=>setPhase(i);road.appendChild(b);
+});
+function setPhase(i){
+  $$('.node',road).forEach((n,j)=>{n.classList.toggle('on',i===j);n.setAttribute('aria-selected',i===j)});
+  const p=phases[i];
+  phase.innerHTML=`<span class="yr">${p.y}</span><h3>${p.t}</h3><p>${p.d}</p><ul>${p.c.map(c=>`<li>${c}</li>`).join('')}</ul>`;
+}
+setPhase(0);
+
+/* ---- waitlist (front-end only; no backend wired up) ---- */
+/* waitlist: submission is handled by LaunchList's widget-diy.js (see form action key) */
+
+/* ============================================================
+   THREE — the realm
+   ============================================================ */
+let renderer;
+const canvas=$('#bg');
+try{
+  renderer=new THREE.WebGLRenderer({canvas,antialias:!isMobile,powerPreference:'high-performance'});
+}catch(err){document.documentElement.classList.add('no-webgl');renderer=null}
+
+if(!renderer){ $('#loader').classList.add('done'); }
+else {
+renderer.setPixelRatio(Math.min(devicePixelRatio,isMobile?1.5:1.75));
+renderer.setSize(innerWidth,innerHeight);
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+
+const scene=new THREE.Scene();
+scene.fog=new THREE.FogExp2(0xb98a74,.0034);
+const camera=new THREE.PerspectiveCamera(58,innerWidth/innerHeight,.5,2500);
+
+/* ---------- terrain ---------- */
+const cx=z=>Math.sin(z*.018)*28;
+const PLAT={z:-215,h:30};PLAT.x=cx(PLAT.z);
+function terrainH(x,z){
+  const d=Math.abs(x-cx(z));
+  const m=smooth(10,85,d);
+  const hills=fbm(x*.035,z*.035)*7;
+  const ridge=Math.pow(fbm(x*.011+7.3,z*.011+2.1),1.7)*170;
+  let h=-1+hills*(1-m*.5)+ridge*Math.pow(m,1.4);
+  h-=3.8*Math.exp(-Math.pow(d/6,2));                 // river channel
+  const pd=Math.hypot(x-PLAT.x,z-PLAT.z);
+  return lerp(h,PLAT.h,smooth(75,38,pd));            // citadel plateau
+}
+{
+  const segX=isMobile?150:230,segZ=isMobile?110:170;
+  const g=new THREE.PlaneGeometry(700,520,segX,segZ);
+  g.rotateX(-Math.PI/2);g.translate(0,0,-110);
+  const pos=g.attributes.position,col=new Float32Array(pos.count*3);
+  for(let i=0;i<pos.count;i++) pos.setY(i,terrainH(pos.getX(i),pos.getZ(i)));
+  g.computeVertexNormals();
+  const nrm=g.attributes.normal,c=new THREE.Color();
+  for(let i=0;i<pos.count;i++){
+    const h=pos.getY(i),n=nrm.getY(i),v=hash(i*.37,i*.11)*.12;
+    if(h<1.2) c.setHex(0x5b5a45);
+    else if(h<24) c.setHex(0x3f6236).lerp(new THREE.Color(0x6b7a3d),smooth(8,24,h)*.6);
+    else c.setHex(0x6b6559);
+    if(n<.78) c.lerp(new THREE.Color(0x6e675c),smooth(.78,.55,n));
+    if(h>62) c.lerp(new THREE.Color(0xeef2f8),smooth(62,80,h)*smooth(.4,.8,n));
+    c.offsetHSL(0,0,v-.06);
+    col[i*3]=c.r;col[i*3+1]=c.g;col[i*3+2]=c.b;
+  }
+  g.setAttribute('color',new THREE.BufferAttribute(col,3));
+  const terrain=new THREE.Mesh(g,new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:.95}));
+  scene.add(terrain);
+}
+const water=new THREE.Mesh(new THREE.PlaneGeometry(700,520).rotateX(-Math.PI/2).translate(0,0,-110),
+  new THREE.MeshStandardMaterial({color:0x2f6a86,roughness:.15,metalness:.35,transparent:true,opacity:.82}));
+water.position.y=.35;scene.add(water);
+
+/* ---------- lights ---------- */
+const hemi=new THREE.HemisphereLight(0x8fa0d8,0x3a2f2a,.8);scene.add(hemi);
+const sun=new THREE.DirectionalLight(0xffc58a,2);scene.add(sun,sun.target);
+
+/* ---------- sky ---------- */
+const skyU={uTop:{value:new THREE.Color()},uHor:{value:new THREE.Color()}};
+const sky=new THREE.Mesh(new THREE.SphereGeometry(1500,32,16),new THREE.ShaderMaterial({
+  uniforms:skyU,side:THREE.BackSide,depthWrite:false,fog:false,
+  vertexShader:'varying vec3 vP;void main(){vP=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'uniform vec3 uTop;uniform vec3 uHor;varying vec3 vP;void main(){float h=normalize(vP).y;float t=smoothstep(-.08,.65,h);gl_FragColor=vec4(mix(uHor,uTop,pow(t,.65)),1.);}'
+}));
+sky.renderOrder=-10;scene.add(sky);
+
+const starGeo=new THREE.BufferGeometry();
+{const n=1400,a=new Float32Array(n*3);for(let i=0;i<n;i++){
+  const u=Math.random()*Math.PI*2,v=Math.acos(Math.random()*.95+.05),r=1400;
+  a[i*3]=r*Math.sin(v)*Math.cos(u);a[i*3+1]=r*Math.cos(v);a[i*3+2]=r*Math.sin(v)*Math.sin(u)}
+  starGeo.setAttribute('position',new THREE.BufferAttribute(a,3))}
+const stars=new THREE.Points(starGeo,new THREE.PointsMaterial({size:2,sizeAttenuation:false,color:0xffffff,transparent:true,opacity:0,fog:false,depthWrite:false}));
+scene.add(stars);
+
+const glowTex=glowTexture();
+const sunSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,transparent:true,fog:false,depthWrite:false,blending:THREE.AdditiveBlending}));
+sunSprite.scale.setScalar(520);scene.add(sunSprite);
+
+const cloudTex=glowTexture('rgba(255,255,255,.9)','rgba(255,255,255,.4)');
+const clouds=[];
+for(let i=0;i<34;i++){
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:cloudTex,transparent:true,opacity:.22,fog:false,depthWrite:false}));
+  const z=lerp(160,-300,Math.random()),x=cx(z)+(Math.random()-.5)*380;
+  s.position.set(x,lerp(70,150,Math.random()),z);
+  s.scale.set(lerp(90,220,Math.random()),lerp(24,50,Math.random()),1);
+  s.userData.v=lerp(.4,1.4,Math.random());clouds.push(s);scene.add(s);
+}
+
+/* ---------- time of day ---------- */
+const KEYS=[
+  {p:0,   top:0x24305c,hor:0xf0a566,fog:0xb98a74,sun:0xffc58a,si:2.2,hs:0x8fa0d8,hg:0x3a2f2a,hi:.8, el:.28,st:.25},
+  {p:.33, top:0x3f6fb0,hor:0xf6d29a,fog:0xb7c3cf,sun:0xfff0cc,si:2.7,hs:0xbfd6ff,hg:0x4a4a3a,hi:1.0,el:.85,st:0},
+  {p:.66, top:0x2a1f4d,hor:0xe0735a,fog:0x8a5f7a,sun:0xff8f5a,si:1.7,hs:0x7a6aa8,hg:0x2a2030,hi:.6, el:.2, st:.5},
+  {p:1,   top:0x060918,hor:0x1d2a54,fog:0x0f1836,sun:0x9db8ff,si:1.0,hs:0x4b5fa8,hg:0x151a2c,hi:.55,el:.55,st:1}
+];
+const tmp=new THREE.Color();
+function applyTime(p){
+  let i=0;while(i<KEYS.length-2&&p>KEYS[i+1].p)i++;
+  const a=KEYS[i],b=KEYS[i+1],t=smooth(0,1,(p-a.p)/(b.p-a.p));
+  const mix=(k,target)=>target.copy(tmp.setHex(a[k])).lerp(new THREE.Color(b[k]),t);
+  mix('top',skyU.uTop.value);mix('hor',skyU.uHor.value);
+  mix('fog',scene.fog.color);mix('sun',sun.color);mix('hs',hemi.color);mix('hg',hemi.groundColor);
+  sun.intensity=lerp(a.si,b.si,t);hemi.intensity=lerp(a.hi,b.hi,t);
+  stars.material.opacity=lerp(a.st,b.st,t);
+  const el=lerp(a.el,b.el,t);
+  sun.position.set(Math.cos(el)*-.6,Math.sin(el),Math.cos(el)*-.8).multiplyScalar(400);
+  sunSprite.material.color.copy(sun.color);
+  sunSprite.userData.dir=sun.position.clone().normalize();
+  clouds.forEach(c=>c.material.color.copy(scene.fog.color).lerp(new THREE.Color(0xffffff),.35*(1-b.st*t)));
+}
+
+/* ---------- forest ---------- */
+const TREE_MAX=isMobile?1800:3600;
+let trees,treeData=[];
+{
+  const parts=[];
+  const add=(geo,y,hex)=>{geo.translate(0,y,0);const n=geo.attributes.position.count,a=new Float32Array(n*3),c=new THREE.Color(hex);
+    for(let i=0;i<n;i++){a[i*3]=c.r;a[i*3+1]=c.g;a[i*3+2]=c.b}geo.setAttribute('color',new THREE.BufferAttribute(a,3));parts.push(geo.toNonIndexed())};
+  add(new THREE.CylinderGeometry(.3,.45,2,5),1,0x4a3424);
+  add(new THREE.ConeGeometry(2.5,5,6),3.8,0x2f5a3a);
+  add(new THREE.ConeGeometry(1.9,4.4,6),6.4,0x386a43);
+  add(new THREE.ConeGeometry(1.3,3.4,6),8.7,0x437a4c);
+  const geo=mergeGeometries(parts);
+  trees=new THREE.InstancedMesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,flatShading:true,roughness:.9}),TREE_MAX);
+  let tries=0;
+  while(treeData.length<TREE_MAX&&tries++<TREE_MAX*8){
+    const z=lerp(135,-270,Math.random()),x=cx(z)+(Math.random()<.5?-1:1)*lerp(9,130,Math.pow(Math.random(),.8));
+    const h=terrainH(x,z);
+    if(h<1.1||h>38)continue;
+    const sl=Math.abs(terrainH(x+2.5,z)-h)+Math.abs(terrainH(x,z+2.5)-h);
+    if(sl>3.4)continue;
+    if(fbm(x*.03+40,z*.03)<.42)continue;
+    treeData.push({x,y:h-.3,z,s:lerp(.7,1.5,Math.random()),r:Math.random()*6.28});
+  }
+  trees.count=treeData.length;
+  const col=new THREE.Color();
+  treeData.forEach((t,i)=>{col.setRGB(lerp(.75,1.2,Math.random()),lerp(.85,1.25,Math.random()),lerp(.75,1.1,Math.random()));trees.setColorAt(i,col)});
+  trees.instanceColor.needsUpdate=true;
+  scene.add(trees);
+}
+let forest=1,forestTarget=1,forestSpeed=1.2;
+const dummy=new THREE.Object3D();
+function updateForest(){
+  treeData.forEach((t,i)=>{dummy.position.set(t.x,t.y,t.z);dummy.rotation.y=t.r;dummy.scale.setScalar(t.s*Math.max(.001,forest));dummy.updateMatrix();trees.setMatrixAt(i,dummy.matrix)});
+  trees.instanceMatrix.needsUpdate=true;
+}
+updateForest();
+
+/* ---------- camera path ---------- */
+const pathPts=[[110,30],[75,20],[35,15],[-5,22],[-45,17],[-85,24],[-125,27],[-165,44]].map(([z,y])=>new THREE.Vector3(cx(z),y,z));
+const curve=new THREE.CatmullRomCurve3(pathPts,false,'catmullrom',.5);
+
+/* ---------- waystones along the road ---------- */
+const stoneMat=new THREE.MeshStandardMaterial({color:0x2d2b34,flatShading:true,roughness:.8});
+const runeMat=new THREE.MeshBasicMaterial({color:0xf1d98a});
+const glowSprites=[];
+for(let i=0;i<8;i++){
+  const t=(i+.5)/8,p=curve.getPointAt(t),side=i%2?1:-1;
+  const x=p.x+side*(11+Math.random()*3),z=p.z,h=terrainH(x,z);
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.BoxGeometry(2,8,1.4),stoneMat);body.position.y=4;
+  const rune=new THREE.Mesh(new THREE.BoxGeometry(.45,3,1.5),runeMat);rune.position.y=4.4;
+  g.add(body,rune);g.position.set(x,h,z);g.rotation.set(0,Math.random()*.6,(Math.random()-.5)*.12);scene.add(g);
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xf1d98a,transparent:true,opacity:.6,blending:THREE.AdditiveBlending,fog:false,depthWrite:false}));
+  s.position.set(x,h+4.6,z);s.scale.setScalar(16);scene.add(s);glowSprites.push(s);
+}
+
+/* ---------- citadel + sigil ---------- */
+const citadel=new THREE.Group();
+{
+  const stone=new THREE.MeshStandardMaterial({color:0x4a4658,flatShading:true,roughness:.9});
+  const roof=new THREE.MeshStandardMaterial({color:0x6a2a34,flatShading:true,roughness:.8});
+  const win=new THREE.MeshBasicMaterial({color:0xffc26b});
+  const addTower=(x,z,r,h)=>{
+    const b=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.12,h,8),stone);b.position.set(x,h/2,z);
+    const c=new THREE.Mesh(new THREE.ConeGeometry(r*1.3,h*.4,8),roof);c.position.set(x,h+h*.2,z);citadel.add(b,c);
+    for(let k=0;k<3;k++){const w=new THREE.Mesh(new THREE.BoxGeometry(.7,1.6,.3),win);const a=Math.random()*6.28;w.position.set(x+Math.cos(a)*r*1.02,h*lerp(.35,.8,Math.random()),z+Math.sin(a)*r*1.02);w.lookAt(x,w.position.y,z);w.rotateY(Math.PI);citadel.add(w)}
+  };
+  const keep=new THREE.Mesh(new THREE.BoxGeometry(14,34,14),stone);keep.position.y=17;citadel.add(keep);
+  const kr=new THREE.Mesh(new THREE.ConeGeometry(11,16,4),roof);kr.position.y=42;kr.rotation.y=Math.PI/4;citadel.add(kr);
+  addTower(-14,-14,3.4,26);addTower(14,-14,3.4,26);addTower(-14,14,3.4,24);addTower(14,14,3.4,24);addTower(0,22,2.6,18);
+  [[0,-14,32,2],[0,14,32,2],[-14,0,2,28],[14,0,2,28]].forEach(([x,z,w,d])=>{const wall=new THREE.Mesh(new THREE.BoxGeometry(w,9,d),stone);wall.position.set(x,4.5,z);citadel.add(wall)});
+  for(let i=0;i<14;i++){const w=new THREE.Mesh(new THREE.BoxGeometry(.9,2,.3),win);w.position.set(lerp(-5.5,5.5,Math.random()),lerp(10,30,Math.random()),7.05);citadel.add(w)}
+  citadel.position.set(PLAT.x,PLAT.h,PLAT.z);citadel.scale.setScalar(1.6);scene.add(citadel);
+}
+const sigil=new THREE.Group();
+const gold=new THREE.MeshBasicMaterial({color:0xf1d98a,fog:false,toneMapped:false});
+const goldDim=new THREE.MeshBasicMaterial({color:0xc9a84c,fog:false,toneMapped:false});
+const rings=[];
+{
+  const R=34;
+  const r1=new THREE.Mesh(new THREE.TorusGeometry(R,.7,8,160),gold);
+  const r2=new THREE.Mesh(new THREE.TorusGeometry(R*.78,.45,8,128),goldDim);
+  const r3=new THREE.Mesh(new THREE.TorusGeometry(R*1.22,.3,8,160),goldDim);
+  r2.rotation.x=Math.PI/2.6;r3.rotation.y=Math.PI/2.8;
+  const ticks=new THREE.InstancedMesh(new THREE.BoxGeometry(.8,3.4,.8),gold,48);
+  for(let i=0;i<48;i++){const a=i/48*Math.PI*2;dummy.position.set(Math.cos(a)*R*1.12,Math.sin(a)*R*1.12,0);dummy.rotation.set(0,0,a);dummy.scale.setScalar(i%4?1:1.9);dummy.updateMatrix();ticks.setMatrixAt(i,dummy.matrix)}
+  const core=new THREE.Mesh(new THREE.IcosahedronGeometry(R*.2,1),new THREE.MeshBasicMaterial({color:0xfff3c4,wireframe:true,fog:false,toneMapped:false}));
+  const coreIn=new THREE.Mesh(new THREE.OctahedronGeometry(R*.1),new THREE.MeshBasicMaterial({color:0xffffff,fog:false,toneMapped:false}));
+  const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xf1d98a,transparent:true,opacity:.75,blending:THREE.AdditiveBlending,fog:false,depthWrite:false}));halo.scale.setScalar(R*5);
+  const emblem=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.TextureLoader().load('logo.webp',t=>{t.colorSpace=THREE.SRGBColorSpace}),transparent:true,opacity:.55,blending:THREE.AdditiveBlending,fog:false,depthWrite:false}));
+  emblem.scale.setScalar(R*2.6);
+  sigil.add(r1,r2,r3,ticks,core,coreIn,emblem,halo);rings.push(r1,r2,r3,ticks,core);
+  sigil.position.set(PLAT.x,PLAT.h+118,PLAT.z);scene.add(sigil);
+  const beam=new THREE.Mesh(new THREE.CylinderGeometry(3,10,100,24,1,true),new THREE.MeshBasicMaterial({color:0xf1d98a,transparent:true,opacity:.14,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,side:THREE.DoubleSide}));
+  beam.position.set(PLAT.x,PLAT.h+62,PLAT.z);scene.add(beam);
+}
+
+/* ---------- ambience: fireflies + rain + sparks ---------- */
+const FF=isMobile?120:260;
+const ffGeo=new THREE.BufferGeometry(),ffBase=new Float32Array(FF*3),ffPos=new Float32Array(FF*3);
+for(let i=0;i<FF;i++){ffBase[i*3]=(Math.random()-.5)*110;ffBase[i*3+1]=(Math.random()-.5)*50;ffBase[i*3+2]=(Math.random()-.5)*110}
+ffGeo.setAttribute('position',new THREE.BufferAttribute(ffPos,3));
+const fireflies=new THREE.Points(ffGeo,new THREE.PointsMaterial({map:glowTex,size:2.2,color:0xffe9a0,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}));
+fireflies.frustumCulled=false;scene.add(fireflies);
+
+const RAIN=isMobile?1200:3000;
+const rainPos=new Float32Array(RAIN*6),rainSeed=new Float32Array(RAIN*3);
+for(let i=0;i<RAIN;i++){rainSeed[i*3]=(Math.random()-.5)*130;rainSeed[i*3+1]=Math.random()*80;rainSeed[i*3+2]=(Math.random()-.5)*130}
+const rainGeo=new THREE.BufferGeometry();rainGeo.setAttribute('position',new THREE.BufferAttribute(rainPos,3));
+const rain=new THREE.LineSegments(rainGeo,new THREE.LineBasicMaterial({color:0xaec6e8,transparent:true,opacity:0,fog:false}));
+rain.frustumCulled=false;scene.add(rain);
+let rainLevel=0,rainTarget=0;
+
+const SP=900,spPos=new Float32Array(SP*3),spCol=new Float32Array(SP*3),spBase=new Float32Array(SP*3),spVel=new Float32Array(SP*3),spLife=new Float32Array(SP),spMax=new Float32Array(SP),spGrav=new Float32Array(SP);
+spPos.fill(-9999);
+const spGeo=new THREE.BufferGeometry();
+spGeo.setAttribute('position',new THREE.BufferAttribute(spPos,3));spGeo.setAttribute('color',new THREE.BufferAttribute(spCol,3));
+const sparks=new THREE.Points(spGeo,new THREE.PointsMaterial({map:glowTex,size:3.2,vertexColors:true,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,fog:false}));
+sparks.frustumCulled=false;scene.add(sparks);
+let spCursor=0;
+function emit(n,o,{speed=10,spread=1,up=0,color=0xffffff,gravity=0,life=2,jitter=1}={}){
+  const c=new THREE.Color(color);
+  for(let k=0;k<n;k++){
+    const i=spCursor++%SP,a=Math.random()*6.28,s=speed*(.3+Math.random()*.7);
+    spPos[i*3]=o.x+(Math.random()-.5)*jitter;spPos[i*3+1]=o.y+(Math.random()-.5)*jitter;spPos[i*3+2]=o.z+(Math.random()-.5)*jitter;
+    spVel[i*3]=Math.cos(a)*s*spread;spVel[i*3+1]=up*(.5+Math.random()*.7);spVel[i*3+2]=Math.sin(a)*s*spread;
+    spBase[i*3]=c.r;spBase[i*3+1]=c.g;spBase[i*3+2]=c.b;spGrav[i]=gravity;spLife[i]=spMax[i]=life*(.6+Math.random()*.6);
+  }
+}
+
+const waves=[];
+const waveGeo=new THREE.RingGeometry(.9,1,64).rotateX(-Math.PI/2);
+function shockwave(o,color,size=70){
+  const m=new THREE.Mesh(waveGeo,new THREE.MeshBasicMaterial({color,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false,fog:false,side:THREE.DoubleSide}));
+  m.position.set(o.x,terrainH(o.x,o.z)+.6,o.z);m.userData={t:0,size};scene.add(m);waves.push(m);
+}
+const cometHead=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:0xbfe9ff,transparent:true,blending:THREE.AdditiveBlending,fog:false,depthWrite:false}));
+cometHead.scale.setScalar(26);cometHead.visible=false;scene.add(cometHead);
+let comet=null;
+const quake={amp:0};
+const flash={v:0,next:0};
+const fissureLight=new THREE.PointLight(0xff6a2a,0,160);scene.add(fissureLight);
+
+function ahead(dist){
+  const d=new THREE.Vector3();camera.getWorldDirection(d);d.y=0;d.normalize();
+  const p=camera.position.clone().addScaledVector(d,dist);p.y=terrainH(p.x,p.z);return p;
+}
+
+/* ---------- agent effects ---------- */
+const effects={
+  economy(){
+    const o=ahead(60);shockwave(o,0xe6c35c);
+    for(let k=0;k<3;k++)setTimeout(()=>emit(70,{x:o.x,y:o.y+2,z:o.z},{speed:6,up:36,gravity:34,color:0xffd34d,life:2.6,jitter:14}),k*350);
+  },
+  weather(){
+    rainTarget=1;flash.next=.6;setTimeout(()=>rainTarget=0,11000);shockwave(ahead(40),0x7fb4ff,90);
+  },
+  ecology(){
+    const o=ahead(55);shockwave(o,0x6fd36a,80);forestTarget=.25;forestSpeed=2.2;
+    setTimeout(()=>{forestTarget=1;forestSpeed=.35;shockwave(ahead(55),0x9bff8a,100)},4200);
+  },
+  geology(){
+    const o=ahead(70);quake.amp=1.6;shockwave(o,0xff7a3a,110);
+    fissureLight.position.set(o.x,o.y+6,o.z);fissureLight.userData.t=5;
+    for(let k=0;k<5;k++)setTimeout(()=>emit(90,{x:o.x,y:o.y,z:o.z},{speed:5,up:46,gravity:22,color:0xff7a2a,life:3.2,jitter:8}),k*420);
+  },
+  narrative(){
+    const d=new THREE.Vector3();camera.getWorldDirection(d);d.y=0;d.normalize();
+    const r=new THREE.Vector3().crossVectors(d,new THREE.Vector3(0,1,0));
+    const a=camera.position.clone().addScaledVector(d,260).addScaledVector(r,-170);a.y+=190;
+    const b=ahead(120);comet={t:0,a,b};cometHead.visible=true;
+  }
+};
+
+/* ---------- agent UI ---------- */
+const icons={
+  economy:'<circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.500 9.500c0-1.100 1.100-1.800 2.500-1.800s2.500.7 2.500 1.800-1.100 1.600-2.500 1.900-2.500.8-2.500 1.900 1.100 1.800 2.500 1.800 2.500-.7 2.500-1.800"/>',
+  weather:'<path d="M7 18a4 4 0 0 1-.5-8A5.500 5.500 0 0 1 17 8.500 3.500 3.500 0 0 1 17.500 18z"/><path d="M9 21l1-2M13 21l1-2"/>',
+  ecology:'<path d="M12 22V10M12 10C12 6 9 3 4 3c0 5 3 7 8 7zM12 14c0-3 2.500-5 7-5 0 4-2.500 6-7 6z"/>',
+  geology:'<path d="M3 20l6-12 3 5 3-8 6 15z"/>',
+  narrative:'<path d="M5 3h11a3 3 0 0 1 3 3v15H8a3 3 0 0 1-3-3z"/><path d="M8 8h7M8 12h7"/>'
+};
+const agents=[
+  {id:'economy',name:'Economy Agent',c:'#e6c35c',short:'Prices from behavior',text:'Tracks every transaction in real time. Prices and scarcity emerge from what players and NPCs actually do — never from a developer-tuned table.',feed:['A guild corners the northern ore mines; smelters raise their prices.','Caravans reroute after a collapsed trade road drives up grain costs.','Signature-weapon components surge in demand across the marketplace.']},
+  {id:'weather',name:'Weather Agent',c:'#7fb4ff',short:'Storms & seasons',text:'Shapes the climate across the realm. Storms, fog and clear skies change how the world looks and how its people travel, farm and trade.',feed:['A storm front rolls over the valley; river crossings are closing.','Fog thickens near the coast and patrols slow to a crawl.','Clear skies return and caravans resume their routes.']},
+  {id:'ecology',name:'Ecology Agent',c:'#6fd36a',short:'Biomes that remember',text:'Over-harvesting depletes a biome, and it stays depleted until it recovers. What you take from the land is reflected in the land.',feed:['Overharvesting thins the pine forest; game animals move on.','Rangers report slow regrowth along the river banks.','The woods recover — hunters return to the old trails.']},
+  {id:'geology',name:'Geology Agent',c:'#ff7a3a',short:'Maps that change',text:'Geological events reshape the geography itself — and the world keeps a permanent record. The map you learn today may not be the map next season.',feed:['Tremors open a fissure across the old mining road.','A ridge collapses, burying a trade route for good.','Ash drifts over the lowlands; farmers abandon their fields.']},
+  {id:'narrative',name:'Narrative Agent',c:'#bfe9ff',short:'Lore that writes itself',text:'Generates emergent lore, crises and history that NPCs reference in conversation. There are no scripted quest lines — the stories come from the simulation.',feed:['A falling star is seen over the citadel; priests call it an omen.','A merchant swears he saw the light strike near the old waystone.','Rumors spread: the omen foretells a faction schism.']}
+];
+const list=$('#agentList'),feed=$('#feed');
+agents.forEach((a,i)=>{
+  const b=document.createElement('button');b.className='agent-btn';b.style.setProperty('--c',a.c);
+  b.innerHTML=`<svg viewBox="0 0 24 24">${icons[a.id]}</svg><span><b>${a.name.replace(' Agent','')}</b><small>${a.short}</small></span>`;
+  b.onclick=()=>pickAgent(i);list.appendChild(b);
+});
+const counters={};
+function pickAgent(i){
+  const a=agents[i];
+  $$('.agent-btn',list).forEach((b,j)=>b.classList.toggle('on',i===j));
+  const det=$('#agentDetail');det.style.setProperty('--c',a.c);
+  $('.hint',det).style.display='none';
+  $('#agName').textContent=a.name;$('#agText').textContent=a.text;
+  const n=counters[a.id]=((counters[a.id]??-1)+1)%a.feed.length;
+  const li=document.createElement('li');li.style.setProperty('--c',a.c);
+  li.innerHTML=`<i></i><span>${a.feed[n]}</span>`;feed.prepend(li);
+  while(feed.children.length>4)feed.lastChild.remove();
+  effects[a.id]();
+}
+
+/* ---------- camera rig + loop ---------- */
+let target=0,cur=0;const mouse={x:0,y:0,sx:0,sy:0};
+function readScroll(){const m=document.documentElement.scrollHeight-innerHeight;target=m>0?clamp(scrollY/m):0}
+addEventListener('scroll',readScroll,{passive:true});readScroll();cur=target;
+addEventListener('pointermove',e=>{mouse.x=e.clientX/innerWidth*2-1;mouse.y=e.clientY/innerHeight*2-1});
+addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();readScroll()});
+const citadelTarget=new THREE.Vector3(PLAT.x,PLAT.h+58,PLAT.z);
+const clock=new THREE.Clock();let elapsed=0,introT=reduced?1:0,first=true;
+const look=new THREE.Vector3(),pos=new THREE.Vector3(),fwd=new THREE.Vector3();
+
+function frame(){
+  const dt=Math.min(clock.getDelta(),.05);elapsed+=dt;
+  introT=Math.min(1,introT+dt/3.4);const ease=1-Math.pow(1-introT,3);
+  cur+=(target-cur)*(1-Math.pow(reduced?.0001:.002,dt));
+  mouse.sx+=(mouse.x-mouse.sx)*(1-Math.pow(.01,dt));mouse.sy+=(mouse.y-mouse.sy)*(1-Math.pow(.01,dt));
+  const p=clamp(cur);
+  curve.getPointAt(p,pos);
+  curve.getPointAt(Math.min(1,p+.075),look);look.y-=2;
+  look.lerp(citadelTarget,smooth(.72,.95,p));
+  pos.y+=Math.sin(elapsed*.6)*.6+(1-ease)*34;
+  pos.x+=mouse.sx*3;pos.y-=mouse.sy*1.5;
+  quake.amp*=Math.pow(.35,dt);
+  const sh=quake.amp;
+  camera.position.set(pos.x+(Math.random()-.5)*sh,pos.y+(Math.random()-.5)*sh,pos.z+(Math.random()-.5)*sh);
+  camera.lookAt(look.x+mouse.sx*10,look.y-mouse.sy*6,look.z);
+  camera.fov=lerp(72,58,ease);camera.updateProjectionMatrix();
+
+  applyTime(p);
+  // sky follows camera
+  sky.position.copy(camera.position);stars.position.copy(camera.position);
+  sunSprite.position.copy(camera.position).addScaledVector(sunSprite.userData.dir,1100);
+  sun.target.position.copy(camera.position);
+  clouds.forEach(c=>{c.position.x+=c.userData.v*dt;if(c.position.x>cx(c.position.z)+220)c.position.x-=440});
+
+  // sigil
+  rings[0].rotation.z+=dt*.18;rings[1].rotation.y+=dt*.3;rings[2].rotation.x-=dt*.22;rings[3].rotation.z-=dt*.08;rings[4].rotation.y+=dt*.6;rings[4].rotation.x+=dt*.4;
+  sigil.position.y=PLAT.h+118+Math.sin(elapsed*.5)*2.5;
+  const pulse=.85+Math.sin(elapsed*1.6)*.15;sigil.children[sigil.children.length-1].material.opacity=.55*pulse;
+  glowSprites.forEach((s,i)=>s.material.opacity=.45+Math.sin(elapsed*1.3+i)*.2);
+
+  // fireflies
+  const fa=ffGeo.attributes.position.array;
+  for(let i=0;i<FF;i++){
+    const bx=ffBase[i*3],by=ffBase[i*3+1],bz=ffBase[i*3+2];
+    fa[i*3]=camera.position.x+((bx+elapsed*1.5*(.3+i%3*.3)+55)%110)-55+Math.sin(elapsed*.7+i)*3;
+    fa[i*3+1]=Math.max(terrainH(camera.position.x+bx,camera.position.z+bz)+3,camera.position.y+by*.5-6)+Math.sin(elapsed+i*1.7)*2;
+    fa[i*3+2]=camera.position.z+bz;
+  }
+  ffGeo.attributes.position.needsUpdate=true;
+  fireflies.material.opacity=.35+.65*smooth(.4,.95,p);
+
+  // rain
+  rainLevel+=(rainTarget-rainLevel)*(1-Math.pow(.2,dt));
+  rain.visible=rainLevel>.01;
+  if(rain.visible){
+    rain.material.opacity=.55*rainLevel;
+    const a=rainGeo.attributes.position.array;
+    for(let i=0;i<RAIN;i++){
+      let y=(rainSeed[i*3+1]-elapsed*65*(.8+(i%5)*.1))%80;if(y<0)y+=80;
+      const x=camera.position.x+rainSeed[i*3],z=camera.position.z+rainSeed[i*3+2],yy=camera.position.y-30+y;
+      a[i*6]=x;a[i*6+1]=yy;a[i*6+2]=z;a[i*6+3]=x-.15;a[i*6+4]=yy+2.2;a[i*6+5]=z;
     }
-    window.addEventListener('load', hidePreloader);
-    setTimeout(hidePreloader, 3000);
+    rainGeo.attributes.position.needsUpdate=true;
+  }
+  scene.fog.density=.0034+rainLevel*.0022;
+  if(rainLevel>.3){flash.next-=dt;if(flash.next<=0){flash.v=1;flash.next=2.5+Math.random()*4}}
+  flash.v*=Math.pow(.003,dt);
+  hemi.intensity+=flash.v*3.2;scene.fog.color.lerp(tmp.setHex(0xdfe8ff),flash.v*.5);
 
-    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) document.documentElement.setAttribute('data-cursor-disabled', 'true');
+  // forest
+  if(Math.abs(forest-forestTarget)>.002){forest+=Math.sign(forestTarget-forest)*Math.min(Math.abs(forestTarget-forest),forestSpeed*dt);updateForest()}
 
-    // ===== TYPING EFFECT =====
-    (function() {
-      var text = "The first MMO where the world is truly alive.";
-      var container = document.getElementById('typing-text');
-      var cursor = document.getElementById('typing-cursor');
-      var i = 0;
-      function type() {
-        if (i < text.length) {
-          container.textContent += text.charAt(i);
-          i++;
-          setTimeout(type, 28 + Math.random() * 12);
-        } else {
-          cursor.style.animation = 'blink 0.8s step-end infinite';
-        }
-      }
-      setTimeout(type, 2800);
-    })();
+  // fissure light
+  if(fissureLight.userData.t>0){fissureLight.userData.t-=dt;fissureLight.intensity=Math.max(0,fissureLight.userData.t)*(900+Math.random()*500)}else fissureLight.intensity=0;
 
-    // ===== NAV SCROLL =====
-    var nav = document.getElementById('nav');
-    var ticking = false;
-    window.addEventListener('scroll', function() {
-      if (!ticking) {
-        window.requestAnimationFrame(function() {
-          nav.classList.toggle('scrolled', window.scrollY > 50);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
+  // comet
+  if(comet){
+    comet.t+=dt/2.4;const t=Math.min(1,comet.t),q=t*t;
+    cometHead.position.lerpVectors(comet.a,comet.b,q);
+    emit(10,cometHead.position,{speed:2,up:1,color:0xcdeeff,life:1.1,jitter:3});
+    if(t>=1){emit(160,comet.b,{speed:14,up:22,gravity:20,color:0xbfe9ff,life:2.4,jitter:3});shockwave(comet.b,0xbfe9ff,80);cometHead.visible=false;comet=null}
+  }
 
-    // ===== SCROLL REVEAL =====
-    var revealEls = document.querySelectorAll('.reveal');
-    var revealObserver = new IntersectionObserver(function(entries) {
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          e.target.classList.add('visible');
-          revealObserver.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.1 });
-    revealEls.forEach(function(el) { revealObserver.observe(el); });
+  // shockwaves
+  for(let i=waves.length-1;i>=0;i--){
+    const w=waves[i];w.userData.t+=dt/2.2;const t=w.userData.t;
+    w.scale.setScalar(1+t*w.userData.size);w.material.opacity=.9*(1-t);
+    if(t>=1){scene.remove(w);w.material.dispose();waves.splice(i,1)}
+  }
+  // sparks
+  let live=false;
+  for(let i=0;i<SP;i++){
+    if(spLife[i]<=0)continue;live=true;
+    spLife[i]-=dt;
+    if(spLife[i]<=0){spPos[i*3+1]=-9999;spCol[i*3]=spCol[i*3+1]=spCol[i*3+2]=0;continue}
+    spVel[i*3+1]-=spGrav[i]*dt;
+    spPos[i*3]+=spVel[i*3]*dt;spPos[i*3+1]+=spVel[i*3+1]*dt;spPos[i*3+2]+=spVel[i*3+2]*dt;
+    const f=clamp(spLife[i]/spMax[i]*1.6);
+    spCol[i*3]=spBase[i*3]*f;spCol[i*3+1]=spBase[i*3+1]*f;spCol[i*3+2]=spBase[i*3+2]*f;
+  }
+  if(live){spGeo.attributes.position.needsUpdate=true;spGeo.attributes.color.needsUpdate=true}
 
-    // ===== 3D TILT =====
-    if (window.matchMedia('(hover: hover)').matches) {
-      document.querySelectorAll('.tilt-card').forEach(function(card) {
-        var rafId = null;
-        card.addEventListener('mousemove', function(e) {
-          if (rafId) return;
-          rafId = requestAnimationFrame(function() {
-            var rect = card.getBoundingClientRect();
-            var x = e.clientX - rect.left;
-            var y = e.clientY - rect.top;
-            var cx = rect.width / 2;
-            var cy = rect.height / 2;
-            card.style.setProperty('--tilt-x', ((y - cy) / cy * -3) + 'deg');
-            card.style.setProperty('--tilt-y', ((x - cx) / cx * 3) + 'deg');
-            rafId = null;
-          });
-        }, { passive: true });
-        card.addEventListener('mouseleave', function() {
-          if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-          card.style.setProperty('--tilt-x', '0deg');
-          card.style.setProperty('--tilt-y', '0deg');
-        }, { passive: true });
-      });
+  renderer.render(scene,camera);
+  if(first){first=false;setTimeout(()=>$('#loader').classList.add('done'),400)}
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
 
-      document.querySelectorAll('.magnetic-btn').forEach(function(btn) {
-        var rafId = null;
-        btn.addEventListener('mousemove', function(e) {
-          if (rafId) return;
-          rafId = requestAnimationFrame(function() {
-            var rect = btn.getBoundingClientRect();
-            var x = e.clientX - rect.left - rect.width / 2;
-            var y = e.clientY - rect.top - rect.height / 2;
-            var dist = Math.sqrt(x*x + y*y);
-            var maxDist = Math.min(rect.width, rect.height) * 1.2;
-            var strength = Math.min(1, 1 - dist/maxDist) * 8;
-            var angle = Math.atan2(y, x);
-            btn.style.transform = 'translate(' + (Math.cos(angle)*strength) + 'px, ' + (Math.sin(angle)*strength) + 'px) scale(1.02)';
-            rafId = null;
-          });
-        }, { passive: true });
-        btn.addEventListener('mouseleave', function() {
-          if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
-          btn.style.transform = 'translate(0,0) scale(1)';
-        }, { passive: true });
-      });
-    }
+/* ============================================================
+   ARMORY — second small renderer with procedural weapons
+   ============================================================ */
+const vEl=$('#viewer'),wCanvas=$('#wcanvas');
+const wr=new THREE.WebGLRenderer({canvas:wCanvas,antialias:true,alpha:true});
+wr.setPixelRatio(Math.min(devicePixelRatio,2));wr.outputColorSpace=THREE.SRGBColorSpace;
+const ws=new THREE.Scene();
+const wcam=new THREE.PerspectiveCamera(36,1,.1,100);wcam.position.set(0,0,17);
+ws.environment=new THREE.PMREMGenerator(wr).fromScene(new RoomEnvironment(),.04).texture;
+ws.add(new THREE.HemisphereLight(0xffffff,0x222233,.6));
+const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(5,8,8);ws.add(key);
+const rim=new THREE.PointLight(0xffffff,0,60);rim.position.set(-6,2,-6);ws.add(rim);
+function sizeW(){const w=vEl.clientWidth,h=vEl.clientHeight;wr.setSize(w,h,false);wcam.aspect=w/h;wcam.updateProjectionMatrix()}
+new ResizeObserver(sizeW).observe(vEl);sizeW();
 
-    // ===== HIGHLY VISIBLE INTERACTIVE SMOKE CANVAS =====
-    (function() {
-      var canvas = document.getElementById('global-canvas');
-      if (!canvas) return;
-      var ctx = canvas.getContext('2d');
-      var dpr = window.devicePixelRatio || 1;
-      var W, H, particles = [];
-      var mouseX = -1000, mouseY = -1000;
-      var animationId = null;
-      var isTabVisible = true;
-      var time = 0;
+const steel=new THREE.MeshStandardMaterial({color:0xc4ccd9,metalness:.85,roughness:.28});
+const goldM=new THREE.MeshStandardMaterial({color:0xc9a84c,metalness:.9,roughness:.3});
+const wood=new THREE.MeshStandardMaterial({color:0x4a3022,metalness:.1,roughness:.8});
+const leather=new THREE.MeshStandardMaterial({color:0x2b1c16,metalness:0,roughness:.9});
+const glowM=c=>new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:1.6,roughness:.2});
+const shapeGeo=(pts,depth,bev=.05)=>{const s=new THREE.Shape();s.moveTo(...pts[0]);pts.slice(1).forEach(p=>s.lineTo(...p));s.closePath();
+  const g=new THREE.ExtrudeGeometry(s,{depth,bevelEnabled:true,bevelSize:bev,bevelThickness:bev,bevelSegments:2});g.translate(0,0,-depth/2);return g};
+const cyl=(r1,r2,h,mat,seg=16,open=false)=>new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,seg,1,open),mat);
 
-      document.addEventListener('visibilitychange', function() {
-        isTabVisible = !document.hidden;
-      });
-
-      function resize() {
-        var rect = canvas.getBoundingClientRect();
-        W = rect.width;
-        H = rect.height;
-        canvas.width = W * dpr;
-        canvas.height = H * dpr;
-        ctx.scale(dpr, dpr);
-        buildSmoke();
-      }
-
-      function buildSmoke() {
-        var area = W * H;
-        var count = Math.max(35, Math.min(180, Math.floor(area / 12000)));
-        particles = [];
-        var scale = Math.min(W, H) / 900;
-        for (var i = 0; i < count; i++) {
-          var baseR = (50 + Math.random() * 220) * scale;
-          particles.push({
-            x: Math.random() * W,
-            y: Math.random() * H,
-            radius: baseR,
-            baseRadius: baseR,
-            vx: (Math.random() - 0.5) * 0.06,
-            vy: (Math.random() - 0.5) * 0.06 - 0.02,
-            opacity: 0.06 + Math.random() * 0.12,
-            phase: Math.random() * Math.PI * 2,
-            phaseSpeed: 0.002 + Math.random() * 0.008,
-            driftAngle: Math.random() * Math.PI * 2,
-            driftSpeed: 0.001 + Math.random() * 0.004,
-          });
-        }
-      }
-
-      function drawMouseGlow() {
-        if (mouseX < 0 || mouseY < 0) return;
-        var grd1 = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 280);
-        grd1.addColorStop(0, 'rgba(201, 168, 76, 0.12)');
-        grd1.addColorStop(0.3, 'rgba(201, 168, 76, 0.06)');
-        grd1.addColorStop(1, 'rgba(201, 168, 76, 0)');
-        ctx.fillStyle = grd1;
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, 280, 0, Math.PI * 2);
-        ctx.fill();
-
-        var grd2 = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 80);
-        grd2.addColorStop(0, 'rgba(230, 215, 180, 0.08)');
-        grd2.addColorStop(1, 'rgba(230, 215, 180, 0)');
-        ctx.fillStyle = grd2;
-        ctx.beginPath();
-        ctx.arc(mouseX, mouseY, 80, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      function drawParticle(p, nearMouse, dist) {
-        var pulse = 0.7 + 0.3 * Math.sin(p.phase);
-        var currentRadius = p.baseRadius * (0.55 + 0.45 * pulse);
-        var currentOpacity = p.opacity * (0.7 + 0.3 * Math.sin(p.phase * 0.7 + 1.2));
-        var isNear = nearMouse && dist < 200;
-        var grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentRadius);
-
-        if (isNear) {
-          var glowFactor = 1 - (dist / 200);
-          var bright = 0.7 + glowFactor * 0.3;
-          grd.addColorStop(0, 'rgba(240, 220, 190, ' + (currentOpacity * bright * 1.2) + ')');
-          grd.addColorStop(0.3, 'rgba(220, 200, 170, ' + (currentOpacity * bright * 0.9) + ')');
-          grd.addColorStop(0.7, 'rgba(190, 175, 155, ' + (currentOpacity * bright * 0.6) + ')');
-          grd.addColorStop(1, 'rgba(150, 140, 130, 0)');
-        } else {
-          grd.addColorStop(0, 'rgba(230, 225, 215, ' + (currentOpacity * 0.95) + ')');
-          grd.addColorStop(0.4, 'rgba(200, 195, 185, ' + (currentOpacity * 0.7) + ')');
-          grd.addColorStop(0.8, 'rgba(170, 165, 155, ' + (currentOpacity * 0.4) + ')');
-          grd.addColorStop(1, 'rgba(140, 135, 125, 0)');
-        }
-
-        ctx.fillStyle = grd;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (isNear) {
-          var coreGrd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, currentRadius * 0.25);
-          coreGrd.addColorStop(0, 'rgba(255, 240, 210, ' + (currentOpacity * 0.35) + ')');
-          coreGrd.addColorStop(1, 'rgba(255, 240, 210, 0)');
-          ctx.fillStyle = coreGrd;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, currentRadius * 0.25, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-
-      function draw() {
-        if (!isTabVisible) {
-          animationId = requestAnimationFrame(draw);
-          return;
-        }
-
-        time += 0.016;
-        ctx.clearRect(0, 0, W, H);
-        drawMouseGlow();
-
-        var influenceRadius = Math.min(W, H) * 0.45;
-        var maxForce = 2.8;
-
-        for (var i = 0; i < particles.length; i++) {
-          var p = particles[i];
-
-          p.driftAngle += p.driftSpeed * (0.5 + 0.3 * Math.sin(time * 0.0005 + i));
-          var windX = Math.cos(p.driftAngle) * (0.025 + 0.01 * Math.sin(time * 0.0003 + i * 0.1));
-          var windY = Math.sin(p.driftAngle) * (0.025 + 0.01 * Math.cos(time * 0.0003 + i * 0.1));
-
-          var dx = p.x - mouseX;
-          var dy = p.y - mouseY;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < influenceRadius && dist > 1) {
-            var strength = (1 - dist / influenceRadius);
-            var force = strength * maxForce;
-            var angle = Math.atan2(dy, dx);
-            p.vx += Math.cos(angle) * force * 0.2;
-            p.vy += Math.sin(angle) * force * 0.2;
-            var swirlStrength = strength * 0.6;
-            p.vx += -Math.sin(angle) * swirlStrength * 0.12;
-            p.vy += Math.cos(angle) * swirlStrength * 0.12;
-            var speedBoost = 1 + strength * 0.5;
-            p.vx *= speedBoost;
-            p.vy *= speedBoost;
-          }
-
-          p.vx += windX * 0.1;
-          p.vy += windY * 0.1;
-          p.vx *= 0.993;
-          p.vy *= 0.993;
-
-          var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-          var maxSpeed = 1.0 + (p.baseRadius / 300);
-          if (speed > maxSpeed) {
-            p.vx = (p.vx / speed) * maxSpeed;
-            p.vy = (p.vy / speed) * maxSpeed;
-          }
-
-          p.x += p.vx;
-          p.y += p.vy;
-
-          var padding = p.radius * 2;
-          if (p.x < -padding) p.x = W + padding;
-          if (p.x > W + padding) p.x = -padding;
-          if (p.y < -padding) p.y = H + padding;
-          if (p.y > H + padding) p.y = -padding;
-
-          p.phase += p.phaseSpeed;
-          var nearMouse = dist < influenceRadius * 0.4;
-          drawParticle(p, nearMouse, dist);
-        }
-
-        setTimeout(function() {
-          animationId = requestAnimationFrame(draw);
-        }, 33);
-      }
-
-      var resizeObserver = new ResizeObserver(function() {
-        resize();
-      });
-      resizeObserver.observe(canvas);
-
-      window.addEventListener('resize', function() {
-        resize();
-      }, { passive: true });
-
-      document.addEventListener('mousemove', function(e) {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      }, { passive: true });
-
-      document.addEventListener('mouseleave', function() {
-        mouseX = -1000;
-        mouseY = -1000;
-      }, { passive: true });
-
-      resize();
-      draw();
-    })();
-
-    // ===== CUSTOM CURSOR =====
-    if (window.matchMedia('(hover: hover)').matches) {
-      var cursor = document.getElementById('custom-cursor');
-      var cx=0, cy=0, tx=0, ty=0;
-      function updateCursor() {
-        tx += (cx - tx) * 0.12;
-        ty += (cy - ty) * 0.12;
-        cursor.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
-        requestAnimationFrame(updateCursor);
-      }
-      document.addEventListener('mousemove', function(e) { cx = e.clientX; cy = e.clientY; }, { passive: true });
-      document.addEventListener('mouseenter', function() { cursor.classList.add('visible'); }, { passive: true });
-      document.addEventListener('mouseleave', function() { cursor.classList.remove('visible'); }, { passive: true });
-      document.querySelectorAll('a, button, [role="button"]').forEach(function(el) {
-        el.addEventListener('mouseenter', function() { cursor.classList.add('hovering'); }, { passive: true });
-        el.addEventListener('mouseleave', function() { cursor.classList.remove('hovering'); }, { passive: true });
-      });
-      document.addEventListener('mousedown', function() { cursor.classList.add('clicking'); }, { passive: true });
-      document.addEventListener('mouseup', function() { cursor.classList.remove('clicking'); }, { passive: true });
-      updateCursor();
-    }
-
-    // ===== SCROLL PROGRESS =====
-    var progressBar = document.getElementById('scroll-progress');
-    window.addEventListener('scroll', function() {
-      var scrollTop = window.scrollY;
-      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      progressBar.style.width = (docHeight > 0 ? (scrollTop / docHeight) * 100 : 0) + '%';
-    }, { passive: true });
-
-    // ===== BACK TO TOP =====
-    var backBtn = document.getElementById('back-to-top');
-    window.addEventListener('scroll', function() {
-      backBtn.classList.toggle('visible', window.scrollY > 600);
-    }, { passive: true });
-    backBtn.addEventListener('click', function() { window.scrollTo({ top:0, behavior:'smooth' }); });
-
-    // ===== ROADMAP EXPAND =====
-    document.querySelectorAll('.roadmap-item').forEach(function(item) {
-      var stage = item.querySelector('.roadmap-stage');
-      stage.addEventListener('click', function() { item.classList.toggle('expanded'); });
-    });
-
-    // ===== HAMBURGER =====
-    var hamburger = document.getElementById('hamburger');
-    var mobileNav = document.getElementById('mobile-nav');
-    hamburger.addEventListener('click', function() {
-      hamburger.classList.toggle('open');
-      mobileNav.classList.toggle('open');
-      document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
-    });
-    mobileNav.querySelectorAll('a').forEach(function(link) {
-      link.addEventListener('click', function() {
-        hamburger.classList.remove('open');
-        mobileNav.classList.remove('open');
-        document.body.style.overflow = '';
-      });
-    });
-
-    // ===== ACTIVE NAV LINK =====
-    var sections = document.querySelectorAll('section[id]');
-    var navLinks = document.querySelectorAll('.nav-links a, .mobile-nav a');
-    var observer = new IntersectionObserver(function(entries) {
-      var current = '';
-      entries.forEach(function(e) { if (e.isIntersecting) current = e.target.id; });
-      navLinks.forEach(function(link) {
-        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
-      });
-    }, { threshold: 0.3 });
-    sections.forEach(function(s) { observer.observe(s); });
-
-    // ===== SECTION PROGRESS =====
-    var progressEl = document.getElementById('section-progress');
-    var chapterNum = progressEl.querySelector('.chapter-num');
-    var chapterLabel = document.getElementById('chapter-label');
-    var totalSections = document.querySelectorAll('.section').length;
-    chapterLabel.textContent = 'of ' + totalSections;
-    var progressObserver = new IntersectionObserver(function(entries) {
-      var index = 0;
-      entries.forEach(function(e) {
-        if (e.isIntersecting) {
-          var all = document.querySelectorAll('.section');
-          index = Array.from(all).indexOf(e.target) + 1;
-        }
-      });
-      if (index > 0) { chapterNum.textContent = index; progressEl.classList.add('visible'); }
-    }, { threshold: 0.4 });
-    document.querySelectorAll('.section').forEach(function(s) { progressObserver.observe(s); });
-
-    // ===== WAITLIST =====
-    var waitlistForm = document.querySelector('.launchlist-form');
-    var statusEl = document.getElementById('waitlist-status');
-    var referralDiv = document.getElementById('launchlist-referral-link');
-    var referralText = document.getElementById('referral-link-text');
-
-    if (waitlistForm) {
-      waitlistForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        var input = waitlistForm.querySelector('input[type="email"]');
-        var email = input.value.trim();
-        if (!email) {
-          statusEl.textContent = '❌ Please enter a valid email address.';
-          statusEl.style.color = '#c9a84c';
-          return;
-        }
-        fetch('https://getlaunchlist.com/s/coI7Ny', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email })
-        })
-        .then(function(response) {
-          if (response.ok) {
-            statusEl.textContent = '✅ You\'re on the list! We\'ll notify you when the world opens.';
-            statusEl.style.color = '#c9a84c';
-            input.value = '';
-            setTimeout(function() {
-              var cookieMatch = document.cookie.match(/launchlist_ref=([^;]+)/);
-              if (cookieMatch) {
-                var refCode = cookieMatch[1];
-                referralText.textContent = window.location.origin + window.location.pathname + '?ref=' + refCode;
-              } else {
-                referralText.textContent = window.location.origin + window.location.pathname + '?ref=YOUR_CODE';
-              }
-              referralDiv.style.display = 'block';
-            }, 800);
-          } else {
-            statusEl.textContent = '❌ Something went wrong. Please try again.';
-            statusEl.style.color = '#c9a84c';
-          }
-        })
-        .catch(function() {
-          statusEl.textContent = '❌ Network error. Please check your connection.';
-          statusEl.style.color = '#c9a84c';
-        });
-      });
-    }
-  </script>
+const builders={
+  greatsword(){
+    const g=new THREE.Group();
+    const blade=new THREE.Mesh(shapeGeo([[-.8,0],[.8,0],[.7,9],[0,11.2],[-.7,9]],.22),steel);blade.position.y=0;g.add(blade);
+    const fuller=new THREE.Mesh(new THREE.BoxGeometry(.18,8,.5),new THREE.MeshStandardMaterial({color:0x8d97a8,metalness:.9,roughness:.4}));fuller.position.y=4.6;g.add(fuller);
+    const guard=new THREE.Mesh(new THREE.BoxGeometry(4.2,.5,.7),goldM);guard.position.y=-.2;g.add(guard);
+    [-1,1].forEach(s=>{const t=new THREE.Mesh(new THREE.ConeGeometry(.4,.9,6),goldM);t.position.set(s*2.3,-.2,0);t.rotation.z=-s*Math.PI/2;g.add(t)});
+    const grip=cyl(.28,.28,2.4,leather);grip.position.y=-1.6;g.add(grip);
+    const pom=new THREE.Mesh(new THREE.SphereGeometry(.5,16,12),goldM);pom.position.y=-3.1;g.add(pom);
+    return g;
+  },
+  dualblades(){
+    const g=new THREE.Group();
+    const one=()=>{const b=new THREE.Group();
+      const s=new THREE.Shape();s.moveTo(-.25,0);s.lineTo(.3,0);s.bezierCurveTo(.9,2.2,.8,4.6,-.2,6.4);s.bezierCurveTo(.15,4.6,0,2.2,-.25,0);
+      const bl=new THREE.Mesh(new THREE.ExtrudeGeometry(s,{depth:.12,bevelEnabled:true,bevelSize:.03,bevelThickness:.03,bevelSegments:2}),steel);bl.position.z=-.06;b.add(bl);
+      const gd=new THREE.Mesh(new THREE.BoxGeometry(1.5,.22,.5),goldM);gd.position.y=-.1;b.add(gd);
+      const gr=cyl(.16,.16,1.5,leather);gr.position.y=-.9;b.add(gr);
+      const pm=new THREE.Mesh(new THREE.SphereGeometry(.24,12,10),goldM);pm.position.y=-1.7;b.add(pm);return b};
+    const a=one();a.rotation.z=.5;a.position.x=-1.2;const b=one();b.scale.x=-1;b.rotation.z=-.5;b.position.x=1.2;
+    g.add(a,b);return g;
+  },
+  staff(){
+    const g=new THREE.Group();
+    const shaft=cyl(.17,.2,10,wood,10);g.add(shaft);
+    for(let i=0;i<3;i++){const b=cyl(.24,.24,.3,goldM,12);b.position.y=lerp(-3,1.5,i/2);g.add(b)}
+    const ring=new THREE.Mesh(new THREE.TorusGeometry(1,.14,10,40),goldM);ring.position.y=5.9;g.add(ring);
+    const orb=new THREE.Mesh(new THREE.IcosahedronGeometry(.62,2),glowM(0xb58cff));orb.position.y=5.9;orb.name='orb';g.add(orb);
+    [-1,1].forEach(s=>{const c=new THREE.Mesh(new THREE.ConeGeometry(.2,1.6,6),goldM);c.position.set(s*.9,6.6,0);c.rotation.z=-s*.35;g.add(c)});
+    const cap=new THREE.Mesh(new THREE.ConeGeometry(.22,.9,8),goldM);cap.position.y=-5.4;cap.rotation.x=Math.PI;g.add(cap);
+    return g;
+  },
+  bow(){
+    const g=new THREE.Group();const R=4.6;
+    const limb=new THREE.Mesh(new THREE.TorusGeometry(R,.17,10,60,Math.PI),wood);limb.rotation.z=-Math.PI/2;g.add(limb);
+    const grip=cyl(.26,.26,1.6,leather);grip.position.x=R;g.add(grip);
+    [-1,1].forEach(s=>{const t=new THREE.Mesh(new THREE.SphereGeometry(.24,10,8),goldM);t.position.set(0,s*R,0);g.add(t)});
+    const str=cyl(.03,.03,R*2,new THREE.MeshStandardMaterial({color:0xe9e0c9,roughness:.6}),6);str.position.x=-.8;g.add(str);
+    const arrow=new THREE.Group();
+    const sh=cyl(.05,.05,6,wood,6);sh.rotation.z=Math.PI/2;arrow.add(sh);
+    const hd=new THREE.Mesh(new THREE.ConeGeometry(.16,.55,8),steel);hd.rotation.z=-Math.PI/2;hd.position.x=3.2;arrow.add(hd);
+    [0,1,2].forEach(k=>{const f=new THREE.Mesh(new THREE.BoxGeometry(.7,.02,.28),new THREE.MeshStandardMaterial({color:0x8fe28a}));f.position.x=-2.7;f.rotation.x=k*Math.PI*2/3;arrow.add(f)});
+    arrow.position.x=1.6;g.add(arrow);g.rotation.z=0;
+    return g;
+  },
+  spear(){
+    const g=new THREE.Group();
+    const shaft=cyl(.14,.14,11,wood,10);g.add(shaft);
+    const head=new THREE.Mesh(shapeGeo([[0,0],[.75,1.5],[0,4.8],[-.75,1.5]],.14,.04),steel);head.position.y=5.4;g.add(head);
+    const sock=cyl(.2,.28,1,goldM,12);sock.position.y=5.2;g.add(sock);
+    const ts=new THREE.Mesh(new THREE.ConeGeometry(.5,1.5,10,1,true),new THREE.MeshStandardMaterial({color:0xb02d3a,roughness:.7,side:THREE.DoubleSide}));ts.position.y=4.5;ts.rotation.x=Math.PI;g.add(ts);
+    const bt=new THREE.Mesh(new THREE.ConeGeometry(.2,.8,8),goldM);bt.position.y=-5.9;bt.rotation.x=Math.PI;g.add(bt);
+    for(let i=0;i<2;i++){const b=cyl(.19,.19,.25,goldM,10);b.position.y=-3+i*6;g.add(b)}
+    return g;
+  },
+  bracers(){
+    const g=new THREE.Group();
+    const one=()=>{const b=new THREE.Group();
+      const tube=cyl(1.25,.95,4.4,steel,24,true);tube.material=steel.clone();tube.material.side=THREE.DoubleSide;b.add(tube);
+      [-1.9,1.9].forEach(y=>{const t=new THREE.Mesh(new THREE.TorusGeometry(y>0?1.25:.95,.11,8,32),goldM);t.rotation.x=Math.PI/2;t.position.y=y;b.add(t)});
+      const plate=new THREE.Mesh(new THREE.BoxGeometry(1.4,2.6,.35),goldM);plate.position.set(0,.3,1.2);b.add(plate);
+      for(let k=0;k<4;k++){const sp=new THREE.Mesh(new THREE.ConeGeometry(.17,.55,6),steel);sp.position.set(-.5+k*.33,2.55,.95);b.add(sp)}
+      const kn=new THREE.Mesh(new THREE.BoxGeometry(1.6,.45,.5),goldM);kn.position.set(0,2.25,.95);b.add(kn);
+      return b};
+    const a=one();a.position.x=-1.9;a.rotation.set(.25,.35,.1);const b=one();b.position.x=1.9;b.rotation.set(.25,-.35,-.1);
+    g.add(a,b);return g;
+  }
+};
+const weapons=[
+  {id:'greatsword',name:'Greatsword',c:'#ff9d5c',d:'Heavy melee — wide sweeps, stagger and zone control.',t:['Stagger','Zone control','Wide arcs'],h:7},
+  {id:'dualblades',name:'Dual Blades',c:'#7fd6ff',d:'High-speed combos — relentless pressure and interrupt chains.',t:['Combos','Pressure','Interrupts'],h:6},
+  {id:'staff',name:'Staff',c:'#b58cff',d:'Elemental spells — AoE burst and sustained field control.',t:['Elemental','AoE burst','Field control'],h:7},
+  {id:'bow',name:'Bow',c:'#8fe28a',d:'Precision ranged — movement-based kiting and charged shots.',t:['Kiting','Charged shots','Precision'],h:7},
+  {id:'spear',name:'Spear',c:'#ffd36a',d:'Reach & precision — thrusting combos, poke pressure and execute range.',t:['Reach','Poke pressure','Execute range'],h:7.5},
+  {id:'bracers',name:'Bracers',c:'#ff7a7a',d:'Close-range brawler — rapid strikes, armor break and counter-attack windows.',t:['Rapid strikes','Armor break','Counters'],h:5.5}
+];
+const pivot=new THREE.Group();ws.add(pivot);
+let model=null,spawnT=1,spin=0,vel=.006,dragging=false,lastX=0,viewerVisible=false;
+const wtabs=$('#wtabs');
+weapons.forEach((w,i)=>{
+  const b=document.createElement('button');b.className='wtab';b.textContent=w.name;b.setAttribute('role','tab');b.onclick=()=>pickWeapon(i);wtabs.appendChild(b);
+});
+function pickWeapon(i){
+  const w=weapons[i];
+  $$('.wtab',wtabs).forEach((b,j)=>{b.classList.toggle('on',i===j);b.setAttribute('aria-selected',i===j)});
+  const root=document.documentElement.style;
+  ['--accent'].forEach(k=>$('#weapons').style.setProperty(k,w.c));
+  $('#wName').textContent=w.name;$('#wDesc').textContent=w.d;
+  $('#wTags').innerHTML=w.t.map(t=>`<span>${t}</span>`).join('');
+  if(model){pivot.remove(model);model.traverse(o=>{o.geometry?.dispose()})}
+  model=builders[w.id]();
+  const box=new THREE.Box3().setFromObject(model),ctr=box.getCenter(new THREE.Vector3()),sz=box.getSize(new THREE.Vector3());
+  model.position.sub(ctr);
+  const holder=new THREE.Group();holder.add(model);
+  const fit=8.6/Math.max(sz.x*.9,sz.y,sz.z);holder.scale.setScalar(fit);holder.userData.fit=fit;
+  if(w.id==='greatsword'||w.id==='spear'||w.id==='staff'){holder.rotation.z=.28}
+  pivot.add(holder);model=holder;spawnT=0;
+  rim.color.set(w.c);rim.intensity=60;
+}
+pickWeapon(0);
+const vo=new IntersectionObserver(es=>es.forEach(e=>viewerVisible=e.isIntersecting));vo.observe(vEl);
+vEl.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;vEl.setPointerCapture(e.pointerId)});
+vEl.addEventListener('pointermove',e=>{if(!dragging)return;const dx=e.clientX-lastX;lastX=e.clientX;pivot.rotation.y+=dx*.012;vel=dx*.0008});
+['pointerup','pointercancel'].forEach(ev=>vEl.addEventListener(ev,()=>dragging=false));
+const wclock=new THREE.Clock();
+(function wloop(){
+  const dt=Math.min(wclock.getDelta(),.05);
+  if(viewerVisible){
+    if(!dragging){pivot.rotation.y+=vel;vel+=(.006-vel)*Math.min(1,dt*1.5)}
+    spawnT=Math.min(1,spawnT+dt*2.4);const e=1-Math.pow(1-spawnT,3);
+    if(model){const f=model.userData.fit;model.scale.setScalar(f*lerp(.3,1,e));model.position.y=Math.sin(performance.now()/900)*.25}
+    const orb=model?.getObjectByName('orb');if(orb)orb.material.emissiveIntensity=1.3+Math.sin(performance.now()/300)*.5;
+    rim.intensity+=(25-rim.intensity)*Math.min(1,dt*3);
+    wr.render(ws,wcam);
+  }
+  requestAnimationFrame(wloop);
+})();
+}
+</script>
 </body>
 </html>
