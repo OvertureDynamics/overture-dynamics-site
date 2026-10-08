@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Project Oath — The World Is Truly Alive</title>
-<meta name="description" content="Project Oath by Overture Dynamics: a high-fantasy action-MMO with classless weapon combat and a five-agent AI world simulation that never runs out of story." />
+<meta name="description" content="Project Oath by Overture Dynamics: a high-fantasy action-MMO with classless weapon combat and a five-agent AI world simulation that never runs out of story. Play. Own. Evolve." />
 <meta name="theme-color" content="#06060d" />
 <link rel="icon" type="image/webp" href="logo.webp" />
 <meta property="og:title" content="Project Oath — The World Is Truly Alive" />
@@ -73,6 +73,13 @@ header.top.scrolled{background:rgba(6,6,13,.82);backdrop-filter:blur(10px);borde
   opacity:.2;mix-blend-mode:screen;-webkit-mask-image:radial-gradient(circle,#000 38%,transparent 70%);mask-image:radial-gradient(circle,#000 38%,transparent 70%);animation:slowspin 240s linear infinite}
 .hero-logo img{width:100%;height:100%;display:block}
 @keyframes slowspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.motto{font-family:var(--ff-head);letter-spacing:.45em;text-transform:uppercase;font-size:clamp(.72rem,1.4vw,.95rem);color:var(--gold-hi);margin-top:1.4rem;text-shadow:0 2px 14px #000}
+.creed-title{font-size:clamp(2.4rem,7vw,5rem);letter-spacing:.1em}
+.creed{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:2.4rem;text-align:left}
+.creed h3{color:var(--gold-hi);font-size:1.5rem;letter-spacing:.2em;text-transform:uppercase}
+.creed p{color:var(--muted);font-size:.93rem}
+@media (max-width:760px){.creed{grid-template-columns:1fr}}
+.foot-motto{font-family:var(--ff-head);letter-spacing:.4em;text-transform:uppercase;color:var(--gold-hi);font-size:.8rem;margin-bottom:1rem}
 .foot-logo{width:64px;height:64px;margin:0 auto 1rem;border-radius:50%;overflow:hidden;opacity:.85}
 .foot-logo img{width:100%;height:100%;object-fit:cover;transform:scale(1.4);display:block}
 .brand span{color:var(--gold-hi)}
@@ -292,7 +299,7 @@ html.no-webgl #bg{display:none}
 </head>
 <body>
 
-<div id="loader"><div><div class="ring"><img src="logo.webp" alt="" /></div><p>Gathering the realm</p></div></div>
+<div id="loader"><div><div class="ring"><img src="logo.webp" alt="" /></div><p>Play. Own. Evolve.</p></div></div>
 <div id="progress"></div>
 <canvas id="bg" aria-hidden="true"></canvas>
 <div class="vignette"></div>
@@ -324,6 +331,7 @@ html.no-webgl #bg{display:none}
       <h1><small>—</small>PROJECT <em>OATH</em></h1>
       <div class="divider"><b></b></div>
       <p class="tagline">The first MMO where the world is truly alive.</p>
+      <p class="motto">Play. Own. Evolve.</p>
       <div class="cta-row">
         <a class="btn" href="#pillars">Begin the Journey</a>
         <a class="btn ghost" href="#join">Join the Waitlist</a>
@@ -451,6 +459,19 @@ html.no-webgl #bg{display:none}
   </section>
 
   <!-- ROADMAP -->
+  <!-- CREED -->
+  <section id="creed" data-label="The Creed" style="min-height:85vh;justify-content:center;text-align:center">
+    <div class="wrap">
+      <span class="eyebrow reveal">The Creed</span>
+      <h2 class="creed-title reveal d1">Play. Own. <em>Evolve.</em></h2>
+      <div class="creed reveal d2">
+        <div class="panel"><h3>Play</h3><p>Classless, real-time weapon combat where skill is positioning, timing and mastery.</p></div>
+        <div class="panel"><h3>Own</h3><p>NPCs and in-world assets with real persistent state and genuine ownership.</p></div>
+        <div class="panel"><h3>Evolve</h3><p>A world that rewrites itself — and remembers everything you did to it.</p></div>
+      </div>
+    </div>
+  </section>
+
   <section id="roadmap" data-label="The Road Ahead">
     <div class="wrap">
       <span class="eyebrow reveal">Development Roadmap</span>
@@ -477,13 +498,15 @@ html.no-webgl #bg{display:none}
         <button class="btn" type="submit">Join the Waitlist</button>
       </form>
       <p class="sworn" id="sworn">The Oath is sworn. We will find you.</p>
-      <p class="fineprint">Marketplace trades carry a 1–5% tiered fee. Play. Own. Evolve.</p>
+      <p class="motto" style="margin-top:2rem">Play. Own. Evolve.</p>
+      <p class="fineprint">Marketplace trades carry a 1–5% tiered fee.</p>
     </div>
   </section>
 </main>
 
 <footer>
   <div class="foot-logo"><img src="logo.webp" alt="Project Oath emblem" /></div>
+  <div class="foot-motto">Play. Own. Evolve.</div>
   <b>OVERTURE DYNAMICS</b>
   © 2026 Overture Dynamics Inc. · New York, NY · Project Oath is in development; all content is subject to change.
 </footer>
